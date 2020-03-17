@@ -81,6 +81,27 @@ constantRoutes.push({
   ]
 })
 /////////////////////////////////////
+constantRoutes.push({
+  path: '/project',
+  component: Layout,
+  redirect: '/project/list',
+  name: '项目管理',
+  meta: { title: '项目管理', icon: 'example' },
+  children: [
+    {
+      path: 'list',
+      name: '项目列表',
+      component: () => import('@/views/project/project-list/index'),
+      meta: { title: '项目列表', icon: 'table' }
+    },
+    {
+      path: 'edit',
+      name: '项目编辑',
+      component: () => import('@/views/project/project-edit/index'),
+      meta: { title: '项目编辑', icon: 'table' }
+    }
+  ]
+})
 
 constantRoutes.push({ path: '*', redirect: '/404', hidden: true })
 
