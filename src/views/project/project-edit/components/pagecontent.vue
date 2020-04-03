@@ -23,7 +23,7 @@
                         <i class="el-icon-edit"></i>
                         <i class="el-icon-delete" @click="deletePanel(item.i)"></i>
                     </div>
-                    <comrender :html="item.template" />
+                    <comrender :html="item.template" :binddata="item.data" />
                 </el-card>
             </grid-item>
         </grid-layout>
@@ -54,6 +54,9 @@ export default {
     };
   },
   methods: {
+    getData(){
+      return this.layout
+    },
     deletePanel(inx) {
       this.layout = this.layout.filter(v => {
         return v.i != inx;
@@ -81,7 +84,7 @@ export default {
         //////////////////////////////////
         let isHaveTemplate = item.template ? true : false
         if(isHaveTemplate){
-            this.$emit("eventChooseItem", item.data.params)
+            this.$emit("eventChooseItem", [item.data.params, item.data.binddata])
         }
     },
     /** event */
@@ -118,7 +121,9 @@ export default {
               }
             }
         }
-        let template = `<${dragData.component} ${paramstr}></${dragData.component}>`
+        let others = ` data-time="${new Date().getTime()}" `
+
+        let template = `<${dragData.component} ${paramstr} :appData="appData" ${others}></${dragData.component}>`
         return template
     }
   }

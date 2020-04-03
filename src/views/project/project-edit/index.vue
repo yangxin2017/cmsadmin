@@ -10,7 +10,7 @@
             <el-col :span="4">
                 <el-tabs type="border-card">
                     <el-tab-pane label="页面">
-                        <page-info ref="refpInfo" @eventAddBlock="pageAddBlock"></page-info>
+                        <page-info ref="refpInfo" @eventAddBlock="pageAddBlock" @eventSavePage="savePage"></page-info>
                     </el-tab-pane>
                     <el-tab-pane label="组件">
                         <component-info ref="refcInfo" @eventValueChanged="_refreshTemplate($event)"></component-info>
@@ -42,13 +42,20 @@ export default {
         pageAddBlock(){
             this.$refs.refPage.addBlock()
         },
-        infoTabItem(param){
-            this.$refs.refcInfo.tabItem(param)
+        infoTabItem(pas){
+            let param = pas[0]
+            let binddata = pas[1]
+            this.$refs.refcInfo.tabItem(param, binddata)
         },
         /** event */
         _refreshTemplate(param){
             this.$refs.refPage.refreshTemplate(param)
         },
+        savePage(){
+            let data = this.$refs.refPage.getData()
+            console.log('save page data...')
+            console.log(data)
+        }
     }
 };
 </script>

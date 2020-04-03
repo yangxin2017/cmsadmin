@@ -1,7 +1,7 @@
 <template>
     <div>
         <label style="margin-bottom:5px;display:block;">已有数据源：</label>
-        <el-cascader :options="datas"></el-cascader>
+        <el-cascader collapse-tags :props="props" :options="datas" v-model="binddata.datasource" @change="changeDataSource"></el-cascader>
         <div class="new-add">
             <el-button type="primary" size="small" round plain @click="showAddSource">添加数据源</el-button>
         </div>
@@ -15,11 +15,19 @@
 import cominfoadddatasource from './com-info-adddatasource';
 
 export default {
+    props:{
+        binddata: {
+            type: Object,
+            default: {}
+        }
+    },
     components: {
         'cominfo-adddatasource': cominfoadddatasource
     },
     data(){
         return {
+            props: { multiple: true },
+            dataval: 12,
             datas: [
                 {
                     value: 1,
@@ -42,8 +50,28 @@ export default {
         }
     },
     methods: {
+        getDataSourceObj(ids){
+            let arr = []
+            for(let ki of this.datas){
+                for(let d of ki.children){
+                    if(ids.indexOf(d.value) >= 0){
+                        arr.push(d)
+                    }
+                }
+            }
+            return arr
+        },
         showAddSource(){
             this.$refs.refAddDatasource.show();
+        },
+        changeDataSource(){
+            let ids = ''
+            for(let d of this.binddata.datasource){
+                ids += d[1] + ','
+            }
+            let objs = this.getDataSourceObj(ids)
+            this.binddata.objs = objs
+            this.$emit('eventChangeDataSource', [this.dataval])
         }
     }
 }

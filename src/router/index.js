@@ -99,8 +99,21 @@ constantRoutes.push({
       name: '项目编辑',
       component: () => import('@/views/project/project-edit/index'),
       meta: { title: '项目编辑', icon: 'table' }
-    }
+    },
+    // {
+    //   path: 'prev',
+    //   name: '项目预览',
+    //   component: () => import('@/views/project/project-prev/index'),
+    //   meta: { title: '项目预览', icon: 'table' }
+    // }
   ]
+})
+
+constantRoutes.push({ 
+  path: '/prev', 
+  name: '项目预览',
+  component: () => import('@/views/project/project-prev/index'),
+  meta: { title: '项目编辑', icon: 'table' }
 })
 
 constantRoutes.push({ path: '*', redirect: '/404', hidden: true })

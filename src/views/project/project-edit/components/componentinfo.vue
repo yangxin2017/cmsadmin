@@ -1,7 +1,9 @@
 <template>
     <div class="component-info">
-        <el-divider content-position="left">绑定数据源</el-divider>
-        <cominfo-datasource></cominfo-datasource>
+        <div v-if="binddata">
+            <el-divider content-position="left">绑定数据源</el-divider>
+            <cominfo-datasource :binddata="binddata" @eventChangeDataSource="changeDataSource"></cominfo-datasource>
+        </div>
 
         <el-divider content-position="left">输入信息</el-divider>
         <div class="com-line" v-for="(item, index) in params" :key="index">
@@ -21,8 +23,10 @@
             </div>
         </div>
         
-        <el-divider content-position="left">页面跳转设置</el-divider>
-        <cominfo-page></cominfo-page>
+        <div v-if="binddata">
+            <el-divider content-position="left">页面跳转设置</el-divider>
+            <cominfo-page :binddata="binddata" @eventChangePage="changeDataSource()"></cominfo-page>
+        </div>
 
     </div>
 </template>
@@ -49,13 +53,15 @@ export default {
     },
     data(){
         return {
-            params: []
+            params: [],
+            binddata: null
         }
     },
     methods: {
         /////////////
-        tabItem(datas){
+        tabItem(datas, binddata){
             this.params = datas
+            this.binddata = binddata
         },
         /** event */
         setText(text, param){
@@ -73,6 +79,9 @@ export default {
         setSelect(selValue, param){
             param.value = selValue[0]
             this.$emit('eventValueChanged', [param])
+        },
+        changeDataSource(){
+            this.$emit('eventValueChanged', [])
         }
     }
 }

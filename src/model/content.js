@@ -11,3 +11,11 @@ export class CmsContent{
         this.checkuser = checkuser
     }
 }
+export var contentFields = [
+    { label: '内容ID', value: 'id' },
+    { label: '点击数', value: 'clicks' },
+    { label: '时间', value: 'time' },
+    { label: '来源', value: 'source' },
+    { label: '标题', value: 'title' },
+    { label: '图片', value: 'src' }
+]

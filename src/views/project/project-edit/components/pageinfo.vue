@@ -2,6 +2,7 @@
 <div class="page-info">
     <div class="panel-add">
         <el-button size="small" type="primary" round @click="addBlock">添加板块</el-button>
+        <el-button size="small" type="success" round @click="savePage">保存</el-button>
     </div>
 
     <el-collapse>
@@ -57,6 +58,12 @@ export default {
                     title: '数据面板',
                     src: 'https://dss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/u=2573142242,3008102846&fm=26&gp=0.jpg',
                     component: 'data-panel',
+                    binddata: {
+                        datasource: -1,
+                        linkmod: [
+                            { name: '内容连接跳转', value: 'content', params: [  ] }
+                        ]
+                    },
                     params: [
                         { name: 'title', type: 'text', title: '面板标题', value: '数据面板标题' },
                         { name: 'showmore', type: 'checkbox', title: '是否显示更多按钮', value: true, children: 
@@ -77,6 +84,13 @@ export default {
                         },
                         { name: 'showcount', type: 'number', title: '显示数量', value: 5 },
                     ]
+                },
+                {
+                    id: 3,
+                    title: '多数据面板',
+                    src: 'http://img2.imgtn.bdimg.com/it/u=1126823232,2000497478&fm=26&gp=0.jpg',
+                    component: 'data-mul-panel',
+                    params: []
                 }
             ],
             curSkin: 'default-skin',
@@ -92,6 +106,9 @@ export default {
     methods: {
         addBlock(){
             this.$emit("eventAddBlock", [])
+        },
+        savePage(){
+            this.$emit('eventSavePage', [])
         },
         dragStart(event, item) {
             event.dataTransfer.setData('data', JSON.stringify(item))
