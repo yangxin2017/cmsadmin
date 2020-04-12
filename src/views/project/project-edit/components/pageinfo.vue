@@ -77,6 +77,7 @@ export default {
                                 { name: '纯文本', value: 'list'},
                                 { name: '轮播图', value: 'image'},
                                 { name: '图文结合', value: 'img-text'},
+                                { name: '时间轴', value: 'timeline'},
                             ],
                             children: [
                                 { name: 'imgwidth', type: 'number', title: '图片宽度', value: 30, showvalue: 'img-text' }

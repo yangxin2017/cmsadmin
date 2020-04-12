@@ -15,8 +15,9 @@
     </div>
     <div class="p-body" v-loading="loading">
         <data-list :datalist="datalists" v-if="showtype == 'list'" :appData="appData"></data-list>
-        <data-image v-if="showtype == 'image'" :count="showcount"></data-image>
-        <data-image-text :imgwidth="imgwidth" v-if="showtype == 'img-text'" :count="showcount"></data-image-text>
+        <data-image v-if="showtype == 'image'" :datalist="datalists" :appData="appData"></data-image>
+        <data-image-text :imgwidth="imgwidth" v-if="showtype == 'img-text'" :datalist="datalists" :appData="appData"></data-image-text>
+        <data-timeline v-if="showtype == 'timeline'" :datalist="datalists" :appData="appData"></data-timeline>
     </div>
 </div>    
 </template>
@@ -25,6 +26,7 @@
 import datalist from './coms/data-list'
 import dataimage from './coms/data-image'
 import dataimagetext from './coms/data-image-text'
+import datatimeline from './coms/data-timeline'
 
 import { getContent } from '@/api/cms';
 
@@ -75,7 +77,8 @@ export default {
     components: {
         'data-list': datalist,
         'data-image': dataimage,
-        'data-image-text': dataimagetext
+        'data-image-text': dataimagetext,
+        'data-timeline': datatimeline
     },
     methods: {
         _getUrl(md){
