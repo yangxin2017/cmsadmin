@@ -1,7 +1,7 @@
 <template>
 <div class="yy-image-text" v-if="datalist && datalist.length > 0">
     <div class="lf-panel" :style="{width: imgwidth + '%'}" v-if="fone">
-        <img :src="fone.src" alt="" />
+        <img :src="fone.tpwj" alt="" />
         <span class="title">{{ fone.title }}</span>
     </div>
     <div class="rg-list">
@@ -12,8 +12,8 @@
                     <span class="clicks">{{ item.clicks }}</span>
                 </p>
                 <p class="infos">
-                    <span class="time">{{ item.time }}</span>
-                    <span class="from">{{ item.source }}</span>
+                    <span class="time">{{ item.publishTime }}</span>
+                    <span class="from">{{ item.lydwmc }}</span>
                 </p>
             </li>
         </ul>

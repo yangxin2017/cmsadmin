@@ -4,10 +4,10 @@
         <label style="margin-bottom:5px;display:block;">{{itemp.name}}跳转至：</label>
         <el-select v-model="itemp.value" placeholder="请选择" @change="changePage(itemp)">
             <el-option
-                v-for="item in datas"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value">
+                v-for="item in menus"
+                :key="item.id"
+                :label="item.name"
+                :value="item.ename">
             </el-option>
         </el-select>
         <div class="page-params" v-if="itemp.params && itemp.params.length > 0">
@@ -35,21 +35,23 @@ export default {
         binddata: {
             type: Object,
             default: {}
+        },
+        menus: {
+            type: Array,
+            default: []
         }
     },
     data(){
         return {
-            datas: [
-                { label: '详细页', value: 'detail', params: [ { value: '', label: '数据ID', field: 'id' }, { value: '', label: '关键词', field: 'keyword' } ] },
-                { label: '搜索页', value: 'search', params: [ { value: '', label: '关键词', field: 'keyword' } ] },
-                { label: '内容页', value: 'content' },
-                { label: '登录页', value: 'login' }
-            ],
             fields: []
         }
     },
     mounted(){
-        // this.changePage(this.binddata.linkmod[0])
+        if(this.binddata.linkmod.length > 0) {
+            for(let lk of this.binddata.linkmod){
+                this.changePage(lk)
+            }            
+        }
         this.fields = contentFields
     },
     methods: {
@@ -64,8 +66,8 @@ export default {
 
         _getValParam(val){
             let obj = null
-            for(let d of this.datas){
-                if(d.value == val){
+            for(let d of this.menus){
+                if(d.ename == val){
                     obj = d
                     break
                 }

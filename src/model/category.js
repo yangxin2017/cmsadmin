@@ -1,9 +1,13 @@
 export class CmsCategory{
-    constructor(id, name, allowContent, formlist, children){
+    constructor(id, name, show, code, children){
         this.id = id
         this.name = name
-        this.allowContent = allowContent
-        this.formlist = formlist
-        this.children = children
+        this.code = code
+        this.show = show
+        this.select = false
+        if(children && children.length > 0){
+            this.children = children
+        }
+        
     }
 }

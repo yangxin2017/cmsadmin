@@ -4,7 +4,7 @@
         <ol v-if="datalist && datalist.length > 0">
             <li v-for="item in datalist" :key="item.id">
                 <div>
-                    <time>{{ item.time }}</time>
+                    <time>{{ item.publishTime }}</time>
                     {{ item.title }}
                 </div>
             </li>

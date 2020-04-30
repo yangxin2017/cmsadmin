@@ -1,6 +1,8 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 
+import { getAllCategorys } from '@/api/cms'
+
 Vue.use(Router)
 
 /* Layout */
@@ -31,7 +33,7 @@ import Layout from '@/layout'
  * all roles can be accessed
  */
 
- let menujson = []
+let menujson = []
 
 export const constantRoutes = [
 ]
@@ -64,19 +66,22 @@ constantRoutes.push({
   component: Layout,
   redirect: '/content/list',
   name: '内容管理',
+  hidden: false,
   meta: { title: '内容管理', icon: 'example' },
   children: [
     {
-      path: 'list',
+      path: 'list/:pcode/:code',
       name: '内容列表',
       component: () => import('@/views/admin/content/list/index'),
-      meta: { title: '内容列表', icon: 'table' }
+      meta: { title: '内容管理', icon: 'table' },
+      hidden: true
     },
     {
-      path: 'tag',
-      name: '标签管理',
-      component: () => import('@/views/admin/content/tag/index'),
-      meta: { title: '标签管理', icon: 'table' }
+      path: 'list/:pcode',
+      name: '内容列表',
+      component: () => import('@/views/admin/content/list/index'),
+      meta: { title: '内容管理', icon: 'table' },
+      hidden: true
     }
   ]
 })
@@ -109,8 +114,8 @@ constantRoutes.push({
   ]
 })
 
-constantRoutes.push({ 
-  path: '/prev', 
+constantRoutes.push({
+  path: '/prev',
   name: '项目预览',
   component: () => import('@/views/project/project-prev/index'),
   meta: { title: '项目编辑', icon: 'table' }

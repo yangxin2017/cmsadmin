@@ -2,7 +2,7 @@
     <div class="component-info">
         <div v-if="binddata">
             <el-divider content-position="left">绑定数据源</el-divider>
-            <cominfo-datasource :binddata="binddata" @eventChangeDataSource="changeDataSource"></cominfo-datasource>
+            <cominfo-datasource :categorys="categorys" :binddata="binddata" @eventChangeDataSource="changeDataSource"></cominfo-datasource>
         </div>
 
         <el-divider content-position="left">输入信息</el-divider>
@@ -13,6 +13,8 @@
             
             <form-select @eventValueChange="setSelect($event, item)" :defValue="item.value" v-if="item.type == 'select'" :predatas="item.predata" :title="item.title"></form-select>
             <form-number @eventValueChange="setText($event, item)" :defValue="item.value" v-if="item.type == 'number'" :title="item.title"></form-number>
+
+            <form-select @eventValueChange="setSelect($event, item)" defField="label" :defValue="item.value" v-if="item.type == 'text-param'" :predatas="curMenu.params" :title="item.title"></form-select>
             
             <div v-if="item.children" style="padding:5px 5px 5px 25px;background:#fbfbfb;border-left:solid 1px #409EFF;">
                 <div v-for="inItem in item.children" :key="inItem.id">
@@ -25,7 +27,7 @@
         
         <div v-if="binddata">
             <el-divider content-position="left">页面跳转设置</el-divider>
-            <cominfo-page :binddata="binddata" @eventChangePage="changeDataSource()"></cominfo-page>
+            <cominfo-page :menus="menus" :binddata="binddata" @eventChangePage="changeDataSource()"></cominfo-page>
         </div>
 
     </div>
@@ -51,6 +53,22 @@ export default {
         'cominfo-datasource': cominfodatasource,
         'cominfo-page': cominfopage
     },
+    props: {
+        menus: {
+            type: Array,
+            default: []
+        },
+        categorys: {
+            type: Array,
+            default: []
+        },
+        curMenu: {
+            type: Object,
+            default: {}
+        }
+    },
+    mounted(){
+    },
     data(){
         return {
             params: [],
@@ -58,6 +76,10 @@ export default {
         }
     },
     methods: {
+        reset(){
+            this.params = []
+            this.binddata = null
+        },
         /////////////
         tabItem(datas, binddata){
             this.params = datas

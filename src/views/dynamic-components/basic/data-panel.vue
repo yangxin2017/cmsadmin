@@ -5,7 +5,7 @@
             <span class="pre"></span>
             {{ title }}
             <ul class="p-menu" v-if="titlemenus && titlemenus.length > 0">
-                <li v-for="item in titlemenus" :key="item.value" :class="{'sel': item.value == curVal}" @click="changeMenuTab(item.value)">{{item.label}}</li>
+                <li v-for="item in titlemenus" :key="item.id" :class="{'sel': item.id == curVal}" @click="changeMenuTab(item.id)">{{item.name}}</li>
             </ul>
         </span>
         <span class="p-more" v-if="showmore == true">
@@ -81,36 +81,21 @@ export default {
         'data-timeline': datatimeline
     },
     methods: {
-        _getUrl(md){
-            let lkmod = this.appData.binddata.linkmod[0]
-            let url = lkmod.value + '?'
-            let arr = []
-            for(let p of lkmod.params){
-                arr.push(`${p.field}=${md[p.value]}`)
-            }
-            url += arr.join('&')
-            return url
-        },
         changeMenuTab(val) {
             this.curVal = val
             this.setContent(val)
         },
-        setContent(val){
+        async setContent(val){
             if(this.oldParam.id != val || this.oldParam.count != this.showcount){
                 this.oldParam.id = val
                 this.oldParam.count = this.showcount
 
+                let lkmod = this.appData.binddata.linkmod[0]
+
                 this.loading = true
-                getContent({type: val, count: this.showcount}).then(res => {
-                    this.datalists = res.data
-
-                    for(let d of this.datalists){
-                        d.href = this._getUrl(d)
-                    }
-                    
-                    this.loading = false
-
-                })
+                let contents = await getContent({cid: val, pagenum: 1, pagesize: this.showcount, linkmod: lkmod})
+                this.datalists = contents.data
+                this.loading = false
             }
         },
         refreshContents(){
@@ -120,6 +105,7 @@ export default {
                     let firstDataSource = this.appData.binddata.datasource[0][1]
 
                     this.titlemenus = this.appData.binddata.objs
+
                     this.curVal = firstDataSource
                     
                     this.setContent(firstDataSource)

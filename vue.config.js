@@ -47,11 +47,17 @@ module.exports = {
           ['^' + process.env.VUE_APP_BASE_API]: ''
         }
       },
-      '/mycms': {
-        target: 'http://192.168.1.130',
+      '/cmsproject': {
+        target: 'http://192.168.1.6:8080',
         changeOrigin: true,
         secure: false,
-        pathRewrite: { '^/mycms': '/mycms' }
+        pathRewrite: { '^/cmsproject': '/cmsproject' }
+      },
+      '/cms': {
+        target: 'http://192.168.1.5:30003',
+        changeOrigin: true,
+        secure: false,
+        pathRewrite: { '^/cms': '/cms' }
       },
     },
     before: require('./mock/mock-server.js')

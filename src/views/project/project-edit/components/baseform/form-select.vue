@@ -5,7 +5,7 @@
             <el-option
                 v-for="item in predatas"
                 :key="item.value"
-                :label="item.name"
+                :label="item[defField]"
                 :value="item.value">
             </el-option>
         </el-select>
@@ -25,6 +25,10 @@ export default {
         defValue: {
             type: String,
             default: ''
+        },
+        defField: {
+            type: String,
+            default: 'name'
         }
     },
     data(){

@@ -4,7 +4,10 @@ import Vue from "vue";
 // 2.注册组件
 var headn1 = () => import("@/views/dynamic-components/basic/header-n1");
 var datapanel = () => import("@/views/dynamic-components/basic/data-panel");
-var datamulpanel = () => import("@/views/dynamic-components/basic/data-mul-panel");
+var datamulpanel = () =>
+  import("@/views/dynamic-components/basic/data-mul-panel");
+var detailpanel = () => import("@/views/dynamic-components/basic/detail-panel");
+var searchpanel = () => import("@/views/dynamic-components/basic/search-panel");
 
 export default {
   props: {
@@ -15,7 +18,7 @@ export default {
     binddata: {
       type: Object,
       default: function() {
-        return { };
+        return {};
       }
     }
   },
@@ -28,14 +31,16 @@ export default {
       components: {
         "head-n1": headn1,
         "data-panel": datapanel,
-        'data-mul-panel': datamulpanel
+        "data-mul-panel": datamulpanel,
+        "data-detail-panel": detailpanel,
+        "search-panel": searchpanel
       },
       template: this.html,
-      props: ['appData']
+      props: ["appData"]
     });
 
     return h(com, {
-      props: {appData: this.binddata}
+      props: { appData: this.binddata }
     });
   }
 };

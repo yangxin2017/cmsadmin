@@ -2,7 +2,7 @@
 <div class="yy-images" v-if="datalist && datalist.length > 0">
     <el-carousel indicator-position="none">
         <el-carousel-item v-for="item in datalist" :key="item.id">
-            <img :src="item.src" alt="" />
+            <img :src="item.tpwj" alt="" />
         </el-carousel-item>
     </el-carousel> 
 </div>

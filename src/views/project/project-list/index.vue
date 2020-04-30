@@ -6,10 +6,10 @@
         <el-row :gutter="12">
             <el-col class="col-panel" :span="6" v-for="item in datas" :key="item.id">
                 <el-card shadow="hover">
-                    <b class="name">{{ item.cname }}</b>
+                    <b class="name">{{ item.name }}</b>
                     <el-image style="height:160px;" :src="item.pic"></el-image>
                     <div class="buttons">
-                        <el-button class="f-btn" type="text">
+                        <el-button class="f-btn" type="text" @click.native="goEdit(item)">
                             <el-tooltip class="item" effect="dark" content="编辑" placement="top">
                                 <i class="el-icon-edit"></i>
                             </el-tooltip>
@@ -35,6 +35,8 @@
 <script>
 
 var addproject = () => import("./components/addproject");
+import { getProjects } from '@/api/cms'
+import { CmsProject } from '../../../model/project';
 
 export default {
     components: {
@@ -42,10 +44,7 @@ export default {
     },
     data(){
         return {
-            datas: [
-                {id: 1, cname: '智慧城市管理系统', ename: 'zhihui', pic: 'https://cube.elemecdn.com/6/94/4d3ea53c084bad6931a56d5158a48jpeg.jpeg', desc: ''},
-                {id: 2, cname: '高影响天气预测系统', ename: 'tianqi', pic: 'https://cube.elemecdn.com/6/94/4d3ea53c084bad6931a56d5158a48jpeg.jpeg', desc: ''}
-            ]
+            datas: []
         }
     },
     methods: {
@@ -55,7 +54,18 @@ export default {
 
         addProjectEvent(ev){
             this.datas.push(ev)
+        },
+        ////
+        async initProject(){
+            let projects = await getProjects({pagenum: 1, pagesize: 10})
+            this.datas = projects
+        },
+        goEdit(item){
+            this.$router.push({path: 'edit', query: {id: item.id}})
         }
+    },
+    mounted(){
+        this.initProject()
     }
 };
 </script>
