@@ -109,6 +109,9 @@ export default {
         this.$emit("eventChooseItem", [item.data.params, item.data.binddata]);
       }
     },
+    setCardType(type){
+      
+    },
     /** event */
     refreshTemplate(item) {
       let dragData = this.curSelItem.data;

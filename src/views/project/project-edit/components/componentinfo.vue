@@ -11,7 +11,10 @@
             <form-text :defValue="item.value" @eventValueChange="setText($event, item)" v-if="item.type == 'text'" :title="item.title"></form-text>
             <form-checkbox :defValue="item.value" @eventValueChange="setCheckBox($event, item)" v-if="item.type == 'checkbox'" :title="item.title"></form-checkbox>
             
+            <!-- 如何设置显示类别 binddata -->
+
             <form-select @eventValueChange="setSelect($event, item)" :defValue="item.value" v-if="item.type == 'select'" :predatas="item.predata" :title="item.title"></form-select>
+            
             <form-number @eventValueChange="setText($event, item)" :defValue="item.value" v-if="item.type == 'number'" :title="item.title"></form-number>
 
             <form-select @eventValueChange="setSelect($event, item)" defField="label" :defValue="item.value" v-if="item.type == 'text-param'" :predatas="curMenu.params" :title="item.title"></form-select>
@@ -99,6 +102,8 @@ export default {
             this.$emit('eventValueChanged', [param])
         },
         setSelect(selValue, param){
+            //this.curMenu.type = param.value
+            // console.log(this.curMenu, param)
             param.value = selValue[0]
             this.$emit('eventValueChanged', [param])
         },

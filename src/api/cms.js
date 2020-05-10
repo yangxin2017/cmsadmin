@@ -44,10 +44,10 @@ export async function getAllCategorys() {
     for (let d of dataobj.data) {
         let child = []
         for (let di of d.children) {
-            let tmp = new CmsCategory(di.id, di.name, di.show, di.code, [])
+            let tmp = new CmsCategory(di.id, di.name, di.show, di.code, [], di.type)
             child.push(tmp)
         }
-        let one = new CmsCategory(d.id, d.name, d.show, d.code, child)
+        let one = new CmsCategory(d.id, d.name, d.show, d.code, child, d.type)
         res.push(one)
     }
     return res

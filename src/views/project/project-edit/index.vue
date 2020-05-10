@@ -8,12 +8,14 @@
           @eventSelectMenu="menuChange($event)"
         ></page-menu>
       </el-col>
-      <el-col :span="showMenu ? 16 : 20" v-if="menuInfo">
-        <page-content
-          :layout="menuInfo.layout"
-          @eventChooseItem="infoTabItem($event)"
-          ref="refPage"
-        ></page-content>
+      <el-col class="pro-wrapper" :span="showMenu ? 16 : 20" v-if="menuInfo">
+        <div :style="{'width': projectInfo.width + 'px', 'height': projectInfo.height + 'px'}">
+          <page-content
+            :layout="menuInfo.layout"
+            @eventChooseItem="infoTabItem($event)"
+            ref="refPage"
+          ></page-content>
+        </div>
       </el-col>
       <el-col :span="4">
         <el-tabs type="border-card">
@@ -84,15 +86,20 @@ export default {
       });
       loading.close();
       this.$message({
-          message: '保存成功！',
-          type: 'success'
-        });
+        message: "保存成功！",
+        type: "success"
+      });
     },
     //////
     async initInfo(id) {
       this.projectInfo = await getProjectById({ id: id });
       /// 分类
       this.categorys = await getAllCategorys();
+      /// 选中第一个
+      if (this.projectInfo.json.menus.length > 0) {
+        let m = this.projectInfo.json.menus[0];
+        this.menuChange(m);
+      }
     },
     /////////output
     menuChange(menu) {
@@ -116,5 +123,9 @@ export default {
 <style lang="scss" scoped>
 .pro-container {
   padding: 20px 20px;
+
+  .pro-wrapper{
+    overflow:auto;
+  }
 }
 </style>
