@@ -129,7 +129,7 @@ export async function searchContents({ cid, pagenum, pagesize, linkmod, keyword 
 
 export function saveProject({ id, json }) {
     return request({
-        url: 'http://192.168.1.5:30003/cms/api/saveproject',
+        url: 'http://localhost:30003/cms/api/saveproject',
         method: 'post',
         data: { "id": id, "json": json }
     })

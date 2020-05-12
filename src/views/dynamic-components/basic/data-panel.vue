@@ -19,15 +19,15 @@
       </span>
     </div>
     <div class="p-body" v-loading="loading" v-if="curMenu">
-      <data-list :datalist="datalists" v-if="showtype == 'list'" :appData="appData"></data-list>
-      <data-image v-if="showtype == 'image'" :datalist="datalists" :appData="appData"></data-image>
+      <data-list :datalist="datalists" v-if="curMenu.type == 'list'" :appData="appData"></data-list>
+      <data-image v-if="curMenu.type == 'image'" :datalist="datalists" :appData="appData"></data-image>
       <data-image-text
         :imgwidth="imgwidth"
-        v-if="showtype == 'img-text'"
+        v-if="curMenu.type == 'img-text'"
         :datalist="datalists"
         :appData="appData"
       ></data-image-text>
-      <data-timeline v-if="showtype == 'timeline'" :datalist="datalists" :appData="appData"></data-timeline>
+      <data-timeline v-if="curMenu.type == 'timeline'" :datalist="datalists" :appData="appData"></data-timeline>
     </div>
   </div>
 </template>
@@ -96,6 +96,7 @@ export default {
       let val = item.id;
       this.curVal = val;
       this.setContent(val);
+      this.$emit('eventChangeTab', item)
       /// xuyao chuan caidan
     },
     async setContent(val) {
@@ -129,7 +130,7 @@ export default {
           this.curVal = firstDataSource;
 
           this.curMenu = this.appData.binddata.objs[0]
-          this.curMenu.type = this.showtype;
+          //this.curMenu.type = this.showtype;
 
           this.setContent(firstDataSource);
         }

@@ -33,7 +33,7 @@
             <i class="el-icon-edit" @click="clearPanel(item)"></i>
             <i class="el-icon-delete" @click="deletePanel(item.i)"></i>
           </div>
-          <comrender :html="item.template" :binddata="item.data" />
+          <comrender @eventChangeTab="changeDataTab($event)" :html="item.template" :binddata="item.data" />
         </el-card>
       </grid-item>
     </grid-layout>
@@ -118,6 +118,9 @@ export default {
       let template = this._getTemplate(dragData);
       this.curSelItem.template = template;
     },
+    changeDataTab(ev){
+      this.$emit("eventChangeTab", ev)
+    },
     /** 私有方法 */
     _getMax(key) {
       let mx = 0;
@@ -148,7 +151,7 @@ export default {
       }
       let others = ` data-time="${new Date().getTime()}" `;
 
-      let template = `<${dragData.component} ${paramstr} :appData="appData" ${others}></${dragData.component}>`;
+      let template = `<${dragData.component} ${paramstr} :appData="appData" @eventChangeTab="eventInfo($event)" ${others}></${dragData.component}>`;
       return template;
     }
   }

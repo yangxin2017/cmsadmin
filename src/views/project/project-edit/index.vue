@@ -13,6 +13,7 @@
           <page-content
             :layout="menuInfo.layout"
             @eventChooseItem="infoTabItem($event)"
+            @eventChangeTab="changeDataTab($event)"
             ref="refPage"
           ></page-content>
         </div>
@@ -27,6 +28,7 @@
               :categorys="categorys"
               :curMenu="menuInfo"
               :menus="projectInfo.json.menus"
+              :curTab="curDataTab"
               ref="refcInfo"
               @eventValueChanged="_refreshTemplate($event)"
             ></component-info>
@@ -56,7 +58,8 @@ export default {
       showMenu: true,
       projectInfo: null,
       menuInfo: null,
-      categorys: []
+      categorys: [],
+      curDataTab: null
     };
   },
   methods: {
@@ -71,6 +74,9 @@ export default {
     /** event */
     _refreshTemplate(param) {
       this.$refs.refPage.refreshTemplate(param);
+    },
+    changeDataTab(ev){
+      this.curDataTab = ev;
     },
     savePage() {
       let data = this.$refs.refPage.getData();

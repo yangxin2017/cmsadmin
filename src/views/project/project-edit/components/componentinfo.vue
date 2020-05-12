@@ -13,7 +13,7 @@
             
             <!-- 如何设置显示类别 binddata -->
 
-            <form-select @eventValueChange="setSelect($event, item)" :defValue="item.value" v-if="item.type == 'select'" :predatas="item.predata" :title="item.title"></form-select>
+            <form-select @eventValueChange="setSelect($event, curTab)" :defValue="curTab.type" v-if="curTab && item.type == 'select'" :predatas="item.predata" :title="item.title"></form-select>
             
             <form-number @eventValueChange="setText($event, item)" :defValue="item.value" v-if="item.type == 'number'" :title="item.title"></form-number>
 
@@ -68,6 +68,10 @@ export default {
         curMenu: {
             type: Object,
             default: {}
+        },
+        curTab: {
+            type: Object,
+            default: null
         }
     },
     mounted(){
@@ -104,8 +108,9 @@ export default {
         setSelect(selValue, param){
             //this.curMenu.type = param.value
             // console.log(this.curMenu, param)
-            param.value = selValue[0]
-            this.$emit('eventValueChanged', [param])
+            console.log(selValue, param)
+            param.type = selValue[0]
+            //this.$emit('eventValueChanged', [param])
         },
         changeDataSource(){
             this.$emit('eventValueChanged', [])

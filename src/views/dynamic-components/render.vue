@@ -20,6 +20,11 @@ export default {
       default: function() {
         return {};
       }
+    },
+  },
+  methods: {
+    changeEvent(ev){
+      this.$emit("eventChangeTab", ev)
     }
   },
 
@@ -27,6 +32,7 @@ export default {
     if (!this.html) {
       return false;
     }
+    let _self = this;
     const com = Vue.extend({
       components: {
         "head-n1": headn1,
@@ -36,7 +42,12 @@ export default {
         "search-panel": searchpanel
       },
       template: this.html,
-      props: ["appData"]
+      props: ["appData"],
+      methods: {
+        eventInfo(ev){
+          _self.changeEvent(ev)
+        }
+      }
     });
 
     return h(com, {

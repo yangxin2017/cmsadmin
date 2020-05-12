@@ -8,6 +8,10 @@
       v-model="binddata.datasource"
       @change="changeDataSource"
     ></el-cascader>
+
+    <label style="margin-bottom:5px;display:block;">显示类型：</label>
+    
+
     <div class="new-add">
       <el-button type="primary" size="small" round plain @click="showAddSource">添加数据源</el-button>
     </div>
@@ -36,7 +40,13 @@ export default {
   data() {
     return {
       props: { multiple: true, value: "id", label: "name" },
-      dataval: 12
+      dataval: 12,
+      showtypes: [
+        { name: "纯文本", value: "list" },
+        { name: "轮播图", value: "image" },
+        { name: "图文结合", value: "img-text" },
+        { name: "时间轴", value: "timeline" }
+      ]
       // datas: [
       //     {
       //         value: 1,
@@ -104,6 +114,7 @@ export default {
       let pobjs = this.getParentDataSource(pids, ids);
 
       this.binddata.objs = objs;
+      console.log(objs);
       this.binddata.pobjs = pobjs;
       this.$emit("eventChangeDataSource", [this.dataval]);
     }
