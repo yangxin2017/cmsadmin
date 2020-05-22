@@ -1,15 +1,18 @@
 <template>
   <div class="pro-container">
+    <div class="page-head">
+      <comrender :html="headtemplate" />
+    </div>
     <div class="page-con" v-if="projectInfo">
       <grid-layout
         :layout.sync="curRoute.layout"
-        :col-num="12"
-        :row-height="5"
+        :col-num="24"
+        :row-height="3"
         :is-draggable="false"
         :is-resizable="false"
         :is-mirrored="false"
         :vertical-compact="true"
-        :margin="[10, 10]"
+        :margin="[5, 5]"
         :use-css-transforms="false"
       >
         <grid-item
@@ -22,6 +25,10 @@
           :key="item.i"
         >
           <div class="pro-card">
+            <span class="sj l1"></span>
+            <span class="sj l2"></span>
+            <span class="sj l3"></span>
+            <span class="sj l4"></span>
             <comrender :html="item.template" :binddata="item.data" />
           </div>
         </grid-item>
@@ -44,7 +51,8 @@ export default {
     return {
       curRoute: {},
       projectInfo: null,
-      menus: []
+      menus: [],
+      headtemplate: ``
     };
   },
   methods: {
@@ -52,6 +60,8 @@ export default {
       if (!this.projectInfo) {
         this.projectInfo = await getProjectById({ id: projectId });
         this.menus = this.projectInfo.json.menus;
+
+        this.headtemplate = `<head-n1 title="${this.projectInfo.name}" ></head-n1>`
       }
       if (!path) {
         for (let m of this.menus) {
@@ -94,13 +104,11 @@ export default {
 }
 .page-con {
   width: 100%;
-  height: 100%;
+  height: calc(100% - 61px);
   position: relative;
-  overflow: hidden;
   .vue-grid-layout {
-    margin: -10px;
     position: absolute;
-    width: calc(100% + 20px);
+    width: 100%;
   }
   .pro-card {
     height: 100%;

@@ -1,14 +1,18 @@
 <template>
   <div class="page-con">
+    <div class="page-head">
+      <!-- <comrender :html="headtemplate" /> -->
+      <head-n1 :title="projectInfo.name" :appData="null"></head-n1>
+    </div>
     <grid-layout
       :layout.sync="layout"
-      :col-num="12"
-      :row-height="5"
+      :col-num="24"
+      :row-height="3"
       :is-draggable="true"
       :is-resizable="true"
       :is-mirrored="false"
       :vertical-compact="true"
-      :margin="[10, 10]"
+      :margin="[5, 5]"
       :use-css-transforms="true"
     >
       <grid-item
@@ -19,6 +23,7 @@
         :h="item.h"
         :i="item.i"
         :key="item.i"
+        :class="{'hide-mod': item.del}"
       >
         <el-card
           shadow="never"
@@ -31,9 +36,13 @@
         >
           <div class="btns">
             <i class="el-icon-edit" @click="clearPanel(item)"></i>
-            <i class="el-icon-delete" @click="deletePanel(item.i)"></i>
+            <i class="el-icon-delete" @click="deletePanel(item)"></i>
           </div>
-          <comrender @eventChangeTab="changeDataTab($event)" :html="item.template" :binddata="item.data" />
+          <comrender
+            @eventChangeTab="changeDataTab($event)"
+            :html="item.template"
+            :binddata="item.data"
+          />
         </el-card>
       </grid-item>
     </grid-layout>
@@ -43,22 +52,30 @@
 import VueGridLayout from "vue-grid-layout";
 import comrender from "@/views/dynamic-components/render";
 import { uuid } from "@/utils/common";
+var headn1 = () => import("@/views/dynamic-components/basic/header-n1");
 
 export default {
   components: {
     GridLayout: VueGridLayout.GridLayout,
     GridItem: VueGridLayout.GridItem,
-    comrender: comrender
+    comrender: comrender,
+    'head-n1': headn1
   },
   props: {
     layout: {
       type: Array,
       default: []
+    },
+    projectInfo: {
+      type: Object,
+      default: null
     }
   },
+  mounted() {},
   data() {
     return {
-      curSelItem: {}
+      curSelItem: {},
+      headtemplate: ``
     };
   },
   methods: {
@@ -66,15 +83,16 @@ export default {
       this.curSelItem = {};
     },
     getData() {
-      return this.layout;
-    },
-    deletePanel(inx) {
-      this.layout = this.layout.filter(v => {
-        return v.i != inx;
+      let ds = this.layout.filter(v => {
+        return !v.del;
       });
+      return ds;
     },
-    clearPanel(item){
-      item.template = ''
+    deletePanel(v) {
+      v.del = true
+    },
+    clearPanel(item) {
+      item.template = "";
     },
     ////
     addBlock() {
@@ -106,20 +124,31 @@ export default {
       //////////////////////////////////
       let isHaveTemplate = item.template ? true : false;
       if (isHaveTemplate) {
-        this.$emit("eventChooseItem", [item.data.params, item.data.binddata]);
+        let curDataTab = null;
+        if (
+          item.data &&
+          item.data.binddata &&
+          item.data.binddata.objs &&
+          item.data.binddata.objs.length > 0
+        ) {
+          curDataTab = item.data.binddata.objs[0];
+        }
+        this.$emit("eventChooseItem", [
+          item.data.params,
+          item.data.binddata,
+          curDataTab
+        ]);
       }
     },
-    setCardType(type){
-      
-    },
+    setCardType(type) {},
     /** event */
     refreshTemplate(item) {
       let dragData = this.curSelItem.data;
       let template = this._getTemplate(dragData);
       this.curSelItem.template = template;
     },
-    changeDataTab(ev){
-      this.$emit("eventChangeTab", ev)
+    changeDataTab(ev) {
+      this.$emit("eventChangeTab", ev);
     },
     /** 私有方法 */
     _getMax(key) {
@@ -159,6 +188,9 @@ export default {
 </script>
 <style lang="scss" scoped>
 .page-con {
+  .hide-mod {
+    display: none;
+  }
   .pro-card {
     height: 100%;
     position: relative;

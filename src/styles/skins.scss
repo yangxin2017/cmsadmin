@@ -1,6 +1,12 @@
+@import './skin1/default.scss';
+
 #default-skin{
-    .yy-header-container{
-        background:#ccc;
+
+    .el-carousel{
+        height:100%;
+        .el-carousel__container{
+            height:100% !important;
+        }
     }
 }
 

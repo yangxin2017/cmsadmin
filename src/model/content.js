@@ -2,7 +2,7 @@ import moment from "moment";
 import { getBasePath } from "@/utils/common";
 
 export class CmsContent {
-    constructor(id, categoryId, title, desc, lydw, lydwmc, publishTime, clicks, tpwj, nrwj, spwj, zqbjson, gjmc, reallydw, lkmod) {
+    constructor(id, categoryId, title, desc, lydw, lydwmc, publishTime, clicks, tpwj, nrwj, spwj, zqbjson, gjmc, reallydw, lkmod, url, tags) {
         this.id = id
         this.categoryId = categoryId
         this.title = title
@@ -18,6 +18,16 @@ export class CmsContent {
         this.gjmc = gjmc
         this.reallydw = reallydw
         this.setUrl(lkmod)
+        this.url = '//' + url
+        //////
+        let arr = tags.split(',')
+        let ts = []
+        for(let a of arr){
+            if(a){
+                ts.push(a)
+            }
+        }
+        this.tags = ts
     }
 
     setUrl(lkmod) {

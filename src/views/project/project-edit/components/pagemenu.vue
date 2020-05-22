@@ -5,13 +5,14 @@
             <div @click="selPageMenu(item)" class="page-mod" :class="{'sel': curMenu.id == item.id}" v-for="item in menus" :key="item.id">
                 <span>{{ item.name }}</span>
                 <i class="btn el-icon-star-on show" v-if="item.home"></i>
-                <el-tooltip class="item" effect="dark" content="设为首页" placement="top" v-if="!item.home">
+                <!-- <el-tooltip class="item" effect="dark" content="设为首页" placement="top" v-if="!item.home">
                     <i @click="setHomePage(item)" class="btn el-icon-s-home"></i>
-                </el-tooltip>
+                </el-tooltip> -->
                 <!-- <i class="btn el-icon-delete"></i>
                 <i class="btn el-icon-edit"></i> -->
             </div>
             <div class="btn-addpage">
+                <el-button type="primary" size="medium" @click="prevProject()">预览</el-button>
                 <el-button type="primary" size="medium" @click="saveProject()">保存</el-button>
             </div>
         </el-card>
@@ -48,6 +49,9 @@ export default {
                 }
             }
             this.menus = tmps
+        },
+        prevProject(){
+            this.$router.push(`prev?pid=1`)
         }
     },
     mounted(){

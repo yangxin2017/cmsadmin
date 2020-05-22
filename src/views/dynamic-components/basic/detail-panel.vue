@@ -64,6 +64,7 @@ export default {
     },
     ////////////////////
     selectList(item){
+    console.log(item)
       this.curData = item
     }
   }

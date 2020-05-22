@@ -1,6 +1,9 @@
 <template>
   <div class="yy-detail-right" v-if="content">
     <h2>{{ content.title }}</h2>
+    <div class="tags" v-if="content.tags && content.tags.length > 0">
+      <a class="ts" v-for="(item,inx) in content.tags" :key="inx">{{item}}</a>
+    </div>
     <div class="rg-info">
       <span class="source">来源单位：{{ content.lydwmc }}</span>
       <span class="time">{{ content.publishTime }}</span>
@@ -17,6 +20,7 @@
         marginwidth="0"
         marginheight="0"
         frameborder="0"
+        v-loading="loadingfile"
       ></iframe>
       <video v-if="content.spwj" controls="controls" :src="content.spwj"></video>
     </div>
@@ -47,8 +51,11 @@ export default {
     return {
       showextra: false,
       loadTask: null,
-      numPages: undefined
+      numPages: undefined,
+      loadingfile: false
     };
+  },
+  mounted(){
   },
   computed: {
     ispdf() {
@@ -56,9 +63,13 @@ export default {
       if (this.content.nrwj) {
         if (this.content.nrwj.indexOf(".pdf") >= 0) {
           ispdf = 1;
+          this.loadingfile = true;
           this.loadTask = pdf.createLoadingTask(this.content.nrwj);
           this.loadTask.then(res => {
             this.numPages = res.numPages;
+            this.loadingfile = false;
+          }).catch(err=>{
+            this.loadingfile = false;
           });
         } else if (this.content.nrwj.indexOf(".doc") >= 0) {
           ispdf = 2;
@@ -84,6 +95,14 @@ export default {
   h2 {
     text-align: center;
   }
+  .tags{
+    margin:5px 0;
+    text-align:center;
+    a{
+      display:inline-block;margin:0 5px 0 0;
+      padding:3px 5px;
+    }
+  }
   .rg-info {
     display: flex;
     justify-content: space-between;
@@ -100,7 +119,6 @@ export default {
     top: -20px;
     right: 0;
     width: 30px;
-    background: #ccc;
     padding: 10px;
     height: 100%;
     overflow: auto;

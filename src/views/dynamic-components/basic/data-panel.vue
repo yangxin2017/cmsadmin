@@ -28,6 +28,8 @@
         :appData="appData"
       ></data-image-text>
       <data-timeline v-if="curMenu.type == 'timeline'" :datalist="datalists" :appData="appData"></data-timeline>
+      <data-image-list v-if="curMenu.type == 'img-list'" :datalist="datalists" :appData="appData"></data-image-list>
+      <data-video v-if="curMenu.type == 'video'" :datalist="datalists" :appData="appData"></data-video>
     </div>
   </div>
 </template>
@@ -36,6 +38,8 @@ import datalist from "./coms/data-list";
 import dataimage from "./coms/data-image";
 import dataimagetext from "./coms/data-image-text";
 import datatimeline from "./coms/data-timeline";
+import dataimagelist from "./coms/data-image-list";
+import datavideo from "./coms/data-video";
 
 import { getContent } from "@/api/cms";
 
@@ -88,7 +92,9 @@ export default {
     "data-list": datalist,
     "data-image": dataimage,
     "data-image-text": dataimagetext,
-    "data-timeline": datatimeline
+    "data-timeline": datatimeline,
+    "data-image-list": dataimagelist,
+    "data-video": datavideo
   },
   methods: {
     changeMenuTab(item) {
@@ -139,7 +145,6 @@ export default {
   },
   mounted() {
     // 刷新数据
-    console.log(this.appData);
     this.refreshContents();
   }
 };
@@ -150,12 +155,10 @@ export default {
   .p-head {
     display: flex;
     justify-content: space-between;
-    height: 35px;
-    background: #eee;
     align-items: center;
     .p-title {
       vertical-align: middle;
-      padding-right: 20px;
+      padding-right: 10px;
       white-space: nowrap;
       .pre {
         display: inline-block;

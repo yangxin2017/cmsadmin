@@ -120,6 +120,12 @@ constantRoutes.push({
   component: () => import('@/views/project/project-prev/index'),
   meta: { title: '项目编辑', icon: 'table' }
 })
+constantRoutes.push({
+  path: '/edit',
+  name: '项目编辑',
+  component: () => import('@/views/project/project-edit/index'),
+  meta: { title: '项目编辑', icon: 'table' }
+})
 
 constantRoutes.push({ path: '*', redirect: '/404', hidden: true })
 

@@ -12,6 +12,7 @@
         <div :style="{'width': projectInfo.width + 'px', 'height': projectInfo.height + 'px'}">
           <page-content
             :layout="menuInfo.layout"
+            :projectInfo="projectInfo"
             @eventChooseItem="infoTabItem($event)"
             @eventChangeTab="changeDataTab($event)"
             ref="refPage"
@@ -21,7 +22,7 @@
       <el-col :span="4">
         <el-tabs type="border-card">
           <el-tab-pane label="页面">
-            <page-info ref="refpInfo" @eventAddBlock="pageAddBlock" @eventSavePage="savePage"></page-info>
+            <page-info :projectInfo="projectInfo" ref="refpInfo" @eventAddBlock="pageAddBlock" @eventSavePage="savePage"></page-info>
           </el-tab-pane>
           <el-tab-pane label="组件">
             <component-info
@@ -69,7 +70,8 @@ export default {
     infoTabItem(pas) {
       let param = pas[0];
       let binddata = pas[1];
-      this.$refs.refcInfo.tabItem(param, binddata);
+      let curdatatab = pas[2];
+      this.$refs.refcInfo.tabItem(param, binddata, curdatatab);
     },
     /** event */
     _refreshTemplate(param) {
@@ -84,10 +86,14 @@ export default {
       console.log(data);
     },
     async saveProject() {
+      for(let m of this.projectInfo.json.menus){
+        m.layout = m.layout.filter(v=>{ return !v.del; })
+      }
       let json = this.projectInfo.json;
       const loading = this.$loading();
       await saveProject({
         id: this.projectInfo.id,
+        name: this.projectInfo.name,
         json: JSON.stringify(json)
       });
       loading.close();

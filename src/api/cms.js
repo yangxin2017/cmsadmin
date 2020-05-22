@@ -53,13 +53,15 @@ export async function getAllCategorys() {
     return res
 }
 
-export async function getContent({ cid, pagenum, pagesize, linkmod, containChild }) {
+export async function getContent({ cid, pagenum, pagesize, linkmod, containChild, gjmc=undefined, orderField=undefined }) {
     let obj = initUserToken()
     let params = Object.assign(obj, {
         pageindex: pagenum,
         pagesize: pagesize,
         cid: cid,
-        containChild: containChild ? true : false
+        containChild: containChild ? true : false,
+        gjmc: gjmc,
+        orderField: orderField
     })
     let dataobj = await request({
         url: `/cms/api/contents`,
@@ -71,13 +73,13 @@ export async function getContent({ cid, pagenum, pagesize, linkmod, containChild
     }
     res.total = dataobj.total;
     for (let d of dataobj.data) {
-        let tmp = new CmsContent(d.id, d.categoryId, d.title, d.description, d.lydw, d.lydwmc, d.publishDate, d.clicks, d.tpwj, d.nrwj, d.spwj, d.sftt, d.gjmc, d.tttp, linkmod)
+        let tmp = new CmsContent(d.id, d.categoryId, d.title, d.description, d.lydw, d.lydwmc, d.publishDate, d.clicks, d.tpwj, d.nrwj, d.spwj, d.sftt, d.gjmc, d.tttp, linkmod, d.url, d.tagIds)
         res.data.push(tmp)
     }
     return res
 }
 
-export async function getContentById({ id }){
+export async function getContentById({ id, linkmod }) {
     let obj = initUserToken()
     let params = Object.assign(obj, {
         id: id
@@ -86,14 +88,16 @@ export async function getContentById({ id }){
         url: `/cms/api/content`,
         params
     })
-    return dataobj.data;
+    let d = dataobj.data;
+    let tmp = new CmsContent(d.id, d.categoryId, d.title, d.description, d.lydw, d.lydwmc, d.publishDate, d.clicks, d.tpwj, d.nrwj, d.spwj, d.sftt, d.gjmc, d.tttp, linkmod, d.url, d.tagIds)
+    return tmp;
 }
 
-export async function getHotWords(){
+export async function getHotWords({pageindex=1, pagesize=10}) {
     let obj = initUserToken()
     let params = Object.assign(obj, {
-        pageindex: 1,
-        pagesize: 10
+        pageindex: pageindex,
+        pagesize: pagesize
     })
     let dataobj = await request({
         url: `/cms/api/words`,
@@ -121,16 +125,34 @@ export async function searchContents({ cid, pagenum, pagesize, linkmod, keyword 
     }
     res.total = dataobj.total;
     for (let d of dataobj.data) {
-        let tmp = new CmsContent(d.id, d.categoryId, d.title, d.description, d.lydw, d.lydwmc, d.publishDate, d.clicks, d.tpwj, d.nrwj, d.spwj, d.sftt, d.gjmc, d.tttp, linkmod)
+        let tmp = new CmsContent(d.id, d.categoryId, d.title, d.description, d.lydw, d.lydwmc, d.publishDate, d.clicks, d.tpwj, d.nrwj, d.spwj, d.sftt, d.gjmc, d.tttp, linkmod, d.url, d.tagIds)
         res.data.push(tmp)
     }
     return res
 }
 
-export function saveProject({ id, json }) {
+export async function getCoutryAndOcean() {
+    let obj = initUserToken()
+    let dataobj = await request({
+        url: '/cms/api/guohais',
+        method: 'get',
+        params: obj
+    })
+    let country = []
+    let ocean = []
+    for (let c of dataobj.data.guo) {
+        country.push({ text: c.text, value: c.id.value });
+    }
+    for (let c of dataobj.data.hai) {
+        ocean.push({ text: c.text, value: c.id.value });
+    }
+    return { country: country, ocean: ocean };
+}
+
+export function saveProject({ id, json, name }) {
     return request({
-        url: 'http://localhost:30003/cms/api/saveproject',
+        url: '/cms/api/saveproject',
         method: 'post',
-        data: { "id": id, "json": json }
+        data: { "id": id, "json": json, "name": name }
     })
 }

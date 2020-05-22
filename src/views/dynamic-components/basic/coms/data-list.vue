@@ -4,7 +4,7 @@
       <li v-for="item in datalist" :key="item.id">
         <p class="titles">
           <a class="link" :href="item.href">
-            <span class="symbol"></span>
+            <i class="el-icon-caret-right"></i>
             {{ item.title }}
           </a>
           <span class="clicks">{{ item.clicks }}</span>
@@ -34,7 +34,7 @@ export default {
 .yy-datalist {
   ul {
     list-style: none;
-    margin: 5px;
+    margin: 0 5px;
     padding: 0;
     li {
       .titles {
@@ -48,7 +48,6 @@ export default {
           overflow: hidden;
           &:hover {
             text-decoration: underline;
-            color: #409eff;
           }
           .symbol {
             display: inline-block;
@@ -66,7 +65,7 @@ export default {
         }
       }
       .infos {
-        display: flex;
+        display: flex;margin:4px;
         justify-content: space-between;
         .time {
           flex: 1;

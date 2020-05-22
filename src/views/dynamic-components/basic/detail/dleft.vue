@@ -20,7 +20,7 @@
         <li v-for="item in datalists" :key="item.id" :class="{'sel': curCid == item.id}">
           <p class="titles">
             <a @click="selectList(item)" class="link">
-              <span class="symbol"></span>
+              <i class="el-icon-caret-right"></i>
               {{ item.title }}
             </a>
             <span class="clicks">{{ item.clicks }}</span>
@@ -33,7 +33,12 @@
       </ul>
     </div>
     <div class="hd-pages">
-      <el-pagination background layout="prev, pager, next" :total="totalcount" @current-change="changePage($event)"></el-pagination>
+      <el-pagination
+        background
+        layout="prev, pager, next"
+        :total="totalcount"
+        @current-change="changePage($event)"
+      ></el-pagination>
     </div>
   </div>
 </template>
@@ -65,12 +70,14 @@ export default {
       datalists: [],
       pageindex: 1,
       totalcount: 1,
-      curCid: -1
+      curCid: -1,
+      lkmod: null
     };
   },
   mounted() {
     this.curCid = this.$route.query[this.contentId];
     if (this.binddata && this.binddata.pobjs) {
+      this.lkmod = this.binddata.linkmod[0];
       for (let o of this.binddata.pobjs) {
         this.lelM1.push(o);
       }
@@ -90,15 +97,26 @@ export default {
     }
   },
   methods: {
-    async setCurContent(){
-      let curContent = await getContentById({id : this.curCid });
-      if(curContent){
+    async setCurContent() {
+      let curContent = await getContentById({ id: this.curCid, linkmod: this.lkmod });
+      if (curContent) {
         this.curCategoryId = curContent.categoryId;
         ///获取父级ID
-        for(let m1 of this.lelM1){
-          for(let m2 of m1.children){
-            if(m2.id == this.curCategoryId){
+        for (let m1 of this.lelM1) {
+          for (let m2 of m1.children) {
+            if (m2.id == this.curCategoryId) {
               this.curCategoryPId = m1.id;
+            }
+          }
+        }
+        ///
+        this.lelM2 = [{ id: -1, name: "全部", code: "", show: true }];
+        for (let l1 of this.lelM1) {
+          if (l1.id == this.curCategoryPId) {
+            for (let m of l1.children) {
+              if (m.select) {
+                this.lelM2.push(m);
+              }
             }
           }
         }
@@ -145,11 +163,11 @@ export default {
       }
       this.loading = false;
     },
-    changePage(ev){
+    changePage(ev) {
       this.pageindex = ev;
-      this.initContent()
+      this.initContent();
     },
-    selectList(item){
+    selectList(item) {
       this.curCid = item.id;
       this.$emit("eventSelectList", item);
     }
@@ -161,12 +179,10 @@ export default {
   height: 100%;
   .hd {
     height: 30px;
-    background: #eee;
     line-height: 30px;
   }
   .hd-menu {
     height: 30px;
-    background: #fff;
     line-height: 30px;
     border: solid 1px #ccc;
     ul {
@@ -178,6 +194,7 @@ export default {
       overflow: auto;
       li {
         border-bottom: solid 2px transparent;
+        cursor: pointer;
         &.sel {
           border-bottom: solid 2px #000;
         }
@@ -188,7 +205,7 @@ export default {
   }
   .hd-content-list {
     height: calc(100% - 113px);
-    overflow:auto;
+    overflow: auto;
     ul {
       list-style: none;
       margin: 5px;
@@ -222,9 +239,9 @@ export default {
             text-align: right;
           }
         }
-        &.sel{
-          .link{
-            color:#f90;
+        &.sel {
+          .link {
+            color: #f90;
           }
         }
         .infos {

@@ -6,14 +6,14 @@
         </div>
 
         <el-divider content-position="left">输入信息</el-divider>
-        <div class="com-line" v-for="(item, index) in params" :key="index">
+        <div class="com-line" v-for="(item, index) in params" :key="index + ts">
             <form-upload @eventValueChange="setImage($event, item)" v-if="item.type == 'image'" :title="item.title"></form-upload>
             <form-text :defValue="item.value" @eventValueChange="setText($event, item)" v-if="item.type == 'text'" :title="item.title"></form-text>
             <form-checkbox :defValue="item.value" @eventValueChange="setCheckBox($event, item)" v-if="item.type == 'checkbox'" :title="item.title"></form-checkbox>
             
             <!-- 如何设置显示类别 binddata -->
 
-            <form-select @eventValueChange="setSelect($event, curTab)" :defValue="curTab.type" v-if="curTab && item.type == 'select'" :predatas="item.predata" :title="item.title"></form-select>
+            <form-select @eventValueChange="setSelect($event, curDataTab)" :defValue="curDataTab.type" v-if="curDataTab && item.type == 'select'" :predatas="item.predata" :title="item.title"></form-select>
             
             <form-number @eventValueChange="setText($event, item)" :defValue="item.value" v-if="item.type == 'number'" :title="item.title"></form-number>
 
@@ -79,7 +79,14 @@ export default {
     data(){
         return {
             params: [],
-            binddata: null
+            binddata: null,
+            ts: new Date().getTime(),
+            curTmpDataTab: null
+        }
+    },
+    computed: {
+        curDataTab() {
+            return this.curTab ? this.curTab : this.curTmpDataTab
         }
     },
     methods: {
@@ -88,9 +95,12 @@ export default {
             this.binddata = null
         },
         /////////////
-        tabItem(datas, binddata){
+        tabItem(datas, binddata, curdatatab){
             this.params = datas
             this.binddata = binddata
+            this.ts = new Date().getTime()
+            this.curTmpDataTab = curdatatab
+            console.log(datas, this.curTab)
         },
         /** event */
         setText(text, param){
@@ -108,7 +118,6 @@ export default {
         setSelect(selValue, param){
             //this.curMenu.type = param.value
             // console.log(this.curMenu, param)
-            console.log(selValue, param)
             param.type = selValue[0]
             //this.$emit('eventValueChanged', [param])
         },

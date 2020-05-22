@@ -14,6 +14,6 @@ export function uuid() {
 }
 
 export function getBasePath() {
-    let prev = '/#/prev?pid=' + getProjectId()
+    let prev = '/web/#/prev?pid=' + getProjectId()
     return prev
 }

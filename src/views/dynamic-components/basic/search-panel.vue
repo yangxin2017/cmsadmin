@@ -27,7 +27,7 @@
         <li v-for="item in contents" :key="item.id">
           <p class="titles">
             <a :href="item.href" class="link">
-              <span class="symbol"></span>
+              <i class="el-icon-caret-right"></i>
               {{ item.title }}
             </a>
             <span class="clicks">{{ item.clicks }}</span>
@@ -101,7 +101,7 @@ export default {
       this.initContent();
     },
     async initInfo() {
-      this.hotwords = await getHotWords();
+      this.hotwords = await getHotWords({pageindex: 1, pagesize: 10});
       this.initContent();
     },
     async initContent() {
@@ -135,6 +135,7 @@ export default {
 <style lang="scss" scoped>
 .yy-seach-panel {
   height: 100%;
+  padding:20px;
   .search-con {
     .cate-menu {
       margin: 0;
@@ -153,7 +154,7 @@ export default {
       }
     }
     .inp-con {
-      margin: 10px;
+      margin: 10px 0;
     }
     .hot-words {
       margin: 0;
@@ -197,7 +198,6 @@ export default {
             overflow: hidden;
             &:hover {
               text-decoration: underline;
-              color: #409eff;
             }
             .symbol {
               display: inline-block;

@@ -1,29 +1,34 @@
 <template>
   <div class="yy-header-container">
     <div class="logo">
-      <a :href="path">
+      <!-- <a :href="path">
         <img :src="src" alt />
-      </a>
+      </a>-->
+      <div class="search-con">
+        <el-input
+          size="small"
+          :autofocus="true"
+          placeholder="请输入内容"
+          suffix-icon="el-icon-search"
+          v-model="searchContent"
+          style="width:247px"
+          @keyup.native="enterSearch($event)"
+          @blur="showsearchcontent=false"
+        ></el-input>
+      </div>
     </div>
-    <div class="title">{{title}}</div>
+    <div class="title">
+      <span class="jb-black-txt">{{title}}</span>
+    </div>
     <div class="buttons">
       <rg-time v-if="showtime == true"></rg-time>
-      <i v-if="showsetting == true" class="el-icon-setting"></i>
-      <i v-if="showuser == true" class="el-icon-user"></i>
-      <i v-if="showsearch == true" class="el-icon-search" @click="showsearchcontent=true"></i>
-      <el-input
-        v-if="showsearchcontent == true"
-        size="small"
-        :autofocus="true"
-        placeholder="请输入内容"
-        suffix-icon="el-icon-search"
-        v-model="searchContent"
-        style="width:200px"
-        @keyup.native="enterSearch($event)"
-        @blur="showsearchcontent=false"
-      ></el-input>
 
-      <span class="username" v-if="showuser == true">Admin</span>
+      <span class="username" v-if="showuser == true">{{ username }}</span>
+      <i v-if="showuser == true" class="el-icon-user-solid"></i>
+
+      <i @click="goedit()" v-if="showsetting == true" class="el-icon-setting"></i>
+
+      <i class="el-icon-switch-button" @click="quit()"></i>
     </div>
   </div>
 </template>
@@ -34,41 +39,49 @@ import { getBasePath } from "@/utils/common";
 export default {
   props: {
     src: {
-      type: String
+      type: String,
+      default: ""
     },
     title: {
       type: String
     },
     showtime: {
-      type: Boolean
+      type: Boolean,
+      default: false
     },
     showsetting: {
-      type: Boolean
+      type: Boolean,
+      default: true
     },
     showsearch: {
-      type: Boolean
+      type: Boolean,
+      default: false
     },
     showuser: {
-      type: Boolean
+      type: Boolean,
+      default: true
     },
-    appData: {
-      type: Object,
-      default: {}
-    }
   },
   data() {
     return {
       path: "",
       searchContent: "",
-      showsearchcontent: false
+      showsearchcontent: false,
+      username: "Admin"
     };
   },
   components: {
     "rg-time": rgtime
   },
   mounted() {
+    this.username = this.$store.getters.name;
+
     let basepath = getBasePath();
-    if (this.appData.binddata && this.appData.binddata.linkmod) {
+    if (
+      this.appData &&
+      this.appData.binddata &&
+      this.appData.binddata.linkmod
+    ) {
       let lk = this.appData.binddata.linkmod[0];
       this.path = basepath + "&path=" + lk.value;
     }
@@ -77,26 +90,41 @@ export default {
     enterSearch(ev) {
       if (ev.keyCode == 13) {
         let basepath = getBasePath();
-        if (this.appData.binddata && this.appData.binddata.linkmod) {
-          let lk = this.appData.binddata.linkmod[1];
-          let params = lk.params;
-          let field = params[0] ? params[0].field : "";
+        let path =
+          basepath +
+          "&path=search" +
+          "&keyword" +
+          "=" +
+          this.searchContent;
+        window.open(path, "_blank");
 
-          let path =
-            basepath +
-            "&path=" +
-            lk.value +
-            "&" +
-            field +
-            "=" +
-            this.searchContent;
-          if (!this.searchContent) {
-            this.$message.error("请输入搜索内容");
-          } else {
-            window.open(path, "_blank");
-          }
-        }
+        // if (this.appData.binddata && this.appData.binddata.linkmod) {
+        //   let lk = this.appData.binddata.linkmod[1];
+        //   let params = lk.params;
+        //   let field = params[0] ? params[0].field : "";
+
+        //   let path =
+        //     basepath +
+        //     "&path=" +
+        //     lk.value +
+        //     "&" +
+        //     field +
+        //     "=" +
+        //     this.searchContent;
+        //   if (!this.searchContent) {
+        //     this.$message.error("请输入搜索内容");
+        //   } else {
+        //     window.open(path, "_blank");
+        //   }
+        // }
       }
+    },
+    async quit(){
+      await this.$store.dispatch('user/logout')
+      this.$router.push(`login?redirect=${this.$route.fullPath}`)
+    },
+    goedit(){
+      this.$router.push(`edit?id=1`)
     }
   }
 };
@@ -106,7 +134,7 @@ export default {
   display: flex;
   height: 100%;
   .logo {
-    width: 100px;
+    width: 300px;
     height: 100%;
     display: flex;
     align-items: center;
@@ -138,7 +166,9 @@ export default {
     .username {
       margin-left: 5px;
       font-size: 16px;
-      font-weight: bold;
+      position: relative;
+      top: 2px;
+      left: 4px;
     }
   }
 }

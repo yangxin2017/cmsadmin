@@ -41,12 +41,12 @@
         </span>
       </el-form-item>
 
-      <el-button :loading="loading" type="primary" style="width:100%;margin-bottom:30px;" @click.native.prevent="handleLogin">Login</el-button>
+      <el-button :loading="loading" type="primary" style="width:100%;margin-bottom:30px;" @click.native.prevent="handleLogin">登录</el-button>
 
-      <div class="tips">
+      <!-- <div class="tips">
         <span style="margin-right:20px;">username: admin</span>
         <span> password: any</span>
-      </div>
+      </div> -->
 
     </el-form>
   </div>
@@ -60,8 +60,8 @@ export default {
   data() {
     return {
       loginForm: {
-        username: 'f1',
-        password: '123456'
+        username: '',
+        password: ''
       },
       loading: false,
       passwordType: 'password',
@@ -92,6 +92,7 @@ export default {
         if (valid) {
           this.loading = true
           this.$store.dispatch('user/login', this.loginForm).then(() => {
+            this.redirect = 'prev?pid=1'
             this.$router.push({ path: this.redirect || '/' })
             this.loading = false
           }).catch(() => {
