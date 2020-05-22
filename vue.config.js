@@ -54,7 +54,7 @@ module.exports = {
         pathRewrite: { '^/cmsproject': '/cmsproject' }
       },
       '/cms': {
-        target: 'http://localhost:30003',
+        target: 'http://localhost:8099',
         changeOrigin: true,
         secure: false,
         pathRewrite: { '^/cms': '/cms' }
