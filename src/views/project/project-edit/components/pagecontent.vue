@@ -35,8 +35,10 @@
           :body-style="{padding:'5px'}"
         >
           <div class="btns">
-            <i class="el-icon-edit" @click="clearPanel(item)"></i>
-            <i class="el-icon-delete" @click="deletePanel(item)"></i>
+            <span class="el-icon-delete" @click="clearPanel(item)">重置</span>
+            <!-- <el-popconfirm title="这是一段内容确定删除吗？" @onConfirm="deletePanel(item)"> -->
+              <span slot="reference" @click="deletePanel(item)" class="el-icon-close">删除</span>
+            <!-- </el-popconfirm> -->
           </div>
           <comrender
             @eventChangeTab="changeDataTab($event)"
@@ -46,6 +48,11 @@
         </el-card>
       </grid-item>
     </grid-layout>
+    <div class="lines">
+      <div class="line-728"><span>高度线：728px</span></div>
+      <div class="line-908"><span>高度线：908px</span></div>
+      <div class="line-1268"><span>高度线：1268px</span></div>
+    </div>
   </div>
 </template>
 <script>
@@ -59,7 +66,7 @@ export default {
     GridLayout: VueGridLayout.GridLayout,
     GridItem: VueGridLayout.GridItem,
     comrender: comrender,
-    'head-n1': headn1
+    "head-n1": headn1
   },
   props: {
     layout: {
@@ -89,7 +96,7 @@ export default {
       return ds;
     },
     deletePanel(v) {
-      v.del = true
+      v.del = true;
     },
     clearPanel(item) {
       item.template = "";
@@ -106,7 +113,8 @@ export default {
         h: 10,
         i: id,
         template: "",
-        data: null
+        data: null,
+        del: false
       });
     },
     allowDrop(event) {
@@ -188,6 +196,40 @@ export default {
 </script>
 <style lang="scss" scoped>
 .page-con {
+  position:relative;
+  .line-728{
+    position:absolute;
+    top:728px;left:0;
+    width:100%;height:3px;
+    border-top:dashed 3px #f60;
+    text-align:right;
+    span{
+      font-size:14px;font-weight:bold;white-space:nowrap;
+      color:#f60;position:absolute;top:-22px;right:0;
+    }
+  }
+  .line-908{
+    position:absolute;
+    top:908px;left:0;
+    width:100%;height:3px;
+    border-top:dashed 3px #f60;
+    text-align:right;
+    span{
+      font-size:14px;font-weight:bold;white-space:nowrap;
+      color:#f60;position:absolute;top:-22px;right:0;
+    }
+  }
+  .line-1268{
+    position:absolute;
+    top:1268px;left:0;
+    width:100%;height:3px;
+    border-top:dashed 3px #f60;
+    text-align:right;
+    span{
+      font-size:14px;font-weight:bold;white-space:nowrap;
+      color:#f60;position:absolute;top:-22px;right:0;
+    }
+  }
   .hide-mod {
     display: none;
   }
@@ -201,11 +243,12 @@ export default {
       position: absolute;
       right: 0px;
       top: 0px;
-      background: #000;
+      background: rgba(0, 0, 0, 0.33);
       padding: 3px 5px;
-      i {
+      span {
         margin: 0 0 0 10px;
         color: #fff;
+        font-size: 12px;
         cursor: pointer;
         &:hover {
           color: #f60;

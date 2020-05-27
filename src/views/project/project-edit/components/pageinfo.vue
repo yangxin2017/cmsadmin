@@ -9,7 +9,7 @@
       <!-- <el-button size="small" type="success" round @click="savePage">保存</el-button> -->
     </div>
 
-    <el-collapse>
+    <el-collapse v-model="activeNames">
       <el-collapse-item title="基础组件" name="1">
         <div class="com-list">
           <div
@@ -19,9 +19,12 @@
             draggable="true"
             @dragstart="dragStart($event, item)"
           >
-            <el-tooltip class="item" effect="dark" :content="item.title" placement="top">
+            <div class="c-mod">
+              {{item.title}}
+            </div>
+            <!-- <el-tooltip class="item" effect="dark" :content="item.title" placement="top">
               <el-image fit="fill" style="height:40px;" :src="item.src"></el-image>
-            </el-tooltip>
+            </el-tooltip> -->
           </div>
         </div>
       </el-collapse-item>
@@ -60,6 +63,7 @@ export default {
   },
   data() {
     return {
+      activeNames: ['1'],
       components: [
         {
           id: 1,
@@ -160,7 +164,7 @@ export default {
               predata: [
                 { name: "纯文本", value: "list" },
                 { name: "轮播图", value: "image" },
-                { name: "图文结合", value: "img-text" },
+                // { name: "图文结合", value: "img-text" },
                 { name: "时间轴", value: "timeline" },
                 { name: "图片列表", value: "img-list" },
                 { name: "视频", value: "video" }
@@ -194,8 +198,7 @@ export default {
               type: "text-param",
               title: "关键词",
               value: "keyword"
-            },
-            { name: "showcount", type: "number", title: "显示数量", value: 5 }
+            }
           ]
         },
         {
@@ -427,6 +430,13 @@ export default {
       margin-bottom: 3px;
       .el-card__body {
         height: 40px;
+      }
+      .c-mod{
+        height:40px;line-height:40px;font-size:12px;color:#333;
+        border:solid 1px #ccc;text-align:center;cursor:pointer;
+        &:hover{
+          border:solid 1px #409EFF;
+        }
       }
     }
   }

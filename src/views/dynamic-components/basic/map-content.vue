@@ -14,7 +14,7 @@
         >{{item.name}}</li>
       </ul>
     </div>
-    <div class="content-wrap">
+    <div class="content-wrap" ref="lmap">
       <div class="yy-map" v-if="curMenu">
         <div class="mapimg2 guo" v-if="showcountry">
           <span
@@ -33,7 +33,7 @@
           >{{item.text}}</span>
         </div>
       </div>
-      <div class="yy-map-con">
+      <div class="yy-map-con" ref="rmap">
         <div class="title">
           <span class="tl-txt jb-black-txt zz-zt">{{ rgText }}</span>
         </div>
@@ -88,6 +88,8 @@ export default {
     };
   },
   mounted() {
+    // let total_width = this.$refs['lmap'].clientWidth - 30;
+    
     this.initBaseInfo();
   },
   methods: {
@@ -103,6 +105,7 @@ export default {
           this.changeTab(this.menus[0]);
         }
       }
+
     },
     changeTab(item) {
       this.curMenu = item;
@@ -191,11 +194,12 @@ export default {
   }
 
   .yy-map {
-    flex: 1;
+    width:60%;
     text-align: center;
   }
 
   .yy-map-con {
+    width:40%;
     .news-data {
       list-style: none;
       margin: 10px 0 0 0;

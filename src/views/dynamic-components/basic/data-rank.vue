@@ -53,6 +53,7 @@ export default {
     };
   },
   mounted() {
+    ///
     if (this.appData.binddata) {
       this.lkmod = this.appData.binddata.linkmod[0];
       this.initContent();
@@ -99,13 +100,13 @@ export default {
     display: flex;
     justify-content: space-between;
     .rank-rcb {
-      flex: 1;
+      width:49%;
       a {
         display: block;
         line-height: 30px;
         color: #333;
         font-size: 14px;
-        width: 195px;
+        width: 100%;
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;

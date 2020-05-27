@@ -48,71 +48,71 @@ constantRoutes.push({
   component: () => import('@/views/404'),
   hidden: true
 })
-constantRoutes.push({
-  path: '/',
-  component: Layout,
-  redirect: '/dashboard',
-  children: [{
-    path: 'dashboard',
-    name: 'Dashboard',
-    component: () => import('@/views/dashboard/index'),
-    meta: { title: 'Dashboard', icon: 'dashboard' }
-  }]
-})
+// constantRoutes.push({
+//   path: '/',
+//   component: Layout,
+//   redirect: '/dashboard',
+//   children: [{
+//     path: 'dashboard',
+//     name: 'Dashboard',
+//     component: () => import('@/views/dashboard/index'),
+//     meta: { title: 'Dashboard', icon: 'dashboard' }
+//   }]
+// })
 
 //add other
-constantRoutes.push({
-  path: '/content',
-  component: Layout,
-  redirect: '/content/list',
-  name: '内容管理',
-  hidden: false,
-  meta: { title: '内容管理', icon: 'example' },
-  children: [
-    {
-      path: 'list/:pcode/:code',
-      name: '内容列表',
-      component: () => import('@/views/admin/content/list/index'),
-      meta: { title: '内容管理', icon: 'table' },
-      hidden: true
-    },
-    {
-      path: 'list/:pcode',
-      name: '内容列表',
-      component: () => import('@/views/admin/content/list/index'),
-      meta: { title: '内容管理', icon: 'table' },
-      hidden: true
-    }
-  ]
-})
+// constantRoutes.push({
+//   path: '/content',
+//   component: Layout,
+//   redirect: '/content/list',
+//   name: '内容管理',
+//   hidden: false,
+//   meta: { title: '内容管理', icon: 'example' },
+//   children: [
+//     {
+//       path: 'list/:pcode/:code',
+//       name: '内容列表',
+//       component: () => import('@/views/admin/content/list/index'),
+//       meta: { title: '内容管理', icon: 'table' },
+//       hidden: true
+//     },
+//     {
+//       path: 'list/:pcode',
+//       name: '内容列表',
+//       component: () => import('@/views/admin/content/list/index'),
+//       meta: { title: '内容管理', icon: 'table' },
+//       hidden: true
+//     }
+//   ]
+// })
 /////////////////////////////////////
-constantRoutes.push({
-  path: '/project',
-  component: Layout,
-  redirect: '/project/list',
-  name: '项目管理',
-  meta: { title: '项目管理', icon: 'example' },
-  children: [
-    {
-      path: 'list',
-      name: '项目列表',
-      component: () => import('@/views/project/project-list/index'),
-      meta: { title: '项目列表', icon: 'table' }
-    },
-    {
-      path: 'edit',
-      name: '项目编辑',
-      component: () => import('@/views/project/project-edit/index'),
-      meta: { title: '项目编辑', icon: 'table' }
-    },
-    // {
-    //   path: 'prev',
-    //   name: '项目预览',
-    //   component: () => import('@/views/project/project-prev/index'),
-    //   meta: { title: '项目预览', icon: 'table' }
-    // }
-  ]
-})
+// constantRoutes.push({
+//   path: '/project',
+//   component: Layout,
+//   redirect: '/project/list',
+//   name: '项目管理',
+//   meta: { title: '项目管理', icon: 'example' },
+//   children: [
+//     {
+//       path: 'list',
+//       name: '项目列表',
+//       component: () => import('@/views/project/project-list/index'),
+//       meta: { title: '项目列表', icon: 'table' }
+//     },
+//     {
+//       path: 'edit',
+//       name: '项目编辑',
+//       component: () => import('@/views/project/project-edit/index'),
+//       meta: { title: '项目编辑', icon: 'table' }
+//     },
+//     // {
+//     //   path: 'prev',
+//     //   name: '项目预览',
+//     //   component: () => import('@/views/project/project-prev/index'),
+//     //   meta: { title: '项目预览', icon: 'table' }
+//     // }
+//   ]
+// })
 
 constantRoutes.push({
   path: '/prev',

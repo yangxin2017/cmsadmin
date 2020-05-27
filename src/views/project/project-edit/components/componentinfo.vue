@@ -9,7 +9,7 @@
         <div class="com-line" v-for="(item, index) in params" :key="index + ts">
             <form-upload @eventValueChange="setImage($event, item)" v-if="item.type == 'image'" :title="item.title"></form-upload>
             <form-text :defValue="item.value" @eventValueChange="setText($event, item)" v-if="item.type == 'text'" :title="item.title"></form-text>
-            <form-checkbox :defValue="item.value" @eventValueChange="setCheckBox($event, item)" v-if="item.type == 'checkbox'" :title="item.title"></form-checkbox>
+            <form-checkbox style="display:none;" :defValue="item.value" @eventValueChange="setCheckBox($event, item)" v-if="item.type == 'checkbox'" :title="item.title"></form-checkbox>
             
             <!-- 如何设置显示类别 binddata -->
 
@@ -17,18 +17,18 @@
             
             <form-number @eventValueChange="setText($event, item)" :defValue="item.value" v-if="item.type == 'number'" :title="item.title"></form-number>
 
-            <form-select @eventValueChange="setSelect($event, item)" defField="label" :defValue="item.value" v-if="item.type == 'text-param'" :predatas="curMenu.params" :title="item.title"></form-select>
+            <form-select style="display:none;" @eventValueChange="setSelect($event, item)" defField="label" :defValue="item.value" v-if="item.type == 'text-param'" :predatas="curMenu.params" :title="item.title"></form-select>
             
             <div v-if="item.children" style="padding:5px 5px 5px 25px;background:#fbfbfb;border-left:solid 1px #409EFF;">
                 <div v-for="inItem in item.children" :key="inItem.id">
-                    <form-text :defValue="inItem.value" @eventValueChange="setText($event, inItem)" v-if="inItem.type == 'text' && inItem.showvalue == item.value" :title="inItem.title"></form-text>
-                    <form-checkbox :defValue="inItem.value" @eventValueChange="setCheckBox($event, inItem)" v-if="inItem.type == 'checkbox' && inItem.showvalue == item.value" :title="inItem.title"></form-checkbox>
+                    <form-text style="display:none;" :defValue="inItem.value" @eventValueChange="setText($event, inItem)" v-if="inItem.type == 'text' && inItem.showvalue == item.value" :title="inItem.title"></form-text>
+                    <form-checkbox style="display:none;" :defValue="inItem.value" @eventValueChange="setCheckBox($event, inItem)" v-if="inItem.type == 'checkbox' && inItem.showvalue == item.value" :title="inItem.title"></form-checkbox>
                     <form-number @eventValueChange="setText($event, inItem)" :defValue="inItem.value" v-if="inItem.type == 'number' && inItem.showvalue == item.value" :title="inItem.title"></form-number>
                 </div>
             </div>
         </div>
         
-        <div v-if="binddata">
+        <div v-if="binddata" style="display:none">
             <el-divider content-position="left">页面跳转设置</el-divider>
             <cominfo-page :menus="menus" :binddata="binddata" @eventChangePage="changeDataSource()"></cominfo-page>
         </div>
@@ -100,7 +100,6 @@ export default {
             this.binddata = binddata
             this.ts = new Date().getTime()
             this.curTmpDataTab = curdatatab
-            console.log(datas, this.curTab)
         },
         /** event */
         setText(text, param){
