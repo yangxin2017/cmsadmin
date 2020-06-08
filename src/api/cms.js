@@ -53,6 +53,34 @@ export async function getAllCategorys() {
     return res
 }
 
+export async function getDeptCates({ deptid }){
+    let obj = initUserToken()
+    let target = {deptid: deptid};
+    let pam = Object.assign(obj, target);
+
+    let dataobj = await request({
+        url: `/cms/api/deptCates`,
+        params: pam
+    })
+    let res = []
+    for(let d of dataobj.data){
+        res.push(d.id.categoryId)
+    }
+    return res
+}
+
+export function updateDept({deptid, name, desc, cids}){
+    let obj = initUserToken()
+    let target = {deptId: deptid, name: name, desc: desc, cids: cids}
+    let pam = Object.assign(obj, target);
+    let dataobj = request({
+        url: `/cms/api/saveDept`,
+        params: pam,
+        method: 'post'
+    })
+    return dataobj
+}
+
 export async function getContent({ cid, pagenum, pagesize, linkmod, containChild, gjmc=undefined, orderField=undefined }) {
     let obj = initUserToken()
     let params = Object.assign(obj, {

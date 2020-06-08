@@ -61,30 +61,62 @@ constantRoutes.push({
 // })
 
 //add other
-// constantRoutes.push({
-//   path: '/content',
-//   component: Layout,
-//   redirect: '/content/list',
-//   name: '内容管理',
-//   hidden: false,
-//   meta: { title: '内容管理', icon: 'example' },
-//   children: [
-//     {
-//       path: 'list/:pcode/:code',
-//       name: '内容列表',
-//       component: () => import('@/views/admin/content/list/index'),
-//       meta: { title: '内容管理', icon: 'table' },
-//       hidden: true
-//     },
-//     {
-//       path: 'list/:pcode',
-//       name: '内容列表',
-//       component: () => import('@/views/admin/content/list/index'),
-//       meta: { title: '内容管理', icon: 'table' },
-//       hidden: true
-//     }
-//   ]
-// })
+constantRoutes.push({
+  path: '/content',
+  component: Layout,
+  redirect: '/content/list',
+  name: '内容管理',
+  hidden: false,
+  meta: { title: '内容管理', icon: 'example' },
+  children: [
+    {
+      path: 'list',
+      name: '内容列表',
+      component: () => import('@/views/admin/content/list/index'),
+      meta: { title: '内容管理', icon: 'table' }
+    }
+  ]
+})
+
+constantRoutes.push({
+  path: '/dept',
+  component: Layout,
+  redirect: '/dept/list',
+  name: '部门管理',
+  hidden: false,
+  meta: { title: '部门管理', icon: 'example' },
+  children: [
+    {
+      path: 'list',
+      name: '部门列表',
+      component: () => import('@/views/admin/dept/list'),
+      meta: { title: '部门列表', icon: 'table' }
+    }
+  ]
+})
+
+constantRoutes.push({
+  path: '/user',
+  component: Layout,
+  redirect: '/user/userlist',
+  name: '用户管理',
+  hidden: false,
+  meta: { title: '用户管理', icon: 'example' },
+  children: [
+    {
+      path: 'rolelist',
+      name: '角色列表',
+      component: () => import('@/views/admin/role/list/index'),
+      meta: { title: '角色列表', icon: 'table' }
+    },
+    {
+      path: 'userlist',
+      name: '用户列表',
+      component: () => import('@/views/admin/user/list/index'),
+      meta: { title: '用户列表', icon: 'table' }
+    }
+  ]
+})
 /////////////////////////////////////
 // constantRoutes.push({
 //   path: '/project',
