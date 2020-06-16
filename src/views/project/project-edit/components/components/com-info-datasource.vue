@@ -9,11 +9,11 @@
       @change="changeDataSource"
     ></el-cascader>
 
-    <!-- <div class="new-add">
+    <div class="new-add">
       <el-button type="primary" size="small" round plain @click="showAddSource">添加数据源</el-button>
-    </div> -->
+    </div>
 
-    <cominfo-adddatasource ref="refAddDatasource"></cominfo-adddatasource>
+    <cominfo-adddatasource ref="refAddDatasource" @addCateEvent="addCateEvent"></cominfo-adddatasource>
   </div>
 </template>
 <script>
@@ -37,7 +37,7 @@ export default {
   data() {
     return {
       props: { multiple: true, value: "id", label: "name" },
-      dataval: 12,
+      dataval: 12
       // datas: [
       //     {
       //         value: 1,
@@ -60,6 +60,9 @@ export default {
     };
   },
   methods: {
+    addCateEvent() {
+      this.$emit("addCateEvent");
+    },
     getDataSourceObj(ids) {
       let arr = [];
       for (let ki of this.categorys) {
@@ -105,7 +108,6 @@ export default {
       let pobjs = this.getParentDataSource(pids, ids);
 
       this.binddata.objs = objs;
-      console.log(objs);
       this.binddata.pobjs = pobjs;
       this.$emit("eventChangeDataSource", [this.dataval]);
     }

@@ -1,5 +1,6 @@
 import { login, getInfo } from '@/api/user'
 import { getAllCategorys } from '@/api/cms'
+import { getDepts } from '@/api/cmsuser'
 import { getToken, setToken, removeToken, getUserId, setUserId, getProjectId, setProjectId } from '@/utils/auth'
 import { resetRouter } from '@/router'
 
@@ -7,9 +8,14 @@ const getDefaultState = () => {
   return {
     userId: getUserId(),
     token: getToken(),
+    cmsuserId: '',
     name: '',
     avatar: '',
+    deptId: -1,
+    role: null,
     categorys: [],
+    seatId: "",
+    depts: [],
     projectId: getProjectId()
   }
 }
@@ -29,6 +35,9 @@ const mutations = {
   SET_NAME: (state, name) => {
     state.name = name
   },
+  SET_DEPTID: (state, deptId) => {
+    state.deptId = deptId
+  },
   SET_AVATAR: (state, avatar) => {
     state.avatar = avatar
   },
@@ -37,7 +46,19 @@ const mutations = {
   },
   SET_CATEGORYS: (state, categorys) => {
     state.categorys = categorys
-  }
+  },
+  SET_DEPTS: (state, depts) => {
+    state.depts = depts
+  },
+  SET_ROLE: (state, role) => {
+    state.role = role
+  },
+  SET_CMSUSERID: (state, cmsuserId) => {
+    state.cmsuserId = cmsuserId
+  },
+  SET_SEATIDS: (state, seatId) => {
+    state.seatId = seatId
+  },
 }
 
 const actions = {
@@ -81,10 +102,14 @@ const actions = {
           reject('Verification failed, please Login again.')
         }
 
-        const { name, avatar } = data
+        const { name, deptId, role, userId, seatIds } = data
 
+        commit('SET_CMSUSERID', userId)
         commit('SET_NAME', name)
+        commit('SET_DEPTID', deptId)
+        commit('SET_ROLE', role)
         commit('SET_AVATAR', './avatar.gif')
+        commit('SET_SEATIDS', seatIds)
         resolve(data)
       }).catch(error => {
         reject(error)
@@ -123,8 +148,19 @@ const actions = {
   // set categorys
   getAllCates( { commit } ) {
     return new Promise((resolve, reject) => {
-      getAllCategorys().then(res=>{
+      getAllCategorys({}).then(res=>{
         commit('SET_CATEGORYS', res)
+        resolve(res)
+      }).catch(err=>{
+        reject(error)
+      })
+    })
+  },
+  //
+  getAllDepts( { commit } ) {
+    return new Promise((resolve, reject) => {
+      getDepts().then(res=>{
+        commit('SET_DEPTS', res)
         resolve(res)
       }).catch(err=>{
         reject(error)

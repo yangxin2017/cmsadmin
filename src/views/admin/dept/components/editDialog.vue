@@ -28,14 +28,14 @@
               <el-form-item label="部门描述">
                 <el-input type="textarea" v-model="curDept.desc"></el-input>
               </el-form-item>
-              <el-form-item label="管理分类">
+              <!-- <el-form-item label="管理分类">
                 <el-cascader
                   :options="catesOption"
                   v-model="curDept.cates"
                   :props="props"
                   clearable
                 ></el-cascader>
-              </el-form-item>
+              </el-form-item>-->
             </el-form>
           </div>
         </el-col>
@@ -56,7 +56,7 @@ export default {
       title: "修改部门",
       alldepts: [],
       defaultProps: {
-        children: "children",
+        children: "childrens",
         label: "name"
       },
       curkey: 1,
@@ -64,17 +64,18 @@ export default {
         name: "",
         cates: [],
         desc: "",
-        id: ""
+        id: "",
+        pid: -1
       },
       loading: false,
-      saving: false,
-      props: { multiple: true, label: "name", value: "id" },
-      catesOption: []
+      saving: false
+      //props: { multiple: true, label: "name", value: "id" },
+      //catesOption: []
     };
   },
   methods: {
     async initcates(did) {
-      let cates = await getAllCategorys();
+      let cates = await getAllCategorys({});
       this.catesOption = cates;
       let objs = await getDeptCates({ deptid: did });
 
@@ -95,6 +96,23 @@ export default {
     },
     initDepts(depts) {
       this.alldepts = depts;
+    },
+    showDialogForAdd(title, dept) {
+      this.title = title;
+      this.dialogVisible = true;
+      this.loading = true;
+      setTimeout(() => {
+        this.curDept = {
+          name: "",
+          cates: [],
+          desc: "",
+          id: ""
+        };
+        this.curkey = dept.id;
+        this.$refs.mtree.setCurrentKey(this.curkey);
+
+        this.loading = false;
+      }, 500);
     },
     showDialog(title, dept) {
       this.title = title;
@@ -126,14 +144,22 @@ export default {
           cids.push(id2);
         }
       }
-      this.saving = true
+      this.saving = true;
       await updateDept({
         deptid: this.curDept.id,
         name: this.curDept.name,
         desc: this.curDept.desc,
-        cids: cids.join(",")
+        cids: cids.join(","),
+        parentId: this.$refs.mtree.getCurrentKey()
       });
-      this.saving = false
+      this.saving = false;
+      ////
+      this.$message({
+        message: "操作成功！",
+        type: "success"
+      });
+      this.$emit("addDeptEvent")
+      this.dialogVisible = false
     },
     ///////
     _inarray(id, arr) {

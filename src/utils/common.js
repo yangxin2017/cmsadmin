@@ -17,3 +17,20 @@ export function getBasePath() {
     let prev = '/web/#/prev?pid=' + getProjectId()
     return prev
 }
+
+export function getDeptById(depts, id) {
+    let res = null
+    for (let o1 of depts) {
+        if (o1.id == id) {
+            res = o1;
+            break
+        }
+        for (let o2 of o1.children) {
+            if (o2.id == id) {
+                res = o2
+                break
+            }
+        }
+    }
+    return res;
+}

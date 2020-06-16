@@ -25,6 +25,7 @@ module.exports = {
    * Detail: https://cli.vuejs.org/config/#publicpath
    */
   runtimeCompiler: true,
+  filenameHashing: true,
   publicPath: '/web/',
   outputDir: 'dist',
   assetsDir: 'static',

@@ -1,4 +1,5 @@
 <template>
+<div id="default-skin">
   <div class="pro-container">
     <div class="page-head">
       <comrender :html="headtemplate" />
@@ -35,11 +36,14 @@
       </grid-layout>
     </div>
   </div>
+</div>
 </template>
 <script>
 import VueGridLayout from "vue-grid-layout";
 import comrender from "@/views/dynamic-components/render";
-import { getProjectById } from "@/api/cms";
+import { getProjects, getProjectById } from "@/api/cms";
+
+import { getAllBM } from "@/api/content";
 
 export default {
   components: {
@@ -61,7 +65,7 @@ export default {
         this.projectInfo = await getProjectById({ id: projectId });
         this.menus = this.projectInfo.json.menus;
 
-        this.headtemplate = `<head-n1 title="${this.projectInfo.name}" ></head-n1>`
+        this.headtemplate = `<head-n1 title="${this.projectInfo.name}" ></head-n1>`;
       }
       if (!path) {
         for (let m of this.menus) {
@@ -78,18 +82,43 @@ export default {
           }
         }
       }
+    },
+    async judge() {
+      const loading = this.$loading({
+        lock: true,
+        text: "Loading",
+        spinner: "el-icon-loading",
+        background: "rgba(0, 0, 0, 0.7)"
+      });
+      let webtype = this.$store.getters.webtype;
+      let seatids = this.$store.getters.user.seatId;
+
+      let pros = await getProjects({ pagenum: 1, pagesize: 10 });
+      let id = 1;
+      for (let p of pros) {
+        let ss = "," + p.seatids + ",";
+        if (ss.indexOf(seatids) >= 0) {
+          id = p.id;
+        }
+      }
+      loading.close();
+      this.$router.push("/prev?pid=" + id);
     }
   },
   mounted() {
     let pid = this.$route.query.pid;
-    let path = this.$route.query.path;
-    let cid = this.$route.query.id;
-    this.setPage(path, pid, cid);
-    this.$store.dispatch("user/setProjectId", pid);
+
+    if (!pid) {
+      this.judge();
+    } else {
+      let path = this.$route.query.path;
+      let cid = this.$route.query.id;
+      this.setPage(path, pid, cid);
+      this.$store.dispatch("user/setProjectId", pid);
+    }
   },
   watch: {
     $route(to) {
-      console.log("change path");
       let pid = to.query.pid;
       let path = to.query.path;
       let cid = to.query.id;

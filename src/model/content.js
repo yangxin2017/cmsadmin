@@ -2,7 +2,7 @@ import moment from "moment";
 import { getBasePath } from "@/utils/common";
 
 export class CmsContent {
-    constructor(id, categoryId, title, desc, lydw, lydwmc, publishTime, clicks, tpwj, nrwj, spwj, zqbjson, gjmc, reallydw, lkmod, url, tags) {
+    constructor(id, categoryId, title, desc, lydw, lydwmc, publishTime, clicks, tpwj, nrwj, spwj, zqbjson, gjmc, reallydw, lkmod, url, tags, status, sort, mmdj, olden) {
         this.id = id
         this.categoryId = categoryId
         this.title = title
@@ -11,9 +11,9 @@ export class CmsContent {
         this.lydwmc = lydwmc
         this.publishTime = moment(publishTime).format('YYYY-MM-DD HH:mm:ss')
         this.clicks = clicks
-        this.tpwj = tpwj ? '/cms/webfile/' + tpwj : null
+        this.tpwj = tpwj
         this.nrwj = nrwj
-        this.spwj = spwj ? '/cms/webfile/' + spwj : null
+        this.spwj = spwj
         this.zqbjson = zqbjson ? JSON.parse(zqbjson) : []
         this.gjmc = gjmc
         this.reallydw = reallydw
@@ -22,12 +22,20 @@ export class CmsContent {
         //////
         let arr = tags.split(',')
         let ts = []
+        let ts2 = []
         for(let a of arr){
-            if(a){
-                ts.push(a)
+            let aiarr = a.split("|")
+            if(aiarr.length == 2){
+                ts.push(aiarr[0])
+                ts2.push(aiarr[1])
             }
         }
         this.tags = ts
+        this.tagids = ts2
+        this.status = status
+        this.sort = sort
+        this.mmdj = mmdj
+        this.olden = olden
     }
 
     setUrl(lkmod) {

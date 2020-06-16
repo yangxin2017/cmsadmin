@@ -84,7 +84,7 @@ export default {
   }
 
   .hideSidebar .fixed-header {
-    width: calc(100% - 54px)
+    width: calc(100% - 60px)
   }
 
   .mobile .fixed-header {

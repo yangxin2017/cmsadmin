@@ -1,7 +1,7 @@
 <template>
   <div class="app-container">
     <div class="op-buts">
-      <el-button type="primary" @click="addRole()">添加用户</el-button>
+      <!-- <el-button type="primary" @click="addRole()">添加用户</el-button> -->
       <div class="rg-sea">
         <el-input placeholder="请输入内容" prefix-icon="el-icon-search" v-model="keyword" @change="refreshpage(1)"></el-input>
       </div>
@@ -15,13 +15,13 @@
       <el-table-column prop="seatname" label="席位名称"></el-table-column>
       <el-table-column prop="lastloginip" label="上次登录IP"></el-table-column>
       <el-table-column prop="lastlogindate" label="上次登录日期"></el-table-column>
-      <el-table-column label="操作">
+      <!-- <el-table-column label="操作">
         <template slot-scope="scope">
           <el-button @click="handleClick(scope.row)" type="text" size="small">查看</el-button>
           <el-button type="text" size="small">编辑</el-button>
           <el-button type="text" size="small">删除</el-button>
         </template>
-      </el-table-column>
+      </el-table-column> -->
     </el-table>
     <div class="op-pages">
       <el-pagination
@@ -73,11 +73,11 @@ export default {
 </script>
 <style lang="scss" scoped>
 .op-buts {
-  text-align: left;
+  text-align: right;
   margin: 0 0 10px 0;
   .rg-sea {
-    float: right;
     width: 200px;
+    display:inline-block;
   }
 }
 .op-pages {

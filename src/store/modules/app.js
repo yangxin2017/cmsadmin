@@ -5,7 +5,9 @@ const state = {
     opened: Cookies.get('sidebarStatus') ? !!+Cookies.get('sidebarStatus') : true,
     withoutAnimation: false
   },
-  device: 'desktop'
+  device: 'desktop',
+  webtype: 'main',
+  mainurl: 'https://1.108.100.30:8099/'
 }
 
 const mutations = {

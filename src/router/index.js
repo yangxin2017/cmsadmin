@@ -48,17 +48,12 @@ constantRoutes.push({
   component: () => import('@/views/404'),
   hidden: true
 })
-// constantRoutes.push({
-//   path: '/',
-//   component: Layout,
-//   redirect: '/dashboard',
-//   children: [{
-//     path: 'dashboard',
-//     name: 'Dashboard',
-//     component: () => import('@/views/dashboard/index'),
-//     meta: { title: 'Dashboard', icon: 'dashboard' }
-//   }]
-// })
+constantRoutes.push({
+  path: '/',
+  component: Layout,
+  redirect: '/dashboard',
+  name: '首页'
+})
 
 //add other
 constantRoutes.push({
@@ -74,6 +69,12 @@ constantRoutes.push({
       name: '内容列表',
       component: () => import('@/views/admin/content/list/index'),
       meta: { title: '内容管理', icon: 'table' }
+    },
+    {
+      path: 'add',
+      name: '内容编辑',
+      component: () => import('@/views/admin/content/add/add'),
+      meta: { title: '内容编辑', icon: 'table' }
     }
   ]
 })
@@ -92,6 +93,73 @@ constantRoutes.push({
       component: () => import('@/views/admin/dept/list'),
       meta: { title: '部门列表', icon: 'table' }
     }
+  ]
+})
+
+constantRoutes.push({
+  path: '/seat',
+  component: Layout,
+  redirect: '/seat/list',
+  name: '席位管理',
+  hidden: false,
+  meta: { title: '席位管理', icon: 'example' },
+  children: [
+    {
+      path: 'list',
+      name: '席位列表',
+      component: () => import('@/views/admin/seat/list'),
+      meta: { title: '席位列表', icon: 'table' }
+    },
+  ]
+})
+
+constantRoutes.push({
+  path: '/message',
+  component: Layout,
+  redirect: '/message/list',
+  name: '消息管理',
+  hidden: false,
+  meta: { title: '消息管理', icon: 'example' },
+  children: [
+    {
+      path: 'list',
+      name: '消息列表',
+      component: () => import('@/views/admin/message/list'),
+      meta: { title: '消息列表', icon: 'table' }
+    },
+  ]
+})
+
+constantRoutes.push({
+  path: '/category',
+  component: Layout,
+  redirect: '/category/list',
+  name: '栏目管理',
+  hidden: false,
+  meta: { title: '栏目管理', icon: 'example' },
+  children: [
+    {
+      path: 'list',
+      name: '栏目列表',
+      component: () => import('@/views/admin/categorys/list/index'),
+      meta: { title: '栏目列表', icon: 'table' }
+    },
+  ]
+})
+constantRoutes.push({
+  path: '/tag',
+  component: Layout,
+  redirect: '/tag/list',
+  name: '标签管理',
+  hidden: false,
+  meta: { title: '标签管理', icon: 'example' },
+  children: [
+    {
+      path: 'list',
+      name: '标签列表',
+      component: () => import('@/views/admin/tags/list/index'),
+      meta: { title: '标签列表', icon: 'table' }
+    },
   ]
 })
 
@@ -118,33 +186,33 @@ constantRoutes.push({
   ]
 })
 /////////////////////////////////////
-// constantRoutes.push({
-//   path: '/project',
-//   component: Layout,
-//   redirect: '/project/list',
-//   name: '项目管理',
-//   meta: { title: '项目管理', icon: 'example' },
-//   children: [
-//     {
-//       path: 'list',
-//       name: '项目列表',
-//       component: () => import('@/views/project/project-list/index'),
-//       meta: { title: '项目列表', icon: 'table' }
-//     },
-//     {
-//       path: 'edit',
-//       name: '项目编辑',
-//       component: () => import('@/views/project/project-edit/index'),
-//       meta: { title: '项目编辑', icon: 'table' }
-//     },
-//     // {
-//     //   path: 'prev',
-//     //   name: '项目预览',
-//     //   component: () => import('@/views/project/project-prev/index'),
-//     //   meta: { title: '项目预览', icon: 'table' }
-//     // }
-//   ]
-// })
+constantRoutes.push({
+  path: '/project',
+  component: Layout,
+  redirect: '/project/list',
+  name: '项目管理',
+  meta: { title: '项目管理', icon: 'example' },
+  children: [
+    {
+      path: 'list',
+      name: '项目列表',
+      component: () => import('@/views/project/project-list/index'),
+      meta: { title: '项目列表', icon: 'table' }
+    },
+    // {
+    //   path: 'edit',
+    //   name: '项目编辑',
+    //   component: () => import('@/views/project/project-edit/index'),
+    //   meta: { title: '项目编辑', icon: 'table' }
+    // },
+    // {
+    //   path: 'prev',
+    //   name: '项目预览',
+    //   component: () => import('@/views/project/project-prev/index'),
+    //   meta: { title: '项目预览', icon: 'table' }
+    // }
+  ]
+})
 
 constantRoutes.push({
   path: '/prev',

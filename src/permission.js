@@ -35,6 +35,8 @@ router.beforeEach(async(to, from, next) => {
           await store.dispatch('user/getInfo')
           // get cate info
           await store.dispatch('user/getAllCates')
+          // get depts info
+          await store.dispatch('user/getAllDepts')
 
           next()
         } catch (error) {

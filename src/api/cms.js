@@ -22,7 +22,7 @@ export async function getProjects({ pagenum, pagesize }) {
     })
     let res = []
     for (let d of dataobj.data) {
-        let tmp = new CmsProject(d.id, d.name, d.desc, d.jsonstr, d.pic, d.ctime)
+        let tmp = new CmsProject(d.id, d.name, d.desc, d.jsonstr, d.pic, d.ctime, d.seatids)
         res.push(tmp)
     }
     return res
@@ -32,30 +32,36 @@ export async function getProjectById({ id }) {
         url: `/cms/api/project?id=${id}`
     })
     let d = dataobj.data
-    let res = new CmsProject(d.id, d.name, d.desc, d.jsonstr, d.pic, d.ctime)
+    let res = new CmsProject(d.id, d.name, d.desc, d.jsonstr, d.pic, d.ctime, d.seatids)
     return res
 }
 
-export async function getAllCategorys() {
+export async function getAllCategorys({ title = undefined, lydw = undefined, status = undefined }) {
+    let obj = initUserToken()
+    let target = { title: title, lydw: lydw, status: status };
+    let pam = Object.assign(obj, target);
+
     let dataobj = await request({
-        url: `/cms/api/allcategorys`
+        url: `/cms/api/allcategorys`,
+        params: pam
     })
+
     let res = []
     for (let d of dataobj.data) {
         let child = []
         for (let di of d.children) {
-            let tmp = new CmsCategory(di.id, di.name, di.show, di.code, [], di.type)
+            let tmp = new CmsCategory(di.id, di.name, di.show, di.code, [], di.type, true, di.fields, di.count, di.spec)
             child.push(tmp)
         }
-        let one = new CmsCategory(d.id, d.name, d.show, d.code, child, d.type)
+        let one = new CmsCategory(d.id, d.name, d.show, d.code, child, d.type, false, d.fields, d.count, d.spec)
         res.push(one)
     }
     return res
 }
 
-export async function getDeptCates({ deptid }){
+export async function getDeptCates({ deptid }) {
     let obj = initUserToken()
-    let target = {deptid: deptid};
+    let target = { deptid: deptid };
     let pam = Object.assign(obj, target);
 
     let dataobj = await request({
@@ -63,15 +69,15 @@ export async function getDeptCates({ deptid }){
         params: pam
     })
     let res = []
-    for(let d of dataobj.data){
+    for (let d of dataobj.data) {
         res.push(d.id.categoryId)
     }
     return res
 }
 
-export function updateDept({deptid, name, desc, cids}){
+export function updateDept({ deptid, name, desc, cids, parentId }) {
     let obj = initUserToken()
-    let target = {deptId: deptid, name: name, desc: desc, cids: cids}
+    let target = { deptId: deptid, name: name, desc: desc, cids: cids, parentId: parentId }
     let pam = Object.assign(obj, target);
     let dataobj = request({
         url: `/cms/api/saveDept`,
@@ -81,7 +87,7 @@ export function updateDept({deptid, name, desc, cids}){
     return dataobj
 }
 
-export async function getContent({ cid, pagenum, pagesize, linkmod, containChild, gjmc=undefined, orderField=undefined }) {
+export async function getContent({ cid, pagenum, pagesize, linkmod, containChild, lydw = undefined, gjmc = undefined, orderField = undefined }) {
     let obj = initUserToken()
     let params = Object.assign(obj, {
         pageindex: pagenum,
@@ -89,7 +95,8 @@ export async function getContent({ cid, pagenum, pagesize, linkmod, containChild
         cid: cid,
         containChild: containChild ? true : false,
         gjmc: gjmc,
-        orderField: orderField
+        orderField: orderField,
+        lydw: lydw
     })
     let dataobj = await request({
         url: `/cms/api/contents`,
@@ -121,7 +128,7 @@ export async function getContentById({ id, linkmod }) {
     return tmp;
 }
 
-export async function getHotWords({pageindex=1, pagesize=10}) {
+export async function getHotWords({ pageindex = 1, pagesize = 10 }) {
     let obj = initUserToken()
     let params = Object.assign(obj, {
         pageindex: pageindex,
@@ -183,4 +190,18 @@ export function saveProject({ id, json, name }) {
         method: 'post',
         data: { "id": id, "json": json, "name": name }
     })
+}
+
+export async function updateProConf({id, seatids}) {
+    let obj = initUserToken()
+    let target = {
+        id: id,
+        seatids: seatids
+    }
+    let pam = Object.assign(obj, target);
+    let dataobj = await request({
+        url: `/cms/api/updateproconf`,
+        params: pam
+    })
+    return dataobj
 }

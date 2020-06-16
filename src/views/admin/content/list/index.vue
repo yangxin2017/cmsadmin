@@ -1,60 +1,107 @@
 <template>
   <div class="cms-container">
+    <div class="sub-menu">
+      <div class="menu-title">栏目列表</div>
+      <el-menu class="el-menu-vertical" :default-active="selCategoryCode" v-loading="loading">
+        <el-submenu
+          v-for="item in cates"
+          :key="item.id"
+          :index="item.code"
+          :class="{sel: selCategoryCode==item.code}"
+        >
+          <template slot="title">
+            <div @click="chooseItemi(item)">
+              <i class="el-icon-folder"></i>
+              <span>
+                {{ item.name }}
+                <el-tag
+                  v-if="item.count > 0"
+                  :type="item.isspec ? 'danger' : 'info'"
+                  size="mini"
+                >{{item.count}}</el-tag>
+              </span>
+            </div>
+          </template>
+          <el-submenu
+            :class="{sel: selCategoryCode==itemi.code}"
+            v-for="itemi in item.children"
+            :key="itemi.id"
+            :index="itemi.code"
+          >
+            <template slot="title">
+              <div @click="chooseItemi(itemi)">
+                <span class="dot-circle"></span>
+                {{ itemi.name }}
+                <el-tag
+                  v-if="itemi.count > 0"
+                  :type="itemi.isspec ? 'danger' : 'info'"
+                  size="mini"
+                >{{itemi.count}}</el-tag>
+              </div>
+            </template>
+          </el-submenu>
+        </el-submenu>
+      </el-menu>
+    </div>
     <el-card class="box-card">
-      <content-header></content-header>
-
       <div class="table-content">
-        <content-list></content-list>
+        <content-list
+          ref="refList"
+          :category="curCategory"
+          @refreshCategory="refreshCategory($event)"
+        ></content-list>
       </div>
     </el-card>
   </div>
 </template>
 <script>
 import { mapGetters } from "vuex";
-import contentHeader from "@/views/admin/content/components/content-header";
+import { getAllCategorys } from "@/api/cms";
 import contentList from "@/views/admin/content/components/content-list";
 
 export default {
   components: {
-    "content-header": contentHeader,
     "content-list": contentList
   },
   data() {
     return {
-      content: ""
+      content: "",
+      selCategoryCode: "",
+      curCategory: null,
+      cates: [],
+      loading: true,
+      pm: {
+        title: undefined,
+        lydw: undefined,
+        status: undefined
+      }
     };
   },
-  computed: {
-    ...mapGetters(["categorys"])
-  },
-  mounted() {
-    this.content = "Content";
-    let params = this.$route.params;
-    let pcode = params.pcode;
-    let code = params.code;
-    //////////////
-    if (pcode && code) {
-        console.log(pcode, code)
-      if(this.validCate(pcode, code)){
-          console.log('ok')
-      }else{
-          // this.$router.push({path: '/404'})
-      }
-    }
-  },
+  mounted() {},
   methods: {
-    validCate(pcode, code) {
-      let isvalid = false;
-      for (let c of this.categorys) {
-        if (c.code == pcode) {
-          for (let ci of c.children) {
-            if (ci.code == code) {
-              isvalid = true;
-            }
-          }
-        }
+    chooseItemi(item) {
+      this.selCategoryCode = item.code;
+      this.curCategory = item;
+
+      this.$refs.refList.setCurCid(item.id);
+      ///////
+      this.$refs.refList.initContent();
+    },
+    async refreshCategory(ev) {
+      this.loading = true;
+      if (
+        ev.status == this.pm.status &&
+        ev.title == this.pm.title &&
+        ev.lydw == this.pm.lydw
+      ) {
+      } else {
+        this.pm.status = ev.status;
+        this.pm.title = ev.title;
+        this.pm.lydw = ev.lydw;
+
+        this.cates = await getAllCategorys(this.pm);
       }
-      return isvalid;
+      this.loading = false;
     }
   }
 };
@@ -62,8 +109,42 @@ export default {
 <style lang="scss" scoped>
 .cms-container {
   padding: 15px;
+  display: flex;
+  height: 100%;
   .table-content {
-    margin-top: 20px;
+    margin-top: 0px;
+  }
+  .box-card {
+    flex: 1;
+  }
+  .menu-title {
+    background: #869099;
+    line-height: 50px;
+    font-size: 16px;
+    font-weight: bold;
+    padding: 0 0 0 15px;
+    color: #fff;
+  }
+  .sub-menu {
+    background: #fff;
+    box-shadow: 0 0 10px #ddd;
+    width: 200px;
+    margin: 0 15px 0 0;
+    height: 100%;
+    .el-menu-vertical {
+    }
+    .sel {
+      background: #ecf5ff;
+    }
+  }
+  .dot-circle {
+    display: inline-block;
+    width: 6px;
+    height: 6px;
+    background: #909399;
+    font-size: 16px;
+    border-radius: 5px;
+    margin: 0 3px 0 0;
   }
 }
 </style>

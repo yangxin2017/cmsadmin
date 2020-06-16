@@ -26,7 +26,9 @@
       <span class="username" v-if="showuser == true">{{ username }}</span>
       <i v-if="showuser == true" class="el-icon-user-solid"></i>
 
-      <i @click="goedit()" v-if="showsetting == true" class="el-icon-setting"></i>
+      <i @click="goedit()" v-if="showsetting == true" class="el-icon-s-grid"></i>
+
+      <i @click="goback()" v-if="showsetting == true && userrole" class="el-icon-setting"></i>
 
       <i class="el-icon-switch-button" @click="quit()"></i>
     </div>
@@ -67,7 +69,8 @@ export default {
       path: "",
       searchContent: "",
       showsearchcontent: false,
-      username: "Admin"
+      username: "Admin",
+      userrole: null
     };
   },
   components: {
@@ -75,6 +78,7 @@ export default {
   },
   mounted() {
     this.username = this.$store.getters.name;
+    this.userrole = this.$store.getters.user.role;
 
     let basepath = getBasePath();
     if (
@@ -125,6 +129,9 @@ export default {
     },
     goedit(){
       this.$router.push(`edit?id=1`)
+    },
+    goback(){
+      this.$router.push(`/content`)
     }
   }
 };

@@ -22,7 +22,12 @@
       <el-col :span="4">
         <el-tabs type="border-card">
           <el-tab-pane label="页面">
-            <page-info :projectInfo="projectInfo" ref="refpInfo" @eventAddBlock="pageAddBlock" @eventSavePage="savePage"></page-info>
+            <page-info
+              :projectInfo="projectInfo"
+              ref="refpInfo"
+              @eventAddBlock="pageAddBlock"
+              @eventSavePage="savePage"
+            ></page-info>
           </el-tab-pane>
           <el-tab-pane label="组件">
             <component-info
@@ -32,6 +37,7 @@
               :curTab="curDataTab"
               ref="refcInfo"
               @eventValueChanged="_refreshTemplate($event)"
+              @addCateEvent="addCateEvent"
             ></component-info>
           </el-tab-pane>
         </el-tabs>
@@ -46,6 +52,7 @@ import pagecontent from "@/views/project/project-edit/components/pagecontent";
 import componentinfo from "@/views/project/project-edit/components/componentinfo";
 
 import { getProjectById, getAllCategorys, saveProject } from "@/api/cms";
+import { Base64 } from "js-base64";
 
 export default {
   components: {
@@ -64,6 +71,9 @@ export default {
     };
   },
   methods: {
+    addCateEvent() {
+      this.categorys = this.$store.getters.categorys;
+    },
     pageAddBlock() {
       this.$refs.refPage.addBlock();
     },
@@ -77,7 +87,7 @@ export default {
     _refreshTemplate(param) {
       this.$refs.refPage.refreshTemplate(param);
     },
-    changeDataTab(ev){
+    changeDataTab(ev) {
       this.curDataTab = ev;
     },
     savePage() {
@@ -86,15 +96,23 @@ export default {
       console.log(data);
     },
     async saveProject() {
-      for(let m of this.projectInfo.json.menus){
-        m.layout = m.layout.filter(v=>{ return !v.del; })
+      for (let m of this.projectInfo.json.menus) {
+        m.layout = m.layout.filter(v => {
+          return !v.del;
+        });
       }
       let json = this.projectInfo.json;
       const loading = this.$loading();
+      //////
+      let jsonstr = JSON.stringify(json);
+      jsonstr = Base64.encode(jsonstr);
+
+      let names = Base64.encode(this.projectInfo.name);
+
       await saveProject({
         id: this.projectInfo.id,
-        name: this.projectInfo.name,
-        json: JSON.stringify(json)
+        name: names,
+        json: jsonstr
       });
       loading.close();
       this.$message({
@@ -106,7 +124,7 @@ export default {
     async initInfo(id) {
       this.projectInfo = await getProjectById({ id: id });
       /// 分类
-      this.categorys = await getAllCategorys();
+      this.categorys = this.$store.getters.categorys;
       /// 选中第一个
       if (this.projectInfo.json.menus.length > 0) {
         let m = this.projectInfo.json.menus[0];
@@ -136,8 +154,8 @@ export default {
 .pro-container {
   padding: 20px 20px;
 
-  .pro-wrapper{
-    overflow:auto;
+  .pro-wrapper {
+    overflow: auto;
   }
 }
 </style>

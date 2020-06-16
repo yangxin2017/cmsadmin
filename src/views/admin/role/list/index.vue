@@ -1,19 +1,14 @@
 <template>
   <div class="app-container">
-    <div class="op-buts">
-      <el-button type="primary" @click="addRole()">添加角色</el-button>
-    </div>
-
     <el-table :data="tableData" stripe border style="width: 100%">
       <el-table-column prop="id" label="ID" width="180"></el-table-column>
       <el-table-column prop="rolename" label="名称" width="180"></el-table-column>
-      <el-table-column prop="allright" label="拥有所有功能权限"></el-table-column>
-      <el-table-column prop="allmodel" label="显示所有模块"></el-table-column>
+      <el-table-column prop="name" label="介绍" width="180"></el-table-column>
+      <!-- <el-table-column prop="allright" label="拥有所有功能权限"></el-table-column>
+      <el-table-column prop="allmodel" label="显示所有模块"></el-table-column> -->
       <el-table-column label="操作">
         <template slot-scope="scope">
-          <el-button @click="handleClick(scope.row)" type="text" size="small">查看</el-button>
-          <el-button type="text" size="small">编辑</el-button>
-          <el-button type="text" size="small">删除</el-button>
+          <el-button @click="addRole(scope.row)" type="text" size="small">编辑权限</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -41,13 +36,29 @@ export default {
   methods: {
     async initInfo() {
       let roles = await getRoles();
+      for(let r of roles){
+        r.name = this._getName(r)
+      }
       this.tableData = roles;
     },
-    handleClick(rw) {
-      console.log(rw);
+    addRole(rw) {
+      this.$refs.refAddRole.showDialog(rw);
     },
-    addRole(){
-        this.$refs.refAddRole.showDialog()
+    _getName(r){
+      if(r.rolename == "mainsh"){
+        r.name = "首页审核"
+      }else if(r.rolename == "syupload"){
+        r.name = "首页上传人"
+      }else if(r.rolename == "uploadsh"){
+        r.name = "单位审核"
+      }else if(r.rolename == "upload"){
+        r.name = "单位上传"
+      }else if(r.rolename == "admin"){
+        r.name = "单位管理员"
+      }else if(r.rolename == "superuser"){
+        r.name = "超级管理员"
+      }
+      return r.name
     }
   }
 };

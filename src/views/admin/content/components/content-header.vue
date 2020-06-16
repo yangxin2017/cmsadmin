@@ -1,54 +1,145 @@
 <template>
-<div>
-    <div class="hd-content">
-        <div class="lf-button">
-            <el-button @click="showDialog" size="small" type="primary" icon="el-icon-upload2">批量上传</el-button>
-            <el-button size="small" type="danger" icon="el-icon-delete">批量删除</el-button>
-            <el-button size="small" type="primary" icon="el-icon-check">批量审核</el-button>
-        </div>
+  <div>
+    <div class="hd-content" v-if="params">
+      <div class="lf-button">
+        <el-button
+          v-if="(!category || !category.content) && rolebuts.indexOf('muluploadContent') >= 0"
+          @click="showDialog"
+          size="small"
+          type="primary"
+          icon="el-icon-upload2"
+        >批量上传</el-button>
+        <el-button
+          v-if="category && category.content && rolebuts.indexOf('addContent') >= 0"
+          @click="addContent"
+          size="small"
+          type="primary"
+          icon="el-icon-plus"
+        >添加内容</el-button>
 
-        <div class="rg-content">
-            <el-checkbox-group v-model="checkList" style="display:inline-block;">
-                <el-checkbox label="草稿"></el-checkbox>
-                <el-checkbox label="待审核"></el-checkbox>
-                <el-checkbox label="已发布"></el-checkbox>
-            </el-checkbox-group>
+        <el-button @click="pldel" size="small" type="danger" icon="el-icon-delete">批量删除</el-button>
+        <el-button
+          @click="plsh"
+          size="small"
+          type="primary"
+          icon="el-icon-check"
+          v-if="rolebuts.indexOf('checkContent') >= 0"
+        >批量审核</el-button>
+      </div>
 
-            <el-input placeholder="请输入内容" v-model="searchKey" style="width:200px;margin-left:20px;">
-                <template slot="append"><el-button slot="append" icon="el-icon-search"></el-button></template>
-            </el-input>
-        </div>
+      <div class="rg-content">
+        <el-radio-group
+          v-model="params.status"
+          style="display:inline-block;"
+          @change="changeStatus()"
+        >
+          <el-radio :label="0">草稿</el-radio>
+          <el-radio :label="2">待审核</el-radio>
+          <el-radio :label="1">已发布</el-radio>
+          <el-radio :label="99">已拒绝</el-radio>
+        </el-radio-group>&nbsp;&nbsp;&nbsp;&nbsp;
+        <el-cascader
+          v-model="deptId"
+          :options="alldepts"
+          :props="{ label: 'name', value: 'id' }"
+          @change="changeDept"
+          :clearable="true"
+        ></el-cascader>
+
+        <el-input
+          placeholder="请输入内容"
+          v-model="params.title"
+          style="width:200px;margin-left:20px;"
+          :clearable="true"
+          @clear="searchContent()"
+        >
+          <template slot="append">
+            <el-button slot="append" icon="el-icon-search" @click="searchContent()"></el-button>
+          </template>
+        </el-input>
+      </div>
     </div>
-    <upload-dialog ref="upDialog"></upload-dialog>
-</div>
+    <upload-dialog ref="upDialog" @fileUploaded="refreshData()"></upload-dialog>
+  </div>
 </template>
 <script>
+import uploadDialog from "@/views/admin/content/components/upload-dialog";
 
-import uploadDialog from '@/views/admin/content/components/upload-dialog'
+import { getDepts } from "@/api/cmsuser";
 
 export default {
-    components: {
-        'upload-dialog': uploadDialog
+  components: {
+    "upload-dialog": uploadDialog
+  },
+  props: {
+    params: {
+      type: Object,
+      default: null
     },
-    data(){
-        return {
-            checkList: [],
-            searchKey: ''
-        }
+    category: {
+      type: Object,
+      default: null
     },
-    methods: {
-        showDialog(){
-            this.$refs.upDialog.showDialog()
-        }
+    rolebuts: {
+      type: String,
+      default: ""
     }
-}
+  },
+  data() {
+    return {
+      conStatus: 1,
+      searchKey: "",
+      deptId: [],
+      alldepts: []
+    };
+  },
+  mounted() {
+    this.initInfo();
+  },
+  methods: {
+    addContent() {
+      this.$router.push(`add?cid=${this.category.id}`);
+    },
+    showDialog() {
+      this.$refs.upDialog.showDialog();
+    },
+    async initInfo() {
+      let datas = await getDepts();
+      this.alldepts = datas;
+    },
+    changeDept(ev) {
+      if (this.deptId.length > 1) {
+        this.params.lydw = this.deptId[1];
+      } else {
+        this.params.lydw = undefined;
+      }
+
+      this.$emit("refresh");
+    },
+    changeStatus() {
+      this.$emit("refresh");
+    },
+    searchContent() {
+      this.$emit("refresh");
+    },
+    pldel() {
+      this.$emit("pldelevent");
+    },
+    plsh() {
+      this.$emit("plshevent");
+    },
+    refreshData() {
+      this.$emit("refresh");
+    }
+  }
+};
 </script>
 <style lang="scss" scoped>
-.hd-content{
-    display:flex;
-    justify-content:space-between;
-    .rg-content{
-        display:inline-block;
-    }
+.hd-content {
+  display: flex;
+  justify-content: space-between;
+  .rg-content {
+    display: inline-block;
+  }
 }
 </style>
