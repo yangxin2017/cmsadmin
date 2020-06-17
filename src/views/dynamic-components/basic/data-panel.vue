@@ -51,11 +51,11 @@ export default {
     },
     showmore: {
       type: Boolean,
-      default: "true"
+      default: true
     },
     blank: {
       type: Boolean,
-      default: "false"
+      default: false
     },
     morehref: {
       type: String,

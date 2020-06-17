@@ -4,7 +4,7 @@
       <ul v-if="datalist && datalist.length > 0">
         <li v-for="item in datalist" :key="item.id">
           <div class="img">
-            <img :src="item.tpwj" alt />
+            <img :src="'/cms/webfile/' + item.tpwj" alt />
           </div>
           <p class="titles">
             <i class="el-icon-caret-right"></i>

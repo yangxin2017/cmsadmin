@@ -9,9 +9,9 @@
       @change="changeDataSource"
     ></el-cascader>
 
-    <div class="new-add">
+    <!-- <div class="new-add">
       <el-button type="primary" size="small" round plain @click="showAddSource">添加数据源</el-button>
-    </div>
+    </div> -->
 
     <cominfo-adddatasource ref="refAddDatasource" @addCateEvent="addCateEvent"></cominfo-adddatasource>
   </div>

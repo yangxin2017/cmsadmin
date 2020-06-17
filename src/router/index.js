@@ -51,7 +51,7 @@ constantRoutes.push({
 constantRoutes.push({
   path: '/',
   component: Layout,
-  redirect: '/dashboard',
+  redirect: '/content',
   name: '首页'
 })
 
@@ -93,6 +93,23 @@ constantRoutes.push({
       component: () => import('@/views/admin/dept/list'),
       meta: { title: '部门列表', icon: 'table' }
     }
+  ]
+})
+
+constantRoutes.push({
+  path: '/exttable',
+  component: Layout,
+  redirect: '/exttable/list',
+  name: '表格管理',
+  hidden: false,
+  meta: { title: '表格管理', icon: 'example' },
+  children: [
+    {
+      path: 'list',
+      name: '表格列表',
+      component: () => import('@/views/admin/exts/list'),
+      meta: { title: '表格列表', icon: 'table' }
+    },
   ]
 })
 

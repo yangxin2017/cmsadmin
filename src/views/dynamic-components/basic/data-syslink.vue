@@ -12,7 +12,7 @@
           <div class="lkmods">
             <div class="lkmod" v-for="(initem, inx2) in item" :key="inx2">
               <div class="bor">
-                <img :src="initem.tpwj"
+                <img :src="'/cms/webfile/' + initem.tpwj"
                 />
               </div>
               <br />

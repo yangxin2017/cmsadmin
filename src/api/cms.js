@@ -75,9 +75,9 @@ export async function getDeptCates({ deptid }) {
     return res
 }
 
-export function updateDept({ deptid, name, desc, cids, parentId }) {
+export function updateDept({ deptid, name, desc, url, cids, parentId }) {
     let obj = initUserToken()
-    let target = { deptId: deptid, name: name, desc: desc, cids: cids, parentId: parentId }
+    let target = { deptId: deptid, name: name, desc: desc, url: url, cids: cids, parentId: parentId }
     let pam = Object.assign(obj, target);
     let dataobj = request({
         url: `/cms/api/saveDept`,

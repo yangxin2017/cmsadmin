@@ -1,5 +1,6 @@
 import moment from "moment";
 import { getBasePath } from "@/utils/common";
+import { Base64 } from 'js-base64';
 
 export class CmsContent {
     constructor(id, categoryId, title, desc, lydw, lydwmc, publishTime, clicks, tpwj, nrwj, spwj, zqbjson, gjmc, reallydw, lkmod, url, tags, status, sort, mmdj, olden) {
@@ -14,18 +15,23 @@ export class CmsContent {
         this.tpwj = tpwj
         this.nrwj = nrwj
         this.spwj = spwj
-        this.zqbjson = zqbjson ? JSON.parse(zqbjson) : []
+        this.zqbjson = []
+        if (zqbjson) {
+            let str = Base64.decode(zqbjson)
+            this.zqbjson = str ? JSON.parse(str) : []
+        }
+
         this.gjmc = gjmc
         this.reallydw = reallydw
         this.setUrl(lkmod)
-        this.url = '//' + url
+        this.url = (url && url != 'null') ? 'https://' + url : ""
         //////
         let arr = tags.split(',')
         let ts = []
         let ts2 = []
-        for(let a of arr){
+        for (let a of arr) {
             let aiarr = a.split("|")
-            if(aiarr.length == 2){
+            if (aiarr.length == 2) {
                 ts.push(aiarr[0])
                 ts2.push(aiarr[1])
             }

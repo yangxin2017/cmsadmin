@@ -148,8 +148,8 @@ export default {
       }, 500);
     },
     async initInfo() {
-      this.xws = await getAllBM({ webtype: this.webtype });
       this.refreshCategory();
+      this.xws = await getAllBM({ webtype: this.webtype });
     },
     async refreshCategory(ev) {
       this.loading = true;

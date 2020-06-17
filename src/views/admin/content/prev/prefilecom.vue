@@ -28,7 +28,7 @@ export default {
   computed: {
     src() {
       if (this.type == "file") {
-        return "http://localhost:30003/cms/webfile/" + this.url;
+        return "/cms/webfile/" + this.url;
       } else {
         return "/cms/webfile/" + this.url;
       }

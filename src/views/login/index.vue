@@ -110,7 +110,13 @@ export default {
               // get depts info
               await this.$store.dispatch("user/getAllDepts");
 
-              this.redirect = "prev?pid=1";
+              if(this.$store.getters.webtype == 'gw'){
+                this.redirect = "prev?pid=1";
+              }else{
+                this.redirect = "content";
+              }
+              
+
               this.$router.push({ path: this.redirect || "/" });
               this.loading = false;
             })

@@ -14,6 +14,40 @@
               <el-form-item label="简介">
                 <el-input v-model="form.desc" type="textarea" :rows="4"></el-input>
               </el-form-item>
+              <el-form-item label="执勤表" v-if="curCategory.fileds.indexOf('sftt') >= 0">
+                <div class="zqbs">
+                  <div class="zqb-item" v-for="(item, index) in form.zqbarr" :key="index">
+                    <span>席位：</span>
+                    <el-input v-model="item.xw"></el-input>
+                    <span>姓名：</span>
+                    <el-input v-model="item.xm"></el-input>
+                    <span>职务：</span>
+                    <el-input v-model="item.zw"></el-input>
+                    <span>电话：</span>
+                    <el-input v-model="item.dh"></el-input>
+                    <el-button
+                      style="width:40px"
+                      type="danger"
+                      size="mini"
+                      icon="el-icon-delete"
+                      circle
+                      @click="deleteZqbItem(item)"
+                    ></el-button>
+                  </div>
+
+                  <el-button type="primary" plain size="small" @click="addZqbItem()">添加</el-button>
+                </div>
+              </el-form-item>
+              <el-form-item
+                label="外链地址"
+                prop="url"
+                required
+                v-if="curCategory.fileds.indexOf('wldz') >= 0"
+              >
+                <el-input placeholder="请输入内容" v-model="form.url">
+                  <template slot="prepend">Https://</template>
+                </el-input>
+              </el-form-item>
               <div class="fl-content">
                 <!-- <el-form-item
                   label="来源单位"
@@ -96,7 +130,7 @@
                     </div>
                     <div class="el-upload__tip" slot="tip">
                       只能上传Word/Pdf文件，且不超过800Mb
-                      <br />(Word最大支持50Mb)
+                      <br />(Word最大支持50Mb,word转换需要一断时间)
                     </div>
                   </el-upload>
                 </el-form-item>
@@ -194,7 +228,7 @@
                 ></el-tree>
               </div>
             </div>
-            <div class="con-item">
+            <div class="con-item" v-if="curCategory.fileds.indexOf('tag') >= 0">
               <label class="lbl">选择标签</label>
               <el-tree
                 ref="tagtree"
@@ -235,9 +269,10 @@ import {
   getSeatConfByCid
 } from "@/api/content";
 import { getCoutryAndOcean } from "@/api/cms";
-import { getDeptById } from "@/utils/common";
+import { getDeptById, uuid } from "@/utils/common";
 
 import prevfile from "@/views/admin/content/prev/prevfile";
+import { Base64 } from 'js-base64';
 
 export default {
   components: {
@@ -276,12 +311,19 @@ export default {
         cid: undefined,
         xwstr: "",
         tagstr: "",
-        filetype: ""
+        filetype: "",
+        url: "",
+        zqbarr: [
+          { id: 1, xw: "", xm: "", zw: "", dh: "" },
+          { id: 2, xw: "", xm: "", zw: "", dh: "" }
+        ],
+        sftt: ""
       },
       chkxwkey: [],
       chktagkey: [],
       rules: {
         title: [{ required: true, message: "请输入标题", trigger: "blur" }],
+        url: [{ required: true, message: "请输入URL", trigger: "blur" }],
         nrwj: [{ required: true, message: "请上传文件", trigger: "blur" }],
         tpwj: [{ required: true, message: "请上传图片", trigger: "blur" }],
         spwj: [{ required: true, message: "请上传视频", trigger: "blur" }],
@@ -313,6 +355,15 @@ export default {
     ...mapGetters(["categorys", "user", "webtype"])
   },
   methods: {
+    addZqbItem() {
+      this.form.zqbarr.push({ id: uuid(), xw: "", xm: "", zw: "", dh: "" });
+    },
+    deleteZqbItem(item) {
+      this.form.zqbarr = this.form.zqbarr.filter(v => {
+        return v.id != item.id;
+      });
+    },
+
     chooseXwTemplate(ev) {
       this.chkxwkey = [];
       if (ev) {
@@ -336,6 +387,7 @@ export default {
       let cid = this.$route.query.cid;
       this.form.cid = cid;
       this.curCategory = this.getCateById(cid);
+
       this.userdata = getUserData();
       await this.initInfo();
       this.depts = this.user.depts;
@@ -346,8 +398,14 @@ export default {
       let id = this.$route.query.id;
       if (id) {
         await this.initContent(id);
+      } else {
+        // 默认选中必选标签：
+        this.chktagkey = this.bxtagIds;
       }
       this.xwtemplates = await getSeatConfByCid({ cid: cid });
+
+      ///// 放在最后一个
+      this.xws = await getAllBM({ webtype: this.webtype });
 
       // loading.close();
     },
@@ -409,55 +467,59 @@ export default {
       this.hais = dataobj.ocean;
       this.mmdjs = await getDicData({ id: "1" });
       let tags = await getTags({ webtype: this.webtype });
-      this.xws = await getAllBM({ webtype: this.webtype });
       tags = this._setTagConf(tags);
       this.tags = tags;
     },
     async initContent(id) {
       let content = await getContentById({ id: id });
       ////
-      this.form.title = content.title;
-      this.form.desc = content.desc;
-      this.form.lydw = content.lydw;
-      this.form.level = content.mmdj;
-      this.form.gjlb = content.gjmc;
-      this.form.nrwj = content.nrwj;
-      this.form.tpwj = content.tpwj;
-      this.form.spwj = content.spwj;
-      this.form.draft = false;
-      this.form.id = content.id;
-      this.form.cid = content.categoryId;
-      this.form.xwstr = content.olden.seatids;
-      this.form.tagstr = content.tagids.join(",");
-      this.form.filetype = content.olden.filetype;
-      ///// chkxwkey
-      this.chkxwkey = [];
-      let arr = this.form.xwstr.split(",");
-      for (let a of arr) {
-        if (a) {
-          this.chkxwkey.push(a);
+      if (content) {
+        this.form.title = content.title;
+        this.form.desc = content.desc;
+        this.form.lydw = content.lydw;
+        this.form.level = content.mmdj;
+        this.form.gjlb = content.gjmc;
+        this.form.nrwj = content.nrwj;
+        this.form.tpwj = content.tpwj;
+        this.form.spwj = content.spwj;
+        this.form.draft = false;
+        this.form.id = content.id;
+        this.form.cid = content.categoryId;
+        this.form.xwstr = content.olden.seatids;
+        this.form.tagstr = content.tagids.join(",");
+        this.form.filetype = content.olden.filetype;
+        this.form.url = content.olden.url;
+        this.form.zqbarr = content.zqbjson;
+        console.log(this.form.zqbarr)
+        ///// chkxwkey
+        this.chkxwkey = [];
+        let arr = this.form.xwstr.split(",");
+        for (let a of arr) {
+          if (a) {
+            this.chkxwkey.push(a);
+          }
         }
-      }
-      ///// chktagkey
-      this.chktagkey = [];
-      let arr2 = this.form.tagstr.split(",");
-      for (let a of arr2) {
-        if (a) {
-          this.chktagkey.push(a);
+        ///// chktagkey
+        this.chktagkey = [];
+        let arr2 = this.form.tagstr.split(",");
+        for (let a of arr2) {
+          if (a) {
+            this.chktagkey.push(a);
+          }
         }
-      }
-      /////
-      this.filelist = [];
-      if (content.nrwj) {
-        this.filelist = [{ name: "点击查看文件", url: content.nrwj }];
-      }
-      this.imagelist = [];
-      if (content.tpwj) {
-        this.imagelist = [{ name: "点击查看文件", url: content.tpwj }];
-      }
-      this.videolist = [];
-      if (content.spwj) {
-        this.videolist = [{ name: "点击查看文件", url: content.spwj }];
+        /////
+        this.filelist = [];
+        if (content.nrwj) {
+          this.filelist = [{ name: "点击查看文件", url: content.nrwj }];
+        }
+        this.imagelist = [];
+        if (content.tpwj) {
+          this.imagelist = [{ name: "点击查看文件", url: content.tpwj }];
+        }
+        this.videolist = [];
+        if (content.spwj) {
+          this.videolist = [{ name: "点击查看文件", url: content.spwj }];
+        }
       }
     },
     getCateById(cid) {
@@ -516,23 +578,29 @@ export default {
       this.$refs["form"].validate(async valid => {
         if (valid) {
           let selxw = this.$refs.xwtree.getCheckedNodes();
-          let seltag = this.$refs.tagtree.getCheckedNodes();
+
+          if (this.$refs.tagtree) {
+            let seltag = this.$refs.tagtree.getCheckedNodes();
+            let t2 = [];
+            for (let tg of seltag) {
+              t2.push(tg.id);
+            }
+            this.form.tagstr = t2.join(",");
+          }
 
           let t1 = [];
           for (let xw of selxw) {
             t1.push(xw.xh);
           }
-          let t2 = [];
-          for (let tg of seltag) {
-            t2.push(tg.id);
-          }
 
           this.form.xwstr = t1.join(",");
-          this.form.tagstr = t2.join(",");
           this.form.draft = tp == "no";
           if (this.form.xwstr != "") {
             this.form.xwstr = "," + this.form.xwstr + ",";
           }
+
+          /////
+          this.form.sftt = Base64.encode(JSON.stringify(this.form.zqbarr));
 
           ///////////////
           this.ischooseTag = true;
@@ -565,6 +633,22 @@ export default {
 <style lang="scss" scoped>
 .cms-container {
   padding: 15px;
+
+  .zqbs {
+    .zqb-item {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 15px;
+      span {
+        width: 47px;
+      }
+      .el-input {
+        flex: 1;
+        margin-right: 10px;
+      }
+    }
+  }
+
   .fl-content {
     display: flex;
     justify-content: space-between;

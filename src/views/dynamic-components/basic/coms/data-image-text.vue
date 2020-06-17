@@ -1,7 +1,7 @@
 <template>
 <div class="yy-image-text" v-if="datalist && datalist.length > 0">
     <div class="lf-panel" :style="{width: imgwidth + '%'}" v-if="fone">
-        <img :src="fone.tpwj" alt="" />
+        <img :src="'/cms/webfile/' + fone.tpwj" alt="" />
         <span class="title">{{ fone.title }}</span>
     </div>
     <div class="rg-list">

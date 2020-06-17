@@ -28,6 +28,9 @@
               <el-form-item label="部门描述">
                 <el-input type="textarea" v-model="curDept.desc"></el-input>
               </el-form-item>
+              <el-form-item label="部门连接">
+                <el-input v-model="curDept.url"></el-input>
+              </el-form-item>
               <!-- <el-form-item label="管理分类">
                 <el-cascader
                   :options="catesOption"
@@ -65,7 +68,8 @@ export default {
         cates: [],
         desc: "",
         id: "",
-        pid: -1
+        pid: -1,
+        url: ""
       },
       loading: false,
       saving: false
@@ -106,7 +110,8 @@ export default {
           name: "",
           cates: [],
           desc: "",
-          id: ""
+          id: "",
+          url: ""
         };
         this.curkey = dept.id;
         this.$refs.mtree.setCurrentKey(this.curkey);
@@ -149,6 +154,7 @@ export default {
         deptid: this.curDept.id,
         name: this.curDept.name,
         desc: this.curDept.desc,
+        url: this.curDept.url,
         cids: cids.join(","),
         parentId: this.$refs.mtree.getCurrentKey()
       });

@@ -91,14 +91,17 @@ export default {
         this.curCategoryPId = this.lelM1[0].id;
       }
 
-      this.setCurContent();
-
-      this.initContent();
+      this.setCurContent(() => {
+        this.initContent();
+      });
     }
   },
   methods: {
-    async setCurContent() {
-      let curContent = await getContentById({ id: this.curCid, linkmod: this.lkmod });
+    async setCurContent(callback = null) {
+      let curContent = await getContentById({
+        id: this.curCid,
+        linkmod: this.lkmod
+      });
       if (curContent) {
         this.curCategoryId = curContent.categoryId;
         ///获取父级ID
@@ -120,6 +123,9 @@ export default {
             }
           }
         }
+      }
+      if (callback) {
+        callback();
       }
       this.$emit("eventSelectList", curContent);
     },

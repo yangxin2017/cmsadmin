@@ -84,12 +84,12 @@ export async function getDicData({ id: id }) {
     return res
 }
 
-export async function addContent({ id, cid, title, desc, lydw, level, gjlb, nrwj, tpwj, spwj, xwstr, tagstr, draft, filetype }) {
+export async function addContent({ id, cid, title, desc, lydw, level, gjlb, nrwj, tpwj, spwj, xwstr, tagstr, draft, filetype, url, sftt }) {
     let obj = initUserToken()
     let target = {
         id: id, cid: cid, title: title, desc: desc, lydw: lydw, level: level,
         gjlb: gjlb, nrwj: nrwj, tpwj: tpwj, spwj: spwj, xwstr: xwstr, tagstr, draft,
-        filetype: filetype
+        filetype: filetype, url: url, sftt: sftt
     };
     let pam = Object.assign(obj, target);
 
@@ -242,7 +242,7 @@ export async function getTagConf({ cid, tid }) {
 }
 
 export async function getAllBM({ webtype = 'main' }) {
-    let url = webtype == 'main' ? 'allbmstmp' : 'allbmstmp';
+    let url = webtype == 'main' ? 'allbms' : 'allbmstmp';
     let obj = initUserToken()
     let dataobj = await request({
         url: `/cms/api/${url}`,

@@ -16,7 +16,8 @@
 
 #default-skin{
     background-color:#000;
-    font-size:14px;height:100%;
+    font-size:14px;min-height:100%;
+    height:auto;
 }
 
 ///// 头部

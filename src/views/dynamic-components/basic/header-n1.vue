@@ -18,7 +18,7 @@
       </div>
     </div>
     <div class="title">
-      <span class="jb-black-txt">{{title}}</span>
+      <span class="jb-black-txt" style="cursor:pointer" @click="goMain()">{{title}}</span>
     </div>
     <div class="buttons">
       <rg-time v-if="showtime == true"></rg-time>
@@ -91,6 +91,9 @@ export default {
     }
   },
   methods: {
+    goMain(){
+      this.$router.push('/prev')
+    },
     enterSearch(ev) {
       if (ev.keyCode == 13) {
         let basepath = getBasePath();

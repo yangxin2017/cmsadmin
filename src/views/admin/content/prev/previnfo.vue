@@ -16,6 +16,19 @@
             <pre-file-com v-if="content.tpwj" type="image" :url="content.tpwj"></pre-file-com>
           </div>
         </div>
+        <div class="infos" v-if="content.url">外链地址：{{content.url}}</div>
+        <div class="infos" v-if="content.zqbjson && content.zqbjson.length > 0" style="display:block">
+          <div class="zqb-item" v-for="item in content.zqbjson" :key="item.id">
+            <span class="lbl">席位：</span>
+            <span class="val">{{item.xw}}</span>
+            <span class="lbl">姓名：</span>
+            <span class="val">{{item.xm}}</span>
+            <span class="lbl">职务：</span>
+            <span class="val">{{item.zw}}</span>
+            <span class="lbl">电话：</span>
+            <span class="val">{{item.dh}}</span>
+          </div>
+        </div>
         <div class="details">
           <pre-file-com v-if="content.nrwj" type="file" :url="content.nrwj"></pre-file-com>
           <pre-file-com v-if="content.spwj" type="video" :url="content.spwj"></pre-file-com>
@@ -53,6 +66,19 @@ export default {
 </script>
 <style lang="scss" scoped>
 .prev-container {
+  .zqb-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin:0 0 10px 0 !important;
+    .lbl {
+      width: 40px;
+      font-weight: bold;
+    }
+    .val {
+      flex: 1;
+    }
+  }
   h3 {
     margin: 0 0 10px 0;
     text-align: center;

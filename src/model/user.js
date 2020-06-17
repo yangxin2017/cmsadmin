@@ -12,12 +12,13 @@ export class CmsRole{
 }
 
 export class CmsDept{
-    constructor(id, name, parentid, parentname, desc, children){
+    constructor(id, name, parentid, parentname, desc, url, children){
         this.id = id
         this.name = name
         this.parentname = parentname
         this.parentid = parentid
         this.desc = desc
+        this.url = url
         this.children = children
     }
 }

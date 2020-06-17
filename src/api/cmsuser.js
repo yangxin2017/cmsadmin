@@ -37,10 +37,10 @@ export async function getDepts() {
     for (let d of dataobj.data) {
         let children = []
         for (let di of d.children) {
-            let tmi = new CmsDept(di.id, di.name, di.parentId, d.name, di.description, undefined)
+            let tmi = new CmsDept(di.id, di.name, di.parentId, d.name, di.description, di.url, undefined)
             children.push(tmi)
         }
-        let tm = new CmsDept(d.id, d.name, d.parentId, '无', d.description, children)
+        let tm = new CmsDept(d.id, d.name, d.parentId, '无', d.description, d.url, children)
         res.push(tm)
     }
     return res

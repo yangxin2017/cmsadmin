@@ -13,6 +13,7 @@
       <el-table-column prop="name" label="名称" width="180"></el-table-column>
       <el-table-column prop="parentname" label="父部门"></el-table-column>
       <el-table-column prop="desc" label="描述"></el-table-column>
+      <el-table-column prop="url" label="路径"></el-table-column>
       <el-table-column label="操作">
         <template slot-scope="scope">
           <el-button v-if="!scope.row.parentid" @click="addDept(scope.row)" size="mini">添加下一级</el-button>

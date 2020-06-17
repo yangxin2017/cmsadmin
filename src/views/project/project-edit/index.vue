@@ -1,48 +1,50 @@
 <template>
-  <div class="pro-container" v-if="projectInfo">
-    <el-row :gutter="12">
-      <el-col v-if="showMenu" class="pro-left" :span="4">
-        <page-menu
-          :menus="projectInfo.json.menus"
-          @eventSaving="saveProject($event)"
-          @eventSelectMenu="menuChange($event)"
-        ></page-menu>
-      </el-col>
-      <el-col class="pro-wrapper" :span="showMenu ? 16 : 20" v-if="menuInfo">
-        <div :style="{'width': projectInfo.width + 'px', 'height': projectInfo.height + 'px'}">
-          <page-content
-            :layout="menuInfo.layout"
-            :projectInfo="projectInfo"
-            @eventChooseItem="infoTabItem($event)"
-            @eventChangeTab="changeDataTab($event)"
-            ref="refPage"
-          ></page-content>
-        </div>
-      </el-col>
-      <el-col :span="4">
-        <el-tabs type="border-card">
-          <el-tab-pane label="页面">
-            <page-info
+  <div id="default-skin">
+    <div class="pro-container" v-if="projectInfo">
+      <el-row :gutter="12">
+        <el-col v-if="showMenu" class="pro-left" :span="4">
+          <page-menu
+            :menus="projectInfo.json.menus"
+            @eventSaving="saveProject($event)"
+            @eventSelectMenu="menuChange($event)"
+          ></page-menu>
+        </el-col>
+        <el-col class="pro-wrapper" :span="showMenu ? 16 : 20" v-if="menuInfo">
+          <div :style="{'width': projectInfo.width + 'px', 'height': projectInfo.height + 'px'}">
+            <page-content
+              :layout="menuInfo.layout"
               :projectInfo="projectInfo"
-              ref="refpInfo"
-              @eventAddBlock="pageAddBlock"
-              @eventSavePage="savePage"
-            ></page-info>
-          </el-tab-pane>
-          <el-tab-pane label="组件">
-            <component-info
-              :categorys="categorys"
-              :curMenu="menuInfo"
-              :menus="projectInfo.json.menus"
-              :curTab="curDataTab"
-              ref="refcInfo"
-              @eventValueChanged="_refreshTemplate($event)"
-              @addCateEvent="addCateEvent"
-            ></component-info>
-          </el-tab-pane>
-        </el-tabs>
-      </el-col>
-    </el-row>
+              @eventChooseItem="infoTabItem($event)"
+              @eventChangeTab="changeDataTab($event)"
+              ref="refPage"
+            ></page-content>
+          </div>
+        </el-col>
+        <el-col :span="4">
+          <el-tabs type="border-card">
+            <el-tab-pane label="页面">
+              <page-info
+                :projectInfo="projectInfo"
+                ref="refpInfo"
+                @eventAddBlock="pageAddBlock"
+                @eventSavePage="savePage"
+              ></page-info>
+            </el-tab-pane>
+            <el-tab-pane label="组件">
+              <component-info
+                :categorys="categorys"
+                :curMenu="menuInfo"
+                :menus="projectInfo.json.menus"
+                :curTab="curDataTab"
+                ref="refcInfo"
+                @eventValueChanged="_refreshTemplate($event)"
+                @addCateEvent="addCateEvent"
+              ></component-info>
+            </el-tab-pane>
+          </el-tabs>
+        </el-col>
+      </el-row>
+    </div>
   </div>
 </template>
 <script>

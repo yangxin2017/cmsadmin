@@ -4,7 +4,8 @@
       <el-divider content-position="left">绑定数据源</el-divider>
       <cominfo-datasource
         :categorys="categorys"
-        :binddata="binddata" @addCateEvent="addCateEvent"
+        :binddata="binddata"
+        @addCateEvent="addCateEvent"
         @eventChangeDataSource="changeDataSource"
       ></cominfo-datasource>
     </div>
@@ -88,7 +89,12 @@
 
     <div v-if="binddata" style="display:none">
       <el-divider content-position="left">页面跳转设置</el-divider>
-      <cominfo-page :menus="menus" :binddata="binddata" @eventChangePage="changeDataSource()"></cominfo-page>
+      <cominfo-page
+        ref="cpInfo"
+        :menus="menus"
+        :binddata="binddata"
+        @eventChangePage="changeDataSource()"
+      ></cominfo-page>
     </div>
   </div>
 </template>
@@ -158,6 +164,10 @@ export default {
       this.binddata = binddata;
       this.ts = new Date().getTime();
       this.curTmpDataTab = curdatatab;
+      ////////////////////////////////
+      setTimeout(() => {
+        this.$refs.cpInfo.chooseDefault();
+      }, 300);
     },
     /** event */
     setText(text, param) {

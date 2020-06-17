@@ -9,12 +9,12 @@
       <span class="time">{{ content.publishTime }}</span>
     </div>
     <div class="rg-file">
-      <div v-if="ispdf==1 && loadTask" style="height:100%;overflow:auto;">
+      <!-- <div v-if="ispdf==1 && loadTask" style="height:100%;overflow:auto;">
         <pdf v-for="i in numPages" :key="i" :src="loadTask" :page="i"></pdf>
-      </div>
+      </div>-->
       <iframe
-        v-if="ispdf==2 && content.nrwj"
-        :src="content.nrwj"
+        v-if="nrwj"
+        :src="nrwj"
         width="100%"
         height="100%"
         marginwidth="0"
@@ -22,12 +22,12 @@
         frameborder="0"
         v-loading="loadingfile"
       ></iframe>
-      <video v-if="content.spwj" controls="controls" :src="content.spwj"></video>
+      <video v-if="spwj" controls="controls" :src="spwj"></video>
     </div>
     <div class="extra" :class="{'show': showextra}">
       <p class="e-info">{{ content.desc }}</p>
-      <div class="img e-info" v-if="content.tpwj">
-        <img :src="content.tpwj" alt />
+      <div class="img e-info" v-if="tpwj">
+        <img :src="tpwj" alt />
       </div>
       <i v-if="!showextra" class="el-icon-d-arrow-left" @click="showextra=!showextra"></i>
       <i v-if="showextra" class="el-icon-d-arrow-right" @click="showextra=!showextra"></i>
@@ -52,38 +52,68 @@ export default {
       showextra: false,
       loadTask: null,
       numPages: undefined,
-      loadingfile: false
+      loadingfile: false,
+
+      // nrwj: '',
+      // tpwj: '',
+      // spwj: ''
     };
   },
-  mounted(){
+  mounted() {
+    if (this.content) {
+      if (this.content.nrwj) {
+        this.content.nrwj = "/cms/webfile/" + this.content.nrwj;
+      }
+      if (this.content.tpwj) {
+        this.content.tpwj = "/cms/webfile/" + this.content.tpwj;
+      }
+      if (this.content.spwj) {
+        this.content.spwj = "/cms/webfile/" + this.content.spwj;
+      }
+    }
   },
   computed: {
-    ispdf() {
-      let ispdf = 1;
+    nrwj(){
       if (this.content.nrwj) {
-        if (this.content.nrwj.indexOf(".pdf") >= 0) {
-          ispdf = 1;
-          this.loadingfile = true;
-          this.loadTask = pdf.createLoadingTask(this.content.nrwj);
-          this.loadTask.then(res => {
-            this.numPages = res.numPages;
-            this.loadingfile = false;
-          }).catch(err=>{
-            this.loadingfile = false;
-          });
-        } else if (this.content.nrwj.indexOf(".doc") >= 0) {
-          ispdf = 2;
-          this.loadTask = null;
-        } else {
-          ispdf = -1;
-          this.loadTask = null;
-        }
-      } else {
-        ispdf = -1;
-        this.loadTask = null;
+        return "/cms/webfile/" + this.content.nrwj;
       }
-      return ispdf;
+    },
+    tpwj(){
+      if (this.content.tpwj) {
+        return "/cms/webfile/" + this.content.tpwj;
+      }
+    },
+    spwj(){
+      if (this.content.spwj) {
+        return "/cms/webfile/" + this.content.spwj;
+      }
     }
+    // ispdf() {
+    //   let ispdf = 1;
+    //   if (this.content.nrwj) {
+    //     if (this.content.nrwj.indexOf(".pdf") >= 0) {
+    //       ispdf = 1;
+    //       this.loadingfile = true;
+    //       this.loadTask = pdf.createLoadingTask(this.content.nrwj);
+    //       this.loadTask.then(res => {
+    //         this.numPages = res.numPages;
+    //         this.loadingfile = false;
+    //       }).catch(err=>{
+    //         this.loadingfile = false;
+    //       });
+    //     } else if (this.content.nrwj.indexOf(".doc") >= 0) {
+    //       ispdf = 2;
+    //       this.loadTask = null;
+    //     } else {
+    //       ispdf = -1;
+    //       this.loadTask = null;
+    //     }
+    //   } else {
+    //     ispdf = -1;
+    //     this.loadTask = null;
+    //   }
+    //   return ispdf;
+    // }
   }
 };
 </script>
@@ -95,23 +125,25 @@ export default {
   h2 {
     text-align: center;
   }
-  .tags{
-    margin:5px 0;
-    text-align:center;
-    a{
-      display:inline-block;margin:0 5px 0 0;
-      padding:3px 5px;
+  .tags {
+    margin: 5px 0;
+    text-align: center;
+    a {
+      display: inline-block;
+      margin: 0 5px 0 0;
+      padding: 3px 5px;
     }
   }
   .rg-info {
     display: flex;
     justify-content: space-between;
   }
-  .rg-file{
-    height:calc(100% - 100px);
-    video{
-      width:100%;height:100%;
-      object-fit:fill;
+  .rg-file {
+    height: calc(100% - 100px);
+    video {
+      width: 100%;
+      height: 100%;
+      object-fit: fill;
     }
   }
   .extra {
