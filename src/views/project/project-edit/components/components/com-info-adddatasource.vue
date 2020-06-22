@@ -27,6 +27,7 @@
             <el-option label="图片" value="tpwj"></el-option>
             <el-option label="文件" value="nrwj,tpwj"></el-option>
             <el-option label="视频" value="spwj,tpwj"></el-option>
+            <el-option label="外链" value="wldz,tpwj"></el-option>
           </el-select>
         </el-form-item>
 
@@ -97,6 +98,8 @@ export default {
         this.ruleForm.types = "spwj,tpwj";
       } else if (dept.fileds.indexOf("tpwj") >= 0) {
         this.ruleForm.types = "tpwj";
+      } else if (dept.fileds.indexOf("wldz") >= 0) {
+        this.ruleForm.types = "wldz,tpwj";
       }
       this.ruleForm.cid = dept.id;
     },

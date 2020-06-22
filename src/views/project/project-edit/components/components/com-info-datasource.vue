@@ -33,30 +33,13 @@ export default {
   components: {
     "cominfo-adddatasource": cominfoadddatasource
   },
-  mounted() {},
+  mounted() {
+  },
   data() {
     return {
       props: { multiple: true, value: "id", label: "name" },
-      dataval: 12
-      // datas: [
-      //     {
-      //         value: 1,
-      //         label: '综合研究',
-      //         children: [
-      //             { label: '综合一', value: 11 },
-      //             { label: '综合二', value: 12 }
-      //         ]
-
-      //     },
-      //     {
-      //         value: 2,
-      //         label: '开源信息',
-      //         children: [
-      //             { label: '开源一', value: 21 },
-      //             { label: '开源二', value: 22 }
-      //         ]
-      //     },
-      // ]
+      dataval: 12,
+      oldstr: ''
     };
   },
   methods: {
@@ -104,6 +87,7 @@ export default {
           pids += d[0] + ",";
         }
       }
+
       let objs = this.getDataSourceObj(ids);
       let pobjs = this.getParentDataSource(pids, ids);
 

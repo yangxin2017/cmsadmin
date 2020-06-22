@@ -6,8 +6,30 @@
         {{ title }}
       </div>
     </div>
-    <div class="yy-zqb-table">
-      <div class="table-wrap" v-for="(item, index) in zqbs" :key="index">
+    <div class="yy-zqb-table" style="height:calc(100% - 23px);">
+      <el-carousel indicator-position="none" style="height:100%;width:100%;">
+        <el-carousel-item v-for="(item, index) in zqbs" :key="index" style="display:flex;justify-content:space-between;">
+          <table class="table-wrap" v-for="(itemi, indexi) in item" :key="indexi">
+            <thead>
+              <tr>
+                <th>席位</th>
+                <th>姓名</th>
+                <th>职务</th>
+                <th>电话</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="(initem,index2) in itemi" :key="index2">
+                <td>{{initem.xw}}</td>
+                <td>{{initem.xm}}</td>
+                <td>{{initem.zw}}</td>
+                <td>{{initem.dh}}</td>
+              </tr>
+            </tbody>
+          </table>
+        </el-carousel-item>
+      </el-carousel>
+      <!-- <div class="table-wrap" v-for="(item, index) in zqbs" :key="index">
         <table width="100%">
           <thead>
             <tr>
@@ -26,7 +48,7 @@
             </tr>
           </tbody>
         </table>
-      </div>
+      </div>-->
     </div>
   </div>
 </template>
@@ -45,6 +67,10 @@ export default {
     appData: {
       type: Object,
       default: {}
+    },
+    liecount: {
+      type: Number,
+      default: 4
     }
   },
   data() {
@@ -71,27 +97,36 @@ export default {
         linkmod: null
       });
       let content = dataobj.data.length > 0 ? dataobj.data[0] : null;
-      let arr1 = [];
-      let arr2 = [];
+      // let arr1 = [];
+      // let arr2 = [];
+      let resarr = [];
+      let finarr = [];
       if (content && content.zqbjson) {
         let json = content.zqbjson;
-        if (json.length <= this.showcount) {
-          for (let i = 0; i < json.length; i++) {
-            arr1.push(json[i]);
+        let numpages = Math.ceil(json.length / this.showcount);
+        for (let i = 0; i < numpages; i++) {
+          let tmp = [];
+          for (let j = 0; j < this.showcount; j++) {
+            let inx = i * this.showcount + j;
+            if (inx < json.length) {
+              tmp.push(json[inx]);
+            }
           }
-        } else {
-          for (let i = 0; i < this.showcount; i++) {
-            arr1.push(json[i]);
+          resarr.push(tmp);
+        }
+        // lieshu
+        let fcount = Math.ceil(resarr.length / this.liecount);
+        for (let i = 0; i < fcount; i++) {
+          let tmp = [];
+          for (let j = 0; j < this.liecount; j++) {
+            let inx = i * this.liecount + j;
+            tmp.push(resarr[inx]);
           }
-          for (let i = this.showcount; i < json.length; i++) {
-            arr2.push(json[i]);
-          }
+          finarr.push(tmp);
         }
       }
       ////////
-      this.zqbs.push(arr1);
-      this.zqbs.push(arr2);
-      console.log(this.zqbs);
+      this.zqbs = finarr;
     }
   }
 };
@@ -116,7 +151,7 @@ export default {
   .yy-zqb-table {
     display: flex;
     justify-content: space-between;
-    padding:10px;
+    padding: 10px;
     .p-title {
       vertical-align: middle;
       padding-right: 20px;
@@ -130,9 +165,10 @@ export default {
       }
     }
     .table-wrap {
-      width: 47%;
+      width: 100%;
+      flex:1;margin:0 10px 0 0;
       th {
-        background: rgba(255,255,255,0.15);
+        background: rgba(255, 255, 255, 0.15);
         color: #fff;
         text-align: center;
         vertical-align: middle;
@@ -146,9 +182,9 @@ export default {
         font-size: 14px;
         line-height: 30px;
       }
-      tr:nth-child(even){
-        td{
-          background: rgba(255,255,255,0.15);
+      tr:nth-child(even) {
+        td {
+          background: rgba(255, 255, 255, 0.15);
         }
       }
     }

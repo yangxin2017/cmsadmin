@@ -1,7 +1,8 @@
 <template>
   <div class="page-info">
     <div>
-      <label style="font-size:14px;">系统名称：</label><br/>
+      <label style="font-size:14px;">系统名称：</label>
+      <br />
       <el-input v-model="projectInfo.name" placeholder="请输入内容"></el-input>
     </div>
     <div class="panel-add">
@@ -19,12 +20,10 @@
             draggable="true"
             @dragstart="dragStart($event, item)"
           >
-            <div class="c-mod">
-              {{item.title}}
-            </div>
+            <div class="c-mod">{{item.title}}</div>
             <!-- <el-tooltip class="item" effect="dark" :content="item.title" placement="top">
               <el-image fit="fill" style="height:40px;" :src="item.src"></el-image>
-            </el-tooltip> -->
+            </el-tooltip>-->
           </div>
         </div>
       </el-collapse-item>
@@ -36,7 +35,7 @@
         <div>简化流程：设计简洁直观的操作流程；</div>
         <div>清晰明确：语言表达清晰且表意明确，让用户快速理解进而作出决策；</div>
         <div>帮助用户识别：界面简单直白，让用户快速识别而非回忆，减少用户记忆负担。</div>
-      </el-collapse-item> -->
+      </el-collapse-item>-->
     </el-collapse>
 
     <!-- <div class="panel-add skins">
@@ -50,7 +49,7 @@
         <img :src="item.src" alt />
         <span>{{ item.name }}</span>
       </div>
-    </div> -->
+    </div>-->
   </div>
 </template>
 <script>
@@ -63,14 +62,17 @@ export default {
   },
   data() {
     return {
-      activeNames: ['1'],
+      activeNames: ["1"],
       components: [
         {
           id: 1,
           title: "头部组件",
           binddata: {
             datasource: -1,
-            linkmod: [{ name: "logo", value: "main", params: [] },{ name: "搜索", value: "search", params: [] }]
+            linkmod: [
+              { name: "logo", value: "main", params: [] },
+              { name: "搜索", value: "search", params: [] }
+            ]
           },
           src:
             "https://dss3.bdstatic.com/70cFv8Sh_Q1YnxGkpoWK1HF6hhy/it/u=2534506313,1688529724&fm=26&gp=0.jpg",
@@ -164,7 +166,7 @@ export default {
               predata: [
                 { name: "纯文本", value: "list" },
                 { name: "轮播图", value: "image" },
-                // { name: "图文结合", value: "img-text" },
+                { name: "图文结合", value: "img-text" },
                 { name: "时间轴", value: "timeline" },
                 { name: "图片列表", value: "img-list" },
                 { name: "视频", value: "video" }
@@ -176,6 +178,13 @@ export default {
                   title: "图片宽度",
                   value: 30,
                   showvalue: "img-text"
+                },
+                {
+                  name: "lieshu",
+                  type: "number",
+                  title: "图片列数",
+                  value: 3,
+                  showvalue: "img-list"
                 }
               ]
             },
@@ -189,8 +198,7 @@ export default {
             datasource: -1,
             linkmod: [{ name: "内容连接跳转", value: "detail", params: [] }]
           },
-          src:
-            "http://img2.imgtn.bdimg.com/it/u=1126823232,2000497478&fm=26&gp=0.jpg",
+          src: "",
           component: "search-panel",
           params: [
             {
@@ -208,8 +216,7 @@ export default {
             datasource: -1,
             linkmod: []
           },
-          src:
-            "http://img2.imgtn.bdimg.com/it/u=1126823232,2000497478&fm=26&gp=0.jpg",
+          src: "",
           component: "data-detail-panel",
           params: [
             {
@@ -228,8 +235,7 @@ export default {
             datasource: -1,
             linkmod: [{ name: "内容连接跳转", value: "detail", params: [] }]
           },
-          src:
-            "http://img2.imgtn.bdimg.com/it/u=1126823232,2000497478&fm=26&gp=0.jpg",
+          src: "",
           component: "data-map-content",
           params: [
             {
@@ -248,8 +254,7 @@ export default {
             datasource: -1,
             linkmod: []
           },
-          src:
-            "http://img2.imgtn.bdimg.com/it/u=1126823232,2000497478&fm=26&gp=0.jpg",
+          src: "",
           component: "data-zqb",
           params: [
             {
@@ -257,7 +262,14 @@ export default {
               type: "text",
               title: "面板标题",
               value: "数据面板标题"
-            }
+            },
+            {
+              name: "showcount",
+              type: "number",
+              title: "每行显示数量",
+              value: 5
+            },
+            { name: "liecount", type: "number", title: "列数", value: 1 }
           ]
         },
         {
@@ -267,8 +279,7 @@ export default {
             datasource: -1,
             linkmod: []
           },
-          src:
-            "http://img2.imgtn.bdimg.com/it/u=1126823232,2000497478&fm=26&gp=0.jpg",
+          src: "",
           component: "data-syslink",
           params: [
             {
@@ -276,7 +287,10 @@ export default {
               type: "text",
               title: "面板标题",
               value: "数据面板标题"
-            }
+            },
+            { name: "lieshu", type: "number", title: "列数", value: 3 },
+            { name: "pagecount", type: "number", title: "每页显示数", value: 6 },
+            { name: "borheight", type: "number", title: "图片宽度", value: 70 }
           ]
         },
         {
@@ -286,8 +300,7 @@ export default {
             datasource: -1,
             linkmod: [{ name: "内容连接跳转", value: "detail", params: [] }]
           },
-          src:
-            "http://img2.imgtn.bdimg.com/it/u=1126823232,2000497478&fm=26&gp=0.jpg",
+          src: "",
           component: "data-rank",
           params: [
             {
@@ -295,7 +308,8 @@ export default {
               type: "text",
               title: "面板标题",
               value: "数据面板标题"
-            }
+            },
+            { name: "showcount", type: "number", title: "显示数量", value: 5 }
           ]
         },
         {
@@ -305,8 +319,7 @@ export default {
             datasource: -1,
             linkmod: []
           },
-          src:
-            "http://img2.imgtn.bdimg.com/it/u=1126823232,2000497478&fm=26&gp=0.jpg",
+          src: "",
           component: "data-contact",
           params: [
             {
@@ -431,11 +444,16 @@ export default {
       .el-card__body {
         height: 40px;
       }
-      .c-mod{
-        height:40px;line-height:40px;font-size:12px;color:#333;
-        border:solid 1px #ccc;text-align:center;cursor:pointer;
-        &:hover{
-          border:solid 1px #409EFF;
+      .c-mod {
+        height: 40px;
+        line-height: 40px;
+        font-size: 12px;
+        color: #333;
+        border: solid 1px #ccc;
+        text-align: center;
+        cursor: pointer;
+        &:hover {
+          border: solid 1px #409eff;
         }
       }
     }

@@ -49,7 +49,7 @@ module.exports = {
         }
       },
       '/cmsproject': {
-        target: 'http://192.168.1.6:8080',
+        target: 'http://localhost:30003',
         changeOrigin: true,
         secure: false,
         pathRewrite: { '^/cmsproject': '/cmsproject' }

@@ -1,14 +1,14 @@
 <template>
 <div class="yy-image-text" v-if="datalist && datalist.length > 0">
     <div class="lf-panel" :style="{width: imgwidth + '%'}" v-if="fone">
-        <img :src="'/cms/webfile/' + fone.tpwj" alt="" />
-        <span class="title">{{ fone.title }}</span>
+        <a :href="fone.href"><img :src="'/cms/webfile/' + fone.tpwj" alt="" /></a>
+        <a :href="fone.href" class="title">{{ fone.title }}</a>
     </div>
     <div class="rg-list">
         <ul v-if="datas && datas.length > 0">
             <li v-for="item in datas" :key="item.id">
                 <p class="titles">
-                    <a class="link" :href="item.href" target="_blank"><span class="symbol"></span>{{ item.title }}</a>
+                    <a class="link" :href="item.href" target="_blank"><i class="el-icon-caret-right"></i>{{ item.title }}</a>
                     <span class="clicks">{{ item.clicks }}</span>
                 </p>
                 <p class="infos">
@@ -54,6 +54,7 @@ export default {
     height:100%;
     display:flex;
     justify-content:space-between;
+    padding:0 10px;
     .lf-panel{
         width:30%;height:100%;position:relative;
         img{
@@ -75,6 +76,7 @@ export default {
             list-style:none;
             margin:5px;padding:0;
             li{
+                line-height:4px;
                 .titles{
                     display:flex;
                     justify-content:space-between;
@@ -104,7 +106,7 @@ export default {
                     display:flex;
                     justify-content:space-between;
                     .time{
-                        flex:1;
+                        flex:1;padding-left:13px;
                     }
                     .from{
                         flex:1;text-align:right;

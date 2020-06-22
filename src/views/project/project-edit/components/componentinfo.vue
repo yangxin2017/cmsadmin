@@ -34,7 +34,7 @@
       <!-- 如何设置显示类别 binddata -->
 
       <form-select
-        @eventValueChange="setSelect($event, curDataTab)"
+        @eventValueChange="setSelectForChildren($event, item, curDataTab)"
         :defValue="curDataTab.type"
         v-if="curDataTab && item.type == 'select'"
         :predatas="item.predata"
@@ -93,8 +93,8 @@
         ref="cpInfo"
         :menus="menus"
         :binddata="binddata"
-        @eventChangePage="changeDataSource()"
-      ></cominfo-page>
+        
+      ></cominfo-page> <!-- @eventChangePage="changeDataSource()" -->
     </div>
   </div>
 </template>
@@ -182,13 +182,20 @@ export default {
       param.value = checked[0];
       this.$emit("eventValueChanged", [param]);
     },
+    setSelectForChildren(selValue, item, param){
+      item.value = selValue[0]
+      param.type = selValue[0];
+      //param.value = selValue[0]
+      // this.$emit("eventValueChanged", []);
+    },
     setSelect(selValue, param) {
-      //this.curMenu.type = param.value
+      // this.curMenu.type = param.value
       // console.log(this.curMenu, param)
       param.type = selValue[0];
       //this.$emit('eventValueChanged', [param])
     },
     changeDataSource() {
+      console.log('change datasource')
       this.$emit("eventValueChanged", []);
     }
   }

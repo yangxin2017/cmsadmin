@@ -10,13 +10,24 @@
       <el-carousel>
         <el-carousel-item v-for="(item, inx) in this.contents" :key="inx">
           <div class="lkmods">
-            <div class="lkmod" v-for="(initem, inx2) in item" :key="inx2">
-              <div class="bor">
-                <img :src="'/cms/webfile/' + initem.tpwj"
-                />
+            <div
+              class="lkmod"
+              v-for="(initem, inx2) in item"
+              :key="inx2"
+              :style="{width: 'calc(' + (100 / lieshu) + '% - 10px)'}"
+            >
+              <div class="bor" :style="{height: borheight + 'px'}">
+                <a target="_blank" :title="item.title" :href="initem.url">
+                  <img :src="'/cms/webfile/' + initem.tpwj" />
+                </a>
               </div>
               <br />
-              <a target="_blank" :href="initem.url" class="txt">{{ initem.title }}</a>
+              <a
+                target="_blank"
+                :title="item.title"
+                :href="initem.url"
+                class="txt"
+              >{{ initem.title }}</a>
             </div>
           </div>
         </el-carousel-item>
@@ -35,6 +46,18 @@ export default {
     appData: {
       type: Object,
       default: {}
+    },
+    lieshu: {
+      type: Number,
+      default: 3
+    },
+    pagecount: {
+      type: Number,
+      default: 6
+    },
+    borheight: {
+      type: Number,
+      default: 70
     }
   },
   data() {
@@ -62,7 +85,7 @@ export default {
         pagesize: 100,
         linkmod: this.lkmod
       });
-      let percount = 6;
+      let percount = this.pagecount;
       let datas = dataobj.data;
       let pages = Math.ceil(datas.length / percount);
       for (let i = 0; i < pages; i++) {
@@ -104,34 +127,37 @@ export default {
     height: 100%;
     .lkmods {
       margin-top: 20px;
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
       .lkmod {
         float: left;
         width: 33.33%;
         text-align: center;
         margin: 0 0 25px 0;
         .bor {
-          border: solid 1px #076A78;
+          border: solid 1px #076a78;
           background: rgba(0, 0, 0, 0.22);
-          width: 45px;
-          height: 45px;
+          min-width: 45px;
+          min-height: 45px;
+          width: 70%;
+          height: 70%;
           display: inline-block;
           text-align: center;
           vertical-align: middle;
+          padding: 5px;
           img {
-            width: 90%;
-            height: 90%;
-            vertical-align: middle;
-            margin-top: 5%;
+            width: 100%;
+            height: 100%;
           }
         }
         .txt {
           font-size: 14px;
           color: #333;
           display: inline-block;
-          white-space: nowrap;
-          overflow: hidden;
           width: 90%;
-          text-overflow: ellipsis;
+          height: 25px;
+          overflow: hidden;
         }
       }
     }

@@ -37,11 +37,11 @@
           <div class="btns">
             <span class="el-icon-delete" @click="clearPanel(item)">重置</span>
             <!-- <el-popconfirm title="这是一段内容确定删除吗？" @onConfirm="deletePanel(item)"> -->
-              <span slot="reference" @click="deletePanel(item)" class="el-icon-close">删除</span>
+            <span slot="reference" @click="deletePanel(item)" class="el-icon-close">删除</span>
             <!-- </el-popconfirm> -->
           </div>
           <comrender
-            @eventChangeTab="changeDataTab($event)"
+            @eventChangeTab="changeDataTab($event, item)"
             :html="item.template"
             :binddata="item.data"
           />
@@ -49,9 +49,15 @@
       </grid-item>
     </grid-layout>
     <div class="lines">
-      <div class="line-728"><span>高度线：728px</span></div>
-      <div class="line-908"><span>高度线：908px</span></div>
-      <div class="line-1268"><span>高度线：1268px</span></div>
+      <div class="line-728">
+        <span>高度线：728px</span>
+      </div>
+      <div class="line-908">
+        <span>高度线：908px</span>
+      </div>
+      <div class="line-1268">
+        <span>高度线：1268px</span>
+      </div>
     </div>
   </div>
 </template>
@@ -126,12 +132,8 @@ export default {
       let template = this._getTemplate(dragData);
       item.template = template;
       item.data = dragData;
-    },
-    chooseItem(item) {
-      this.curSelItem = item;
-      //////////////////////////////////
-      let isHaveTemplate = item.template ? true : false;
-      if (isHaveTemplate) {
+      ////////////////////////
+      if (item.template) {
         let curDataTab = null;
         if (
           item.data &&
@@ -148,6 +150,29 @@ export default {
         ]);
       }
     },
+    chooseItem(item) {
+      if (this.curSelItem.i != item.i) {
+        this.curSelItem = item;
+        //////////////////////////////////
+        let isHaveTemplate = item.template ? true : false;
+        if (isHaveTemplate) {
+          let curDataTab = null;
+          if (
+            item.data &&
+            item.data.binddata &&
+            item.data.binddata.objs &&
+            item.data.binddata.objs.length > 0
+          ) {
+            curDataTab = item.data.binddata.objs[0];
+          }
+          this.$emit("eventChooseItem", [
+            item.data.params,
+            item.data.binddata,
+            curDataTab
+          ]);
+        }
+      }
+    },
     setCardType(type) {},
     /** event */
     refreshTemplate(item) {
@@ -155,8 +180,9 @@ export default {
       let template = this._getTemplate(dragData);
       this.curSelItem.template = template;
     },
-    changeDataTab(ev) {
+    changeDataTab(ev, item) {
       this.$emit("eventChangeTab", ev);
+      this.$emit("eventChooseItem", [item.data.params, item.data.binddata, ev]);
     },
     /** 私有方法 */
     _getMax(key) {
@@ -196,38 +222,59 @@ export default {
 </script>
 <style lang="scss" scoped>
 .page-con {
-  position:relative;
-  .line-728{
-    position:absolute;
-    top:728px;left:0;
-    width:100%;height:3px;
-    border-top:dashed 3px #f60;
-    text-align:right;
-    span{
-      font-size:14px;font-weight:bold;white-space:nowrap;
-      color:#f60;position:absolute;top:-22px;right:0;
+  position: relative;
+  .line-728 {
+    position: absolute;
+    top: 728px;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    border-top: dashed 3px #f60;
+    text-align: right;
+    span {
+      font-size: 14px;
+      font-weight: bold;
+      white-space: nowrap;
+      color: #f60;
+      position: absolute;
+      top: -22px;
+      right: 0;
     }
   }
-  .line-908{
-    position:absolute;
-    top:908px;left:0;
-    width:100%;height:3px;
-    border-top:dashed 3px #f60;
-    text-align:right;
-    span{
-      font-size:14px;font-weight:bold;white-space:nowrap;
-      color:#f60;position:absolute;top:-22px;right:0;
+  .line-908 {
+    position: absolute;
+    top: 908px;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    border-top: dashed 3px #f60;
+    text-align: right;
+    span {
+      font-size: 14px;
+      font-weight: bold;
+      white-space: nowrap;
+      color: #f60;
+      position: absolute;
+      top: -22px;
+      right: 0;
     }
   }
-  .line-1268{
-    position:absolute;
-    top:1268px;left:0;
-    width:100%;height:3px;
-    border-top:dashed 3px #f60;
-    text-align:right;
-    span{
-      font-size:14px;font-weight:bold;white-space:nowrap;
-      color:#f60;position:absolute;top:-22px;right:0;
+  .line-1268 {
+    position: absolute;
+    top: 1268px;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    border-top: dashed 3px #f60;
+    text-align: right;
+    span {
+      font-size: 14px;
+      font-weight: bold;
+      white-space: nowrap;
+      color: #f60;
+      position: absolute;
+      top: -22px;
+      right: 0;
     }
   }
   .hide-mod {

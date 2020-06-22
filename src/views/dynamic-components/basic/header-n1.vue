@@ -26,9 +26,13 @@
       <span class="username" v-if="showuser == true">{{ username }}</span>
       <i v-if="showuser == true" class="el-icon-user-solid"></i>
 
-      <i @click="goedit()" v-if="showsetting == true" class="el-icon-s-grid"></i>
+      <i @click="goedit()" v-if="showsetting == true && userrole && (userrole.name=='superuser'||userrole.name=='admin')" class="el-icon-s-grid"></i>
 
-      <i @click="goback()" v-if="showsetting == true && userrole" class="el-icon-setting"></i>
+      <i
+        @click="goback()"
+        v-if="showsetting == true && userrole && (userrole.name!='')"
+        class="el-icon-setting"
+      ></i>
 
       <i class="el-icon-switch-button" @click="quit()"></i>
     </div>
@@ -62,7 +66,7 @@ export default {
     showuser: {
       type: Boolean,
       default: true
-    },
+    }
   },
   data() {
     return {
@@ -91,18 +95,14 @@ export default {
     }
   },
   methods: {
-    goMain(){
-      this.$router.push('/prev')
+    goMain() {
+      this.$router.push("/prev");
     },
     enterSearch(ev) {
       if (ev.keyCode == 13) {
         let basepath = getBasePath();
         let path =
-          basepath +
-          "&path=search" +
-          "&keyword" +
-          "=" +
-          this.searchContent;
+          basepath + "&path=search" + "&keyword" + "=" + this.searchContent;
         window.open(path, "_blank");
 
         // if (this.appData.binddata && this.appData.binddata.linkmod) {
@@ -126,15 +126,15 @@ export default {
         // }
       }
     },
-    async quit(){
-      await this.$store.dispatch('user/logout')
-      this.$router.push(`login?redirect=${this.$route.fullPath}`)
+    async quit() {
+      await this.$store.dispatch("user/logout");
+      this.$router.push(`login?redirect=${this.$route.fullPath}`);
     },
-    goedit(){
-      this.$router.push(`edit?id=1`)
+    goedit() {
+      this.$router.push(`edit?id=1`);
     },
-    goback(){
-      this.$router.push(`/content`)
+    goback() {
+      this.$router.push(`/content`);
     }
   }
 };

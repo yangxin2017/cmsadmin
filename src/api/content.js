@@ -178,7 +178,26 @@ export async function getTags({ name = undefined, webtype = "main" }) {
     return res
 }
 
-export async function addTag({ parentId, id, status, lydw, name, webtype }) {
+export async function addSelfTag({ parentId, id, status, lydw, name, webtype, issh }){
+    let url = "addtag";
+    let obj = initUserToken()
+    let target = {
+        name: name,
+        parentId: parentId,
+        id: id,
+        status: 1,
+        lydw: lydw,
+        issh: false
+    };
+    let pam = Object.assign(obj, target);
+    let dataobj = await request({
+        url: `/cms/api/${url}`,
+        method: 'post',
+        params: pam
+    })
+    return dataobj
+}
+export async function addTag({ parentId, id, status, lydw, name, webtype, issh }) {
     let url = webtype == 'main' ? "addtag" : "addtagtmp";
     let obj = initUserToken()
     let target = {
@@ -186,7 +205,8 @@ export async function addTag({ parentId, id, status, lydw, name, webtype }) {
         parentId: parentId,
         id: id,
         status: status,
-        lydw: lydw
+        lydw: lydw,
+        issh: issh
     };
     let pam = Object.assign(obj, target);
     let dataobj = await request({

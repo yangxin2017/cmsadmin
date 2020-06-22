@@ -428,7 +428,7 @@ export default {
                 ni.disabled = true;
               } else {
                 if (ni.cfstr.indexOf("required") >= 0) {
-                  ni.name += "(必选)";
+                  ni.name += "(推荐)";
                   this.bxtagIds.push(ni.id);
                 }
               }
@@ -450,7 +450,7 @@ export default {
             t.disabled = true;
           } else {
             if (t.cfstr.indexOf("required") >= 0) {
-              t.name += "(必选)";
+              t.name += "(推荐)";
               this.bxtagIds.push(t.id);
             }
           }
@@ -604,12 +604,12 @@ export default {
 
           ///////////////
           this.ischooseTag = true;
-          let ststr = this.form.tagstr + ",";
-          for (let t of this.bxtagIds) {
-            if (ststr.indexOf(t + ",") < 0) {
-              this.ischooseTag = false;
-            }
-          }
+          // let ststr = this.form.tagstr + ",";
+          // for (let t of this.bxtagIds) {
+          //   if (ststr.indexOf(t + ",") < 0) {
+          //     this.ischooseTag = false;
+          //   }
+          // }
 
           if (this.ischooseTag) {
             this.loading = true;

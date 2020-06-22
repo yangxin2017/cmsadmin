@@ -2,7 +2,7 @@
   <div class="yy-video">
     <video
       v-for="(item) in datas"
-      :src="item.spwj"
+      :src="'/cms/webfile/' + item.spwj"
       :key="item.id"
       controls="controls"
     ></video>

@@ -6,7 +6,7 @@ const state = {
     withoutAnimation: false
   },
   device: 'desktop',
-  webtype: 'gw',
+  webtype: 'main',
   mainurl: 'https://1.108.100.30:8099/'
 }
 

@@ -11,6 +11,11 @@
       <el-form-item label="标签名称" prop="name">
         <el-input v-model="ruleForm.name"></el-input>
       </el-form-item>
+
+      <el-form-item label="是否审核" prop="issh" v-if="ruleForm.webtype == 'gw'">
+        <el-switch v-model="ruleForm.issh"></el-switch>
+      </el-form-item>
+
       <el-form-item>
         <el-button type="primary" @click="submitForm('ruleForm')">保存</el-button>
       </el-form-item>
@@ -18,7 +23,7 @@
   </div>
 </template>
 <script>
-import { addTag } from "@/api/content";
+import { addTag, addSelfTag } from "@/api/content";
 
 export default {
   data() {
@@ -37,6 +42,9 @@ export default {
       }
     };
   },
+  mounted() {
+    this.ruleForm.webtype = this.$store.getters.webtype;
+  },
   methods: {
     reset() {
       this.title = "添加标签";
@@ -45,7 +53,8 @@ export default {
         parentId: undefined,
         id: undefined,
         status: 1,
-        lydw: undefined
+        lydw: undefined,
+        issh: false
       };
     },
     setParentId(pdata) {
@@ -62,6 +71,10 @@ export default {
         if (valid) {
           this.ruleForm.webtype = this.$store.getters.webtype;
           await addTag(this.ruleForm);
+          // 分站需要添加自己数据库的tag
+          if (this.ruleForm.webtype == 'gw') {
+            await addSelfTag(this.ruleForm);
+          }
 
           this.$message({
             message: "操作成功！",

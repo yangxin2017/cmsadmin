@@ -97,6 +97,41 @@ constantRoutes.push({
 })
 
 constantRoutes.push({
+  path: '/formtool',
+  component: Layout,
+  redirect: '/formtool/list',
+  name: '表单管理',
+  hidden: false,
+  meta: { title: '表单管理', icon: 'example' },
+  children: [
+    {
+      path: 'list',
+      name: '表单列表',
+      component: () => import('@/views/formtool/index'),
+      meta: { title: '表单列表', icon: 'table' }
+    },
+    {
+      path: 'add',
+      name: '添加表单',
+      component: () => import('@/views/formtool/adddesign'),
+      meta: { title: '添加表单', icon: 'table' }
+    },
+    {
+      path: 'prev',
+      name: '表单预览',
+      component: () => import('@/views/formtool/prev'),
+      meta: { title: '表单预览', icon: 'table' }
+    },
+    {
+      path: 'viewdata',
+      name: '表单数据',
+      component: () => import('@/views/formtool/viewdata'),
+      meta: { title: '表单数据', icon: 'table' }
+    }
+  ]
+})
+
+constantRoutes.push({
   path: '/exttable',
   component: Layout,
   redirect: '/exttable/list',

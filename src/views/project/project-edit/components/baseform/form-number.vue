@@ -1,7 +1,7 @@
 <template>
     <div>
         <label style="margin-bottom:5px;display:block;">{{ title }}：</label>
-        <el-input-number style="width:100%;" v-model="data" size="small" @change="valueChange" :min="1" :max="100"></el-input-number>
+        <el-input-number style="width:100%;" v-model="data" size="small" @change="valueChange" :min="1" :max="900"></el-input-number>
     </div>    
 </template>
 <script>

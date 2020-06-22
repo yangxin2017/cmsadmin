@@ -61,7 +61,7 @@ export default {
   },
   methods: {
     async initContent() {
-      let words = await getHotWords({pagesize: 5});
+      let words = await getHotWords({pagesize: this.showcount});
       let dataobj = await getContent({
         cid: undefined,
         pagenum: this.pagenum,

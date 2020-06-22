@@ -28,7 +28,7 @@
         :appData="appData"
       ></data-image-text>
       <data-timeline v-if="curMenu.type == 'timeline'" :datalist="datalists" :appData="appData"></data-timeline>
-      <data-image-list v-if="curMenu.type == 'img-list'" :datalist="datalists" :appData="appData"></data-image-list>
+      <data-image-list v-if="curMenu.type == 'img-list'" :datalist="datalists" :appData="appData" :lieshu="lieshu"></data-image-list>
       <data-video v-if="curMenu.type == 'video'" :datalist="datalists" :appData="appData"></data-video>
     </div>
   </div>
@@ -73,6 +73,10 @@ export default {
       type: Number,
       default: 30
     },
+    lieshu: {
+      type: Number,
+      default: 3
+    },
     appData: {
       type: Object,
       default: {}
@@ -101,11 +105,11 @@ export default {
       this.curMenu = item;
       let val = item.id;
       this.curVal = val;
-      this.setContent(val);
-      this.$emit('eventChangeTab', item)
+      this.setContent(val, false);
+      this.$emit("eventChangeTab", item);
       /// xuyao chuan caidan
     },
-    async setContent(val) {
+    async setContent(val, isfirst) {
       if (this.oldParam.id != val || this.oldParam.count != this.showcount) {
         this.oldParam.id = val;
         this.oldParam.count = this.showcount;
@@ -135,10 +139,10 @@ export default {
 
           this.curVal = firstDataSource;
 
-          this.curMenu = this.appData.binddata.objs[0]
+          this.curMenu = this.appData.binddata.objs[0];
           //this.curMenu.type = this.showtype;
 
-          this.setContent(firstDataSource);
+          this.setContent(firstDataSource, true);
         }
       }
     }
