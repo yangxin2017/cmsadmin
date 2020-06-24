@@ -116,7 +116,7 @@
                     class="upload-demo myupload"
                     :data="userdata"
                     drag
-                    action="/cms/api/fileupload"
+                    action="/cms/api/fileuploadForNB"
                     accept=".pdf, .doc, .docx"
                     :on-success="wjuploaded"
                     :on-remove="wjdelete"
@@ -145,7 +145,7 @@
                     :data="userdata"
                     drag
                     accept="image/png, image/jpeg"
-                    action="/cms/api/fileupload"
+                    action="/cms/api/fileuploadForNB"
                     :on-success="tpuploaded"
                     :on-remove="tpdelete"
                     :on-preview="tpprev"
@@ -170,11 +170,12 @@
                     :data="userdata"
                     drag
                     accept=".mp4"
-                    action="/cms/api/fileupload"
+                    action="/cms/api/fileuploadForNB"
                     :on-success="spuploaded"
                     :on-remove="spdelete"
                     :on-preview="spprev"
                     :file-list="videolist"
+                    :on-progress="spprogress"
                   >
                     <i class="el-icon-upload"></i>
                     <div class="el-upload__text">
@@ -272,7 +273,7 @@ import { getCoutryAndOcean } from "@/api/cms";
 import { getDeptById, uuid } from "@/utils/common";
 
 import prevfile from "@/views/admin/content/prev/prevfile";
-import { Base64 } from 'js-base64';
+import { Base64 } from "js-base64";
 
 export default {
   components: {
@@ -389,7 +390,6 @@ export default {
       this.curCategory = this.getCateById(cid);
 
       this.userdata = getUserData();
-      await this.initInfo();
       this.depts = this.user.depts;
       this.curuserdept = getDeptById(this.depts, this.user.deptId);
       /////
@@ -405,6 +405,7 @@ export default {
       this.xwtemplates = await getSeatConfByCid({ cid: cid });
 
       ///// 放在最后一个
+      await this.initInfo();
       this.xws = await getAllBM({ webtype: this.webtype });
 
       // loading.close();
@@ -490,7 +491,7 @@ export default {
         this.form.filetype = content.olden.filetype;
         this.form.url = content.olden.url;
         this.form.zqbarr = content.zqbjson;
-        console.log(this.form.zqbarr)
+        console.log(this.form.zqbarr);
         ///// chkxwkey
         this.chkxwkey = [];
         let arr = this.form.xwstr.split(",");
@@ -538,12 +539,17 @@ export default {
     wjuploaded(res, file, fileList) {
       this.form.nrwj = res.data.fileName;
       this.form.filetype = res.data.fileType;
-      this.filelist = [{ url: res.data.fileName, name: "点击查看文件" }];
+      let url = res.data.fileName;
+      if (res.data.prevpath) {
+        url = res.data.prevpath + url;
+      }
+      this.filelist = [{ url: url, name: "点击查看文件" }];
     },
     wjdelete(file, fileList) {
       this.form.nrwj = "";
     },
     wjprev(file) {
+      console.log(file);
       this.$refs.refFile.show(file.url, "file");
     },
 
@@ -568,6 +574,9 @@ export default {
     },
     spprev(file) {
       this.$refs.refFile.show(file.url, "video");
+    },
+    spprogress(event, file, fileList) {
+      console.log(event);
     },
     filterNode(value, data) {
       if (!value) return true;

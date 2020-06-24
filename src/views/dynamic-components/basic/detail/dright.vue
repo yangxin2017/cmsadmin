@@ -60,21 +60,24 @@ export default {
     };
   },
   mounted() {
-    if (this.content) {
-      if (this.content.nrwj) {
-        this.content.nrwj = "/cms/webfile/" + this.content.nrwj;
-      }
-      if (this.content.tpwj) {
-        this.content.tpwj = "/cms/webfile/" + this.content.tpwj;
-      }
-      if (this.content.spwj) {
-        this.content.spwj = "/cms/webfile/" + this.content.spwj;
-      }
-    }
+    // if (this.content) {
+    //   if (this.content.nrwj) {
+    //     this.content.nrwj = "/cms/webfile/" + this.content.nrwj;
+    //   }
+    //   if (this.content.tpwj) {
+    //     this.content.tpwj = "/cms/webfile/" + this.content.tpwj;
+    //   }
+    //   if (this.content.spwj) {
+    //     this.content.spwj = "/cms/webfile/" + this.content.spwj;
+    //   }
+    // }
   },
   computed: {
     nrwj(){
       if (this.content.nrwj) {
+        if(this.content.nrwj.indexOf(".doc") >= 0 || this.content.nrwj.indexOf(".docx") >= 0){
+          return this.content.nrwj;
+        }
         return "/cms/webfile/" + this.content.nrwj;
       }
     },

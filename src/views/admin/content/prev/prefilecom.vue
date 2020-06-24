@@ -10,7 +10,7 @@
       :src="src"
       style="width:100%;height:100%"
     ></iframe>
-    <video v-if="type == 'video'" muted loop autoplay controls :src="src" ></video>
+    <video v-if="type == 'video'" muted loop autoplay controls :src="src"></video>
   </div>
 </template>
 <script>
@@ -28,6 +28,9 @@ export default {
   computed: {
     src() {
       if (this.type == "file") {
+        if(this.url.indexOf(".doc") >= 0 || this.url.indexOf(".docx") >= 0){
+          return this.url;
+        }
         return "/cms/webfile/" + this.url;
       } else {
         return "/cms/webfile/" + this.url;
@@ -39,13 +42,14 @@ export default {
 <style lang="scss" scoped>
 .cons {
   height: 700px;
-  video{
-      object-fit: fill;
-      width:100%;height:100%;
+  video {
+    object-fit: fill;
+    width: 100%;
+    height: 100%;
   }
-  img{
-      max-width: 100%;
-      max-height: 100%;
+  img {
+    max-width: 100%;
+    max-height: 100%;
   }
 }
 </style>

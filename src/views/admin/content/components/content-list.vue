@@ -206,7 +206,11 @@ export default {
       let bjhost = window.location.origin;
       let path = "";
       if (wj != "") {
-        path = bjhost + "/cms/webfile/" + wj;
+        if(wj.indexOf(".doc") >= 0 || wj.indexOf(".docx") >= 0){
+          path = wj;
+        }else{
+          path = bjhost + "/cms/webfile/" + wj;
+        }
       }
       return path;
     },
@@ -237,7 +241,6 @@ export default {
       });
     },
     sortChange(column, prop, order) {
-      console.log(column, prop, order);
       /////
       this.params.orderField = undefined;
       this.params.orderType = undefined;
