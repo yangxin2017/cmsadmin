@@ -365,6 +365,28 @@ export default {
               value: "010-87702584"
             }
           ]
+        },
+        {
+          id: 10,
+          title: "数据表格",
+          binddata: {
+            datasource: -1,
+            linkmod: [{ name: "内容连接跳转", value: "detail", params: [] }],
+            chooses: [],
+            selIndex: 0
+          },
+          src: "",
+          component: "data-table",
+          params: [
+            {
+              name: "title",
+              type: "text",
+              title: "面板标题",
+              value: "数据面板标题"
+            },
+            { name: "showcount", type: "number", title: "显示数量", value: 5 },
+            { name: "showFields", type: "chks", title: "显示字段", value: "", chooses: [] }
+          ]
         }
       ],
       curSkin: "default-skin",

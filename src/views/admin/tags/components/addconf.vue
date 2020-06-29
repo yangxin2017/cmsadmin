@@ -17,6 +17,7 @@
       <el-col :span="16" v-loading="loading">
         <div class="cg-gp" v-if="form.cid">
           <el-checkbox-group v-model="checkList">
+            <el-checkbox label="hot">热点</el-checkbox>
             <el-checkbox label="required">推荐</el-checkbox>
             <el-checkbox label="hidden">隐藏</el-checkbox>
           </el-checkbox-group>

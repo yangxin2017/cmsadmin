@@ -186,13 +186,13 @@
                   </el-upload>
                 </el-form-item>
               </div>
-              <el-form-item label="同步主站">
+              <el-form-item label="同步主站" v-if="webtype == 'gw'">
                 <el-switch v-model="form.sfgzsj"></el-switch>
               </el-form-item>
             </el-form>
           </div>
         </el-col>
-        <el-col v-if="webtype == 'gw'" :span="14">
+        <el-col :span="14">
           <div class="grid-content bg-purple">
             <div class="con-item">
               <label class="lbl" style="position: relative;top: 14px;">选择席位</label>
@@ -243,6 +243,9 @@
                 :default-checked-keys="chktagkey"
                 :props="props"
               ></el-tree>
+              <!-- <div style="flex:1;width:calc(100% - 100px)">
+                <choose-tag :tags="tags"></choose-tag>
+              </div> -->
             </div>
             <label
               v-if="!ischooseTag"
@@ -276,11 +279,14 @@ import { getCoutryAndOcean } from "@/api/cms";
 import { getDeptById, uuid } from "@/utils/common";
 
 import prevfile from "@/views/admin/content/prev/prevfile";
+import choosetag from "@/views/admin/content/add/choosetag";
+
 import { Base64 } from "js-base64";
 
 export default {
   components: {
-    "prev-file": prevfile
+    "prev-file": prevfile,
+    "choose-tag": choosetag
   },
   watch: {
     filterText(val) {
@@ -356,8 +362,8 @@ export default {
   },
   mounted() {
     this.initAll();
-    if(this.danwei == "nanbu"){
-      this.uploadurl = "/cms/api/fileuploadForNB"
+    if (this.danwei == "nanbu") {
+      this.uploadurl = "/cms/api/fileuploadForNB";
     }
   },
   computed: {
@@ -499,7 +505,7 @@ export default {
         this.form.filetype = content.olden.filetype;
         this.form.url = content.olden.url;
         this.form.zqbarr = content.zqbjson;
-        this.form.sfgzsj = content.olden.author == "true" ? true : false
+        this.form.sfgzsj = content.olden.author == "true" ? true : false;
         console.log(this.form.zqbarr);
         ///// chkxwkey
         this.chkxwkey = [];

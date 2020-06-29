@@ -1,5 +1,8 @@
 <template>
-  <div class="app-container">
+  <div class="app-container" style="min-height:500px;">
+    <div class="btns-add">
+      <el-button @click="goAdd()">添加</el-button>
+    </div>
     <el-table
       :data="tableData"
       border
@@ -21,7 +24,12 @@
       <el-table-column label="操作" width="500px">
         <template slot-scope="scope">
           <el-button @click="editRow(scope.row)" size="mini">编辑</el-button>
-          <el-button @click="delRow(scope.row)" type="danger" size="mini">删除</el-button>
+          <el-button
+            @click="delRow(scope.row)"
+            type="danger"
+            v-loading="reportloading"
+            size="mini"
+          >删除</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -31,25 +39,25 @@
         layout="prev, pager, next"
         @current-change="changepage"
         :page-size="filter.pagesize"
-        :total="total">
-      </el-pagination>
-
+        :total="total"
+      ></el-pagination>
     </div>
   </div>
 </template>
 <script>
-import { getFormDatas, getDesignById } from "@/api/form";
+import { getFormDatas, getDesignById, delvals } from "@/api/form";
 import moment from "moment";
 export default {
   data() {
     return {
       tableData: [],
       loading: false,
+      reportloading: false,
       coms: [],
       ddata: null,
       filter: {
         pageindex: 1,
-        pagesize: 2,
+        pagesize: 10,
         formid: "",
         itemid: "",
         type: "px",
@@ -61,12 +69,37 @@ export default {
   },
   mounted() {
     let formid = this.$route.query.id;
-    this.filter.formid = formid;
-    ////////////////////////////
-    this.initAll();
+    if (formid) {
+      this.filter.formid = formid;
+      this.initAll();
+    }
   },
   methods: {
-    changepage(ev){
+    goAdd() {
+      this.$router.push(`/formtool/prev?id=${this.filter.formid}`);
+    },
+    editRow(item) {
+      this.$router.push(
+        `/formtool/prev?id=${this.filter.formid}&rid=${item.rowid}`
+      );
+    },
+    delRow(item) {
+      this.$confirm("您确认要删除吗?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
+      }).then(async () => {
+        this.reportloading = true;
+        await delvals({ rowid: item.rowid });
+        this.reportloading = false;
+        this.initData();
+      });
+    },
+    setFormId(id) {
+      this.filter.formid = id;
+      this.initAll();
+    },
+    changepage(ev) {
       this.filter.pageindex = ev;
       this.initData();
     },
@@ -96,25 +129,24 @@ export default {
       let tmpdatas = [];
       for (let r of datas) {
         let tmp = {};
-        for(let kid in r){
+        tmp["rowid"] = r.rowid;
+        for (let kid in r) {
           let vs = r[kid];
           for (let c of this.coms) {
-            if(c.id == kid){
+            if (c.id == kid) {
               tmp[c.id] = this._gerRealVal(vs, c);
             }
           }
         }
 
         tmpdatas.push(tmp);
-        
       }
       this.tableData = tmpdatas;
       this.loading = false;
-      console.log(tmpdatas)
     },
     sortDatas(column) {
       this.filter.datainfo = "desc";
-      if(column.order == "ascending"){
+      if (column.order == "ascending") {
         this.filter.datainfo = "asc";
       }
       this.filter.itemid = column.prop;
@@ -153,7 +185,6 @@ export default {
       return val;
     },
     _setColumnInfo() {
-      console.log(this.coms);
       for (let c of this.coms) {
         if (
           c.com.ctype == "input" ||
@@ -209,8 +240,12 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-.pages{
+.pages {
   margin: 20px 0;
   text-align: center;
+}
+.btns-add {
+  margin: 5px 0;
+  text-align: right;
 }
 </style>

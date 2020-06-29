@@ -141,7 +141,7 @@
     </el-dialog>
 
     <prev-info ref="refPrev"></prev-info>
-    <sb-dialog ref="refSb" @refresh="initContent"></sb-dialog>
+    <sb-dialog ref="refSb" @refresh="initContent" v-if="webtype=='gw'"></sb-dialog>
   </div>
 </template>
 <script>

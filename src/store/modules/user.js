@@ -62,9 +62,11 @@ const mutations = {
 }
 
 const actions = {
-  ssologin({ commit }, token) {
+  ssologin({ commit }, param) {
+    let token = param.token
+    let qbbs = param.qbbs
     return new Promise((resolve, reject) => {
-      ssologin({username: "", password: "", token: token}).then((response)=>{
+      ssologin({username: "", password: "", token: token, qbbs: qbbs}).then((response)=>{
         let data = response
         if(data.success){
           if(data.authToken && data.data){

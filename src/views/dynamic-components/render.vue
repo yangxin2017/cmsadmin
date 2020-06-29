@@ -13,6 +13,7 @@ var datazqb = () => import("@/views/dynamic-components/basic/data-zqb");
 var datasyslink = () => import("@/views/dynamic-components/basic/data-syslink");
 var datarank = () => import("@/views/dynamic-components/basic/data-rank");
 var datacontact = () => import("@/views/dynamic-components/basic/data-contact");
+var datatable = () => import("@/views/dynamic-components/basic/data-table");
 
 export default {
   props: {
@@ -49,7 +50,8 @@ export default {
         "data-zqb": datazqb,
         "data-syslink": datasyslink,
         "data-rank": datarank,
-        "data-contact": datacontact
+        "data-contact": datacontact,
+        "data-table": datatable
       },
       template: this.html,
       props: ["appData"],

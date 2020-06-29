@@ -126,3 +126,15 @@ export async function delDesign({ id }) {
     })
     return dataobj.data
 }
+export async function delvals({ rowid }) {
+    let obj = initUserToken()
+    let target = { rowid: rowid };
+    let pam = Object.assign(obj, target);
+
+    let dataobj = await request({
+        url: `/cms/api/delvals`,
+        method: 'post',
+        params: pam
+    })
+    return dataobj.data
+}

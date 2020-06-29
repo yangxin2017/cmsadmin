@@ -11,7 +11,7 @@
           <template slot-scope="scope">
             <el-button @click="editRow(scope.row)" size="mini">编辑信息</el-button>
             <el-button @click="editFormRow(scope.row)" size="mini">编辑表单</el-button>
-            <el-button @click="prevRow(scope.row)" size="mini">预览表单</el-button>
+            <el-button @click="prevRow(scope.row)" size="mini">添加表单数据</el-button>
             <el-button @click="viewData(scope.row)" size="mini">查看数据</el-button>
             <el-button @click="delRow(scope.row)" type="danger" size="mini">删除</el-button>
           </template>

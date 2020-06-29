@@ -75,6 +75,15 @@
           <br />
           <span>部门管理</span>
         </li>
+        <li
+          @click="gourl('/formtool', 'formtool')"
+          :class="{sel: curmenu=='formtool'}"
+          v-if="webtype == 'gw'"
+        >
+          <i class="el-icon-document"></i>
+          <br />
+          <span>数据表格</span>
+        </li>
         <!-- <li
           @click="gourl('/log', 'log')"
           :class="{sel: curmenu=='log'}"
@@ -83,7 +92,7 @@
           <i class="el-icon-s-order"></i>
           <br />
           <span>日志查看</span>
-        </li> -->
+        </li>-->
         <li
           @click="gourl('/message', 'message')"
           :class="{sel: curmenu=='message'}"

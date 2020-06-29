@@ -28,18 +28,26 @@
             <el-option label="文件" value="nrwj,tpwj"></el-option>
             <el-option label="视频" value="spwj,tpwj"></el-option>
             <el-option label="外链" value="wldz,tpwj"></el-option>
-          </el-select> -->
-          <el-checkbox-group v-model="ruleForm.types">
-            <el-checkbox label="tpwj">图片</el-checkbox>
-            <el-checkbox label="nrwj">文件</el-checkbox>
-            <el-checkbox label="spwj">视频</el-checkbox>
-            <el-checkbox label="gjlb">国家列表（美国，拉美，欧洲，非洲，俄罗斯，中东）</el-checkbox>
-            <el-checkbox label="zbgj">周边国家（渤海方向，中印边境，朝鲜半岛，东海方向，南海方向，黄海方向）</el-checkbox>
-            <el-checkbox label="wldz">外链地址</el-checkbox>
-            <el-checkbox label="sftt">值勤表</el-checkbox>
-            <el-checkbox label="mmdj">秘密等级</el-checkbox>
-            <el-checkbox label="tag">标签</el-checkbox>
-          </el-checkbox-group>
+          </el-select>-->
+          <div>
+            <el-checkbox-group v-model="ruleForm.types">
+              <el-checkbox label="tpwj">图片</el-checkbox>
+              <el-checkbox label="nrwj">文件</el-checkbox>
+              <el-checkbox label="spwj">视频</el-checkbox>
+              <el-checkbox label="gjlb">国家列表（美国，拉美，欧洲，非洲，俄罗斯，中东）</el-checkbox>
+              <el-checkbox label="zbgj">周边国家（渤海方向，中印边境，朝鲜半岛，东海方向，南海方向，黄海方向）</el-checkbox>
+              <el-checkbox label="wldz">外链地址</el-checkbox>
+              <el-checkbox label="sftt">值勤表</el-checkbox>
+              <el-checkbox label="mmdj">秘密等级</el-checkbox>
+              <el-checkbox label="tag">标签</el-checkbox>
+              <el-divider content-position="left">数据表格</el-divider>
+              <el-checkbox
+                v-for="item in alldes"
+                :key="item.id"
+                :label="'table_' + item.id"
+              >{{item.name}}</el-checkbox>
+            </el-checkbox-group>
+          </div>
         </el-form-item>
 
         <el-form-item>
@@ -51,6 +59,7 @@
 </template>
 <script>
 import { addCategory } from "@/api/cmsuser";
+import { getDesigns, delDesign } from "@/api/form";
 
 export default {
   data() {
@@ -72,7 +81,8 @@ export default {
         desc: [{ required: true, message: "请输入描述内容", trigger: "blur" }],
         types: [{ required: true, message: "请选择类型", trigger: "blur" }]
       },
-      cates: []
+      cates: [],
+      alldes: []
     };
   },
   mounted() {
@@ -94,6 +104,8 @@ export default {
     async initinfo() {
       await this.$store.dispatch("user/getAllCates");
       this.cates = this.$store.getters.categorys;
+      let ds = await getDesigns();
+      this.alldes = ds;
     },
     show(pcode = "") {
       this.dialogVisible = true;
@@ -105,34 +117,34 @@ export default {
       this.ruleForm.desc = dept.desc;
 
       //
-      let types = [];
-      if (dept.fileds.indexOf("nrwj") >= 0) {
-        types.push("nrwj");
-      } 
-      if (dept.fileds.indexOf("spwj") >= 0) {
-        types.push("spwj");
-      }
-      if (dept.fileds.indexOf("tpwj") >= 0) {
-        types.push("tpwj");
-      } 
-      if (dept.fileds.indexOf("wldz") >= 0) {
-        types.push("wldz");
-      }
-      if (dept.fileds.indexOf("zbgj") >= 0) {
-        types.push("zbgj");
-      }
-      if (dept.fileds.indexOf("gjlb") >= 0) {
-        types.push("gjlb");
-      }
-      if (dept.fileds.indexOf("sftt") >= 0) {
-        types.push("sftt");
-      }
-      if (dept.fileds.indexOf("mmdj") >= 0) {
-        types.push("mmdj");
-      }
-      if (dept.fileds.indexOf("tag") >= 0) {
-        types.push("tag");
-      }
+      let types = dept.fileds.split(",")
+      // if (dept.fileds.indexOf("nrwj") >= 0) {
+      //   types.push("nrwj");
+      // }
+      // if (dept.fileds.indexOf("spwj") >= 0) {
+      //   types.push("spwj");
+      // }
+      // if (dept.fileds.indexOf("tpwj") >= 0) {
+      //   types.push("tpwj");
+      // }
+      // if (dept.fileds.indexOf("wldz") >= 0) {
+      //   types.push("wldz");
+      // }
+      // if (dept.fileds.indexOf("zbgj") >= 0) {
+      //   types.push("zbgj");
+      // }
+      // if (dept.fileds.indexOf("gjlb") >= 0) {
+      //   types.push("gjlb");
+      // }
+      // if (dept.fileds.indexOf("sftt") >= 0) {
+      //   types.push("sftt");
+      // }
+      // if (dept.fileds.indexOf("mmdj") >= 0) {
+      //   types.push("mmdj");
+      // }
+      // if (dept.fileds.indexOf("tag") >= 0) {
+      //   types.push("tag");
+      // }
       this.ruleForm.types = types;
       this.ruleForm.cid = dept.id;
     },

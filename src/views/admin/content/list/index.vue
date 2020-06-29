@@ -46,10 +46,13 @@
     <el-card class="box-card">
       <div class="table-content">
         <content-list
+          :class="{hide: istable}"
           ref="refList"
           :category="curCategory"
           @refreshCategory="refreshCategory($event)"
         ></content-list>
+        <view-data style="height:100%" 
+          :class="{hide: !istable}" ref="refVD"></view-data>
       </div>
     </el-card>
   </div>
@@ -58,10 +61,12 @@
 import { mapGetters } from "vuex";
 import { getAllCategorys } from "@/api/cms";
 import contentList from "@/views/admin/content/components/content-list";
+import viewdata from "@/views/formtool/viewdata";
 
 export default {
   components: {
-    "content-list": contentList
+    "content-list": contentList,
+    "view-data": viewdata
   },
   data() {
     return {
@@ -74,7 +79,8 @@ export default {
         title: undefined,
         lydw: undefined,
         status: undefined
-      }
+      },
+      istable: false
     };
   },
   mounted() {},
@@ -83,9 +89,20 @@ export default {
       this.selCategoryCode = item.code;
       this.curCategory = item;
 
-      this.$refs.refList.setCurCid(item.id);
-      ///////
-      this.$refs.refList.initContent();
+      if (this.curCategory.fileds.indexOf("table_") < 0) {
+        this.$refs.refList.setCurCid(item.id);
+        ///////
+        this.$refs.refList.initContent();
+        this.istable = false;
+      } else {
+        this.istable = true;
+        let strarr = this.curCategory.fileds.split("table_");
+        setTimeout(() => {
+          if (strarr.length > 1) {
+            this.$refs.refVD.setFormId(strarr[1]);
+          }
+        }, 500);
+      }
     },
     async refreshCategory(ev) {
       this.loading = true;
@@ -107,6 +124,9 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
+.hide{
+  display: none;
+}
 .cms-container {
   padding: 15px;
   display: flex;

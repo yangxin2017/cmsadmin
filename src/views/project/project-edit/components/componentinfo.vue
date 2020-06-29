@@ -58,6 +58,15 @@
         :title="item.title"
       ></form-select>
 
+      <form-chks
+        @valueChanged="setChks($event, item)"
+        :defValue="item.value"
+        v-if="item.type == 'chks'"
+        :chooseValues="item.chooses"
+        :binddata="binddata"
+        :title="item.title"
+      ></form-chks>
+
       <div
         v-if="item.children"
         style="padding:5px 5px 5px 25px;background:#fbfbfb;border-left:solid 1px #409EFF;"
@@ -89,12 +98,8 @@
 
     <div v-if="binddata" style="display:none">
       <el-divider content-position="left">页面跳转设置</el-divider>
-      <cominfo-page
-        ref="cpInfo"
-        :menus="menus"
-        :binddata="binddata"
-        
-      ></cominfo-page> <!-- @eventChangePage="changeDataSource()" -->
+      <cominfo-page ref="cpInfo" :menus="menus" :binddata="binddata"></cominfo-page>
+      <!-- @eventChangePage="changeDataSource()" -->
     </div>
   </div>
 </template>
@@ -104,6 +109,7 @@ import formtext from "@/views/project/project-edit/components/baseform/form-text
 import formcheckbox from "@/views/project/project-edit/components/baseform/form-checkbox";
 import formselect from "@/views/project/project-edit/components/baseform/form-select";
 import formnumber from "@/views/project/project-edit/components/baseform/form-number";
+import formchks from "@/views/project/project-edit/components/baseform/form-chks";
 
 import cominfodatasource from "./components/com-info-datasource";
 import cominfopage from "./components/com-info-page";
@@ -116,7 +122,8 @@ export default {
     "form-select": formselect,
     "form-number": formnumber,
     "cominfo-datasource": cominfodatasource,
-    "cominfo-page": cominfopage
+    "cominfo-page": cominfopage,
+    "form-chks": formchks
   },
   props: {
     menus: {
@@ -170,6 +177,10 @@ export default {
       }, 300);
     },
     /** event */
+    setChks(showfileds, param) {
+      param.value = showfileds;
+      this.$emit("eventValueChanged", [param]);
+    },
     setText(text, param) {
       param.value = text[0];
       this.$emit("eventValueChanged", [param]);
@@ -182,8 +193,8 @@ export default {
       param.value = checked[0];
       this.$emit("eventValueChanged", [param]);
     },
-    setSelectForChildren(selValue, item, param){
-      item.value = selValue[0]
+    setSelectForChildren(selValue, item, param) {
+      item.value = selValue[0];
       param.type = selValue[0];
       //param.value = selValue[0]
       // this.$emit("eventValueChanged", []);
@@ -195,7 +206,7 @@ export default {
       //this.$emit('eventValueChanged', [param])
     },
     changeDataSource() {
-      console.log('change datasource')
+      console.log("change datasource");
       this.$emit("eventValueChanged", []);
     }
   }
