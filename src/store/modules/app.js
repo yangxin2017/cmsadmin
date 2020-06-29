@@ -6,8 +6,8 @@ const state = {
     withoutAnimation: false
   },
   device: 'desktop',
-  webtype: 'gw',
-  mainurl: 'https://1.108.100.30:8099/'
+  webtype: 'main',
+  danwei: 'main',//nanbu
 }
 
 const mutations = {

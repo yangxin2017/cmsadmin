@@ -23,12 +23,23 @@
           <el-input type="textarea" v-model="ruleForm.desc"></el-input>
         </el-form-item>-->
         <el-form-item label="类型" prop="types">
-          <el-select v-model="ruleForm.types" placeholder="请选择">
+          <!-- <el-select v-model="ruleForm.types" placeholder="请选择">
             <el-option label="图片" value="tpwj"></el-option>
             <el-option label="文件" value="nrwj,tpwj"></el-option>
             <el-option label="视频" value="spwj,tpwj"></el-option>
             <el-option label="外链" value="wldz,tpwj"></el-option>
-          </el-select>
+          </el-select> -->
+          <el-checkbox-group v-model="ruleForm.types">
+            <el-checkbox label="tpwj">图片</el-checkbox>
+            <el-checkbox label="nrwj">文件</el-checkbox>
+            <el-checkbox label="spwj">视频</el-checkbox>
+            <el-checkbox label="gjlb">国家列表（美国，拉美，欧洲，非洲，俄罗斯，中东）</el-checkbox>
+            <el-checkbox label="zbgj">周边国家（渤海方向，中印边境，朝鲜半岛，东海方向，南海方向，黄海方向）</el-checkbox>
+            <el-checkbox label="wldz">外链地址</el-checkbox>
+            <el-checkbox label="sftt">值勤表</el-checkbox>
+            <el-checkbox label="mmdj">秘密等级</el-checkbox>
+            <el-checkbox label="tag">标签</el-checkbox>
+          </el-checkbox-group>
         </el-form-item>
 
         <el-form-item>
@@ -50,7 +61,7 @@ export default {
         title: "",
         code: "",
         desc: "",
-        types: "nrwj,tpwj",
+        types: ["nrwj", "tpwj", "mmdj", "tag"],
         pcode: "",
         isallow: false,
         cid: undefined
@@ -74,7 +85,7 @@ export default {
         title: "",
         code: "",
         desc: "",
-        types: "nrwj,tpwj",
+        types: ["nrwj", "tpwj", "mmdj", "tag"],
         pcode: "",
         isallow: false,
         cid: undefined
@@ -92,15 +103,37 @@ export default {
       this.ruleForm.title = dept.name;
       this.ruleForm.code = dept.code;
       this.ruleForm.desc = dept.desc;
+
+      //
+      let types = [];
       if (dept.fileds.indexOf("nrwj") >= 0) {
-        this.ruleForm.types = "nrwj,tpwj";
-      } else if (dept.fileds.indexOf("spwj") >= 0) {
-        this.ruleForm.types = "spwj,tpwj";
-      } else if (dept.fileds.indexOf("tpwj") >= 0) {
-        this.ruleForm.types = "tpwj";
-      } else if (dept.fileds.indexOf("wldz") >= 0) {
-        this.ruleForm.types = "wldz,tpwj";
+        types.push("nrwj");
+      } 
+      if (dept.fileds.indexOf("spwj") >= 0) {
+        types.push("spwj");
       }
+      if (dept.fileds.indexOf("tpwj") >= 0) {
+        types.push("tpwj");
+      } 
+      if (dept.fileds.indexOf("wldz") >= 0) {
+        types.push("wldz");
+      }
+      if (dept.fileds.indexOf("zbgj") >= 0) {
+        types.push("zbgj");
+      }
+      if (dept.fileds.indexOf("gjlb") >= 0) {
+        types.push("gjlb");
+      }
+      if (dept.fileds.indexOf("sftt") >= 0) {
+        types.push("sftt");
+      }
+      if (dept.fileds.indexOf("mmdj") >= 0) {
+        types.push("mmdj");
+      }
+      if (dept.fileds.indexOf("tag") >= 0) {
+        types.push("tag");
+      }
+      this.ruleForm.types = types;
       this.ruleForm.cid = dept.id;
     },
     async saveInfo() {

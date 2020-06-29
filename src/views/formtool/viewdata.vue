@@ -7,6 +7,7 @@
       v-if="ddata"
       @sort-change="sortDatas"
       @filter-change="filterDatas"
+      v-loading="loading"
     >
       <el-table-column
         v-for="item in coms"
@@ -24,6 +25,16 @@
         </template>
       </el-table-column>
     </el-table>
+    <div class="pages">
+      <el-pagination
+        background
+        layout="prev, pager, next"
+        @current-change="changepage"
+        :page-size="filter.pagesize"
+        :total="total">
+      </el-pagination>
+
+    </div>
   </div>
 </template>
 <script>
@@ -38,13 +49,14 @@ export default {
       ddata: null,
       filter: {
         pageindex: 1,
-        pagesize: 10,
+        pagesize: 2,
         formid: "",
         itemid: "",
         type: "px",
         datainfo: "desc",
         filters: []
-      }
+      },
+      total: 0
     };
   },
   mounted() {
@@ -54,6 +66,10 @@ export default {
     this.initAll();
   },
   methods: {
+    changepage(ev){
+      this.filter.pageindex = ev;
+      this.initData();
+    },
     async initAll() {
       this.loading = true;
       let design = await getDesignById({ id: this.filter.formid });
@@ -73,21 +89,36 @@ export default {
       this.loading = false;
     },
     async initData() {
-      let datas = await getFormDatas(this.filter);
+      this.loading = true;
+      let dataobj = await getFormDatas(this.filter);
+      let datas = dataobj.data;
+      this.total = dataobj.total;
       let tmpdatas = [];
       for (let r of datas) {
-        let vs = r.vals;
         let tmp = {};
-        for (let c of this.coms) {
-          let cv = this._getValById(c.id, vs);
-          tmp[c.id] = this._gerRealVal(cv, c);
+        for(let kid in r){
+          let vs = r[kid];
+          for (let c of this.coms) {
+            if(c.id == kid){
+              tmp[c.id] = this._gerRealVal(vs, c);
+            }
+          }
         }
+
         tmpdatas.push(tmp);
+        
       }
       this.tableData = tmpdatas;
+      this.loading = false;
+      console.log(tmpdatas)
     },
     sortDatas(column) {
-      console.log(column);
+      this.filter.datainfo = "desc";
+      if(column.order == "ascending"){
+        this.filter.datainfo = "asc";
+      }
+      this.filter.itemid = column.prop;
+      this.initData();
     },
     filterDatas(fs) {
       for (let k in fs) {
@@ -99,7 +130,7 @@ export default {
           this.filter.filters.push(hdom);
         }
       }
-      console.log(this.filter.filters);
+      this.initData();
     },
     _getFilterDom(key) {
       let dom = null;
@@ -178,4 +209,8 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
+.pages{
+  margin: 20px 0;
+  text-align: center;
+}
 </style>

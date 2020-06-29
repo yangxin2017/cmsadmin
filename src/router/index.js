@@ -43,6 +43,13 @@ constantRoutes.push({
   component: () => import('@/views/login/index'),
   hidden: true
 })
+
+constantRoutes.push({
+  path: '/ssologin',
+  component: () => import('@/views/login/ssologin'),
+  hidden: true
+})
+
 constantRoutes.push({
   path: '/404',
   component: () => import('@/views/404'),

@@ -54,6 +54,7 @@
   </div>
 </template>
 <script>
+import { mapGetters } from "vuex";
 import { getCoutryAndOcean, getContent } from "@/api/cms";
 
 export default {
@@ -92,6 +93,9 @@ export default {
     
     this.initBaseInfo();
   },
+  computed: {
+    ...mapGetters(["danwei"])
+  },
   methods: {
     async initBaseInfo() {
       let dataobj = await getCoutryAndOcean();
@@ -108,14 +112,20 @@ export default {
 
     },
     changeTab(item) {
+      /////
+      let val = this.ocean[0];
+      if(this.danwei == "nanbu"){
+        val = this.ocean.filter(v=>{return v.value == 'nanhai'})[0];
+      }
+      /////
       this.curMenu = item;
       this.showcountry = item.type.indexOf("gjlb") >= 0;
       this.curType = this.showcountry
         ? this.country[0].value
-        : this.ocean[0].value;
+        : val.value;
       this.rgText = this.showcountry
         ? this.country[0].text
-        : this.ocean[0].text;
+        : val.text;
       ////
       this.setContent();
     },

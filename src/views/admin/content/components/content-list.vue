@@ -199,7 +199,7 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(["categorys", "user", "mainurl", "webtype"])
+    ...mapGetters(["categorys", "user", "webtype"])
   },
   methods: {
     _getFileUrl(wj) {

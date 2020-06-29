@@ -81,7 +81,7 @@ export async function getUsers({ pageindex = 1, pagesize = 10, deptid = undefine
 
 export async function addCategory({ cid = undefined, title, code, pcode, isallow, types }) {
     let obj = initUserToken()
-    let target = { cid: cid, name: title, code: code, pcode: pcode, isallow: isallow, types: types };
+    let target = { cid: cid, name: title, code: code, pcode: pcode, isallow: isallow, types: types.join(",") };
     let pam = Object.assign(obj, target);
     let dataobj = await request({
         url: `/cms/api/addcategory`,

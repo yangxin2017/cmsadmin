@@ -184,6 +184,14 @@ export async function getCoutryAndOcean() {
     return { country: country, ocean: ocean };
 }
 
+export function ssologin(params){
+    return request({
+      url: '/cms/ssologin',
+      method: 'get',
+      params
+    })
+}
+
 export function saveProject({ id, json, name }) {
     return request({
         url: '/cms/api/saveproject',

@@ -7,6 +7,6 @@ const getters = {
   user: state => state.user,
   categorys: state => state.user.categorys,
   webtype: state => state.app.webtype,
-  mainurl: state => state.app.mainurl
+  danwei: state => state.app.danwei
 }
 export default getters

@@ -1,5 +1,5 @@
 import { login, getInfo } from '@/api/user'
-import { getAllCategorys } from '@/api/cms'
+import { getAllCategorys, ssologin } from '@/api/cms'
 import { getDepts } from '@/api/cmsuser'
 import { getToken, setToken, removeToken, getUserId, setUserId, getProjectId, setProjectId } from '@/utils/auth'
 import { resetRouter } from '@/router'
@@ -62,6 +62,30 @@ const mutations = {
 }
 
 const actions = {
+  ssologin({ commit }, token) {
+    return new Promise((resolve, reject) => {
+      ssologin({username: "", password: "", token: token}).then((response)=>{
+        let data = response
+        if(data.success){
+          if(data.authToken && data.data){
+            commit('SET_TOKEN', data.authToken)
+            commit('SET_USERID', data.data.id)
+            commit('SET_NAME', data.data.nickName)
+            setToken(data.authToken)
+            setUserId(data.data.id)
+          }
+          // if(data.url == "admin"){
+          //   window.location.href = window.location.origin + "/webadmin/#/content/"
+          // }
+          resolve(data)
+        }else{
+          reject(data)
+        }
+      }).catch(err=>{
+        reject(err)
+      })
+    })
+  },
   // set projectId
   setProjectId({ commit }, projectId){
     return new Promise(resolve => {

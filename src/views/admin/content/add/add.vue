@@ -116,7 +116,7 @@
                     class="upload-demo myupload"
                     :data="userdata"
                     drag
-                    action="/cms/api/fileuploadForNB"
+                    :action="uploadurl"
                     accept=".pdf, .doc, .docx"
                     :on-success="wjuploaded"
                     :on-remove="wjdelete"
@@ -145,7 +145,7 @@
                     :data="userdata"
                     drag
                     accept="image/png, image/jpeg"
-                    action="/cms/api/fileuploadForNB"
+                    :action="uploadurl"
                     :on-success="tpuploaded"
                     :on-remove="tpdelete"
                     :on-preview="tpprev"
@@ -170,7 +170,7 @@
                     :data="userdata"
                     drag
                     accept=".mp4"
-                    action="/cms/api/fileuploadForNB"
+                    :action="uploadurl"
                     :on-success="spuploaded"
                     :on-remove="spdelete"
                     :on-preview="spprev"
@@ -286,6 +286,7 @@ export default {
   },
   data() {
     return {
+      uploadurl: "/cms/api/fileupload",
       chooseXWValue: "",
       xwtemplates: [],
       //////////////
@@ -351,9 +352,12 @@ export default {
   },
   mounted() {
     this.initAll();
+    if(this.danwei == "nanbu"){
+      this.uploadurl = "/cms/api/fileuploadForNB"
+    }
   },
   computed: {
-    ...mapGetters(["categorys", "user", "webtype"])
+    ...mapGetters(["categorys", "user", "webtype", "danwei"])
   },
   methods: {
     addZqbItem() {

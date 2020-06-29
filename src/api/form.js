@@ -63,17 +63,17 @@ export async function getFormVals({ formid, rowid }) {
     })
     return dataobj.data
 }
-export async function getFormDatas({ pageindex, pagesize, formid, itemid, type = 'px', datainfo = "desc" }) {
+export async function getFormDatas({ pageindex, pagesize, formid, itemid, type = 'px', datainfo = "desc", filters }) {
     let obj = initUserToken()
-    let target = { pageindex: pageindex, pagesize: pagesize, formid: formid, itemid: itemid, type: type, datainfo: datainfo };
+    let target = { pageindex: pageindex, pagesize: pagesize, formid: formid, itemid: itemid, type: type, datainfo: datainfo, filters: filters };
     let pam = Object.assign(obj, target);
 
     let dataobj = await request({
         url: `/cms/api/formdatas`,
-        method: 'get',
-        params: pam
+        method: 'post',
+        data: pam
     })
-    return dataobj.data
+    return dataobj
 }
 
 export async function saveDesign({ id, name, mdesc }) {
