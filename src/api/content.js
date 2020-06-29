@@ -84,12 +84,12 @@ export async function getDicData({ id: id }) {
     return res
 }
 
-export async function addContent({ id, cid, title, desc, lydw, level, gjlb, nrwj, tpwj, spwj, xwstr, tagstr, draft, filetype, url, sftt }) {
+export async function addContent({ id, cid, title, desc, lydw, level, gjlb, nrwj, tpwj, spwj, xwstr, tagstr, draft, filetype, url, sftt, sfgzsj }) {
     let obj = initUserToken()
     let target = {
         id: id, cid: cid, title: title, desc: desc, lydw: lydw, level: level,
         gjlb: gjlb, nrwj: nrwj, tpwj: tpwj, spwj: spwj, xwstr: xwstr, tagstr, draft,
-        filetype: filetype, url: url, sftt: sftt
+        filetype: filetype, url: url, sftt: sftt, sfgzsj: sfgzsj
     };
     let pam = Object.assign(obj, target);
 

@@ -56,13 +56,13 @@
 
       <el-table-column label="操作">
         <template slot-scope="scope">
-          <el-button-group>
-            <el-tooltip content="置顶" v-if="rolebuts.indexOf('topContent') >= 0">
+          <el-button-group v-loading="reportloading">
+            <el-tooltip content="置顶" v-if="rolebuts.indexOf('topContent') >= 0 && scope.row.olden.status == 1 && scope.row.olden.author != 'true'">
               <el-button class="mybut" size="mini" type="primary" icon="el-icon-top" @click="topcon(scope.row)"></el-button>
             </el-tooltip>
             <el-tooltip
               content="取消置顶"
-              v-if="rolebuts.indexOf('untopContent') >= 0 && scope.row.sort != 0"
+              v-if="rolebuts.indexOf('untopContent') >= 0 && scope.row.sort != 0 && scope.row.olden.status == 1 && scope.row.olden.author != 'true'"
             >
               <el-button class="mybut" size="mini" icon="el-icon-bottom" @click="cancletop(scope.row)"></el-button>
             </el-tooltip>
@@ -79,17 +79,16 @@
             </el-tooltip>
             <el-tooltip
               content="撤销审核"
-              v-if="rolebuts.indexOf('uncheckContent') >= 0 && (scope.row.olden.status==1||scope.row.olden.status==3)"
+              v-if="rolebuts.indexOf('uncheckContent') >= 0 && (scope.row.olden.status==1||scope.row.olden.status==3) && scope.row.olden.author != 'true'"
             >
               <el-button class="mybut" size="mini" type="warning" icon="el-icon-user" @click="uncheck(scope.row)"></el-button>
             </el-tooltip>
 
             <el-tooltip
               content="上报主站"
-              v-if="rolebuts.indexOf('reportContent') >= 0 && scope.row.olden.status==1 && webtype=='gw'"
+              v-if="rolebuts.indexOf('reportContent') >= 0 && scope.row.olden.status==1 && webtype=='gw' && scope.row.olden.author == 'true'"
             >
               <el-button class="mybut"
-                v-loading="reportloading"
                 size="mini"
                 type="warning"
                 icon="el-icon-upload"
@@ -142,6 +141,7 @@
     </el-dialog>
 
     <prev-info ref="refPrev"></prev-info>
+    <sb-dialog ref="refSb" @refresh="initContent"></sb-dialog>
   </div>
 </template>
 <script>
@@ -155,13 +155,15 @@ import {
 } from "@/api/content";
 import { mapGetters } from "vuex";
 import contentHeader from "@/views/admin/content/components/content-header";
+import sbdialog from '@/views/admin/content/components/sb-dialog'
 
 import previnfo from "@/views/admin/content/prev/previnfo";
 
 export default {
   components: {
     "content-header": contentHeader,
-    "prev-info": previnfo
+    "prev-info": previnfo,
+    "sb-dialog": sbdialog
   },
   props: {
     category: {
@@ -232,13 +234,8 @@ export default {
         filetype: "",
         id: row.id
       };
-      this.reportloading = true;
-      await sbdata(param);
-      this.reportloading = false;
-      this.$message({
-        message: "上报成功！",
-        type: "success"
-      });
+      this.$refs.refSb.show(param);
+      
     },
     sortChange(column, prop, order) {
       /////
@@ -282,7 +279,9 @@ export default {
         cancelButtonText: "取消",
         type: "warning"
       }).then(async () => {
+        this.reportloading = true;
         await uncheckContent({ ids: ids, type: 1, uncheck: true, reason: "" });
+        this.reportloading = false;
         this.initContent();
       });
     },
@@ -290,20 +289,32 @@ export default {
       if (this.checkModel.curItem) {
         let ids = this.checkModel.curItem;
         if (this.checkModel.status == "1") {
+          this.reportloading = true;
           await uncheckContent({
             ids: ids,
             type: 1,
             uncheck: false,
             reason: ""
           });
+          this.reportloading = false;
+          this.$message({
+            message: "操作成功！",
+            type: "success"
+          });
           this.initContent();
           this.checkModel.checkdialogVisible = false;
         } else if (this.checkModel.status == "0") {
+          this.reportloading = true;
           await uncheckContent({
             ids: ids,
             type: 0,
             uncheck: false,
             reason: this.checkModel.text
+          });
+          this.reportloading = false;
+          this.$message({
+            message: "操作成功！",
+            type: "success"
           });
           this.initContent();
           this.checkModel.checkdialogVisible = false;

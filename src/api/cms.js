@@ -59,6 +59,29 @@ export async function getAllCategorys({ title = undefined, lydw = undefined, sta
     return res
 }
 
+export async function getAllZZCategorys({ title = undefined, lydw = undefined, status = undefined }) {
+    let obj = initUserToken()
+    let target = { title: title, lydw: lydw, status: status };
+    let pam = Object.assign(obj, target);
+
+    let dataobj = await request({
+        url: `/cms/api/allcategorystmp`,
+        params: pam
+    })
+
+    let res = []
+    for (let d of dataobj.data) {
+        let child = []
+        for (let di of d.children) {
+            let tmp = new CmsCategory(di.id, di.name, di.show, di.code, [], di.type, true, di.fields, di.count, di.spec)
+            child.push(tmp)
+        }
+        let one = new CmsCategory(d.id, d.name, d.show, d.code, child, d.type, false, d.fields, d.count, d.spec)
+        res.push(one)
+    }
+    return res
+}
+
 export async function getDeptCates({ deptid }) {
     let obj = initUserToken()
     let target = { deptid: deptid };

@@ -127,6 +127,11 @@ export async function getRoleById({id}){
 }
 
 export async function getContent({ cid, pagenum, pagesize, containChild, status = 1, lydw = undefined, gjmc = undefined, orderField = undefined, title = undefined, orderType=undefined }) {
+    let istb = "false";
+    if(status == '10'){
+        istb = "true";
+        status = "1";
+    }
     let obj = initUserToken()
     let params = Object.assign(obj, {
         pageindex: pagenum,
@@ -138,7 +143,8 @@ export async function getContent({ cid, pagenum, pagesize, containChild, status 
         orderType: orderType,
         lydw: lydw,
         status: status,
-        title: title
+        title: title,
+        istbzz: istb
     })
     let dataobj = await request({
         url: `/cms/api/contents`,

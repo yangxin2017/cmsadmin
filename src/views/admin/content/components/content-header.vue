@@ -17,7 +17,7 @@
           icon="el-icon-plus"
         >添加内容</el-button>
 
-        <el-button @click="pldel" size="small" type="danger" icon="el-icon-delete">批量删除</el-button>
+        <el-button v-if="rolebuts.indexOf('deleteContent') >= 0" @click="pldel" size="small" type="danger" icon="el-icon-delete">批量删除</el-button>
         <el-button
           @click="plsh"
           size="small"
@@ -37,6 +37,7 @@
           <el-radio :label="2">待审核</el-radio>
           <el-radio :label="1">已发布</el-radio>
           <el-radio :label="99">已拒绝</el-radio>
+          <el-radio :label="10" v-if="webtype=='gw'">待上报主站</el-radio>
         </el-radio-group>&nbsp;&nbsp;&nbsp;&nbsp;
         <el-cascader
           v-model="deptId"
@@ -66,6 +67,7 @@
 import uploadDialog from "@/views/admin/content/components/upload-dialog";
 
 import { getDepts } from "@/api/cmsuser";
+import { mapGetters } from "vuex";
 
 export default {
   components: {
@@ -92,6 +94,9 @@ export default {
       deptId: [],
       alldepts: []
     };
+  },
+  computed: {
+    ...mapGetters(["webtype"])
   },
   mounted() {
     this.initInfo();

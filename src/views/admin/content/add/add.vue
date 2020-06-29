@@ -5,7 +5,7 @@
         <em>[{{ curCategory.name }}]</em>-添加内容
       </h3>
       <el-row :gutter="20">
-        <el-col :span="12">
+        <el-col :span="10">
           <div>
             <el-form ref="form" :rules="rules" :model="form" label-width="80px">
               <el-form-item label="标题" prop="title" required>
@@ -186,10 +186,13 @@
                   </el-upload>
                 </el-form-item>
               </div>
+              <el-form-item label="同步主站">
+                <el-switch v-model="form.sfgzsj"></el-switch>
+              </el-form-item>
             </el-form>
           </div>
         </el-col>
-        <el-col :span="12">
+        <el-col v-if="webtype == 'gw'" :span="14">
           <div class="grid-content bg-purple">
             <div class="con-item">
               <label class="lbl" style="position: relative;top: 14px;">选择席位</label>
@@ -319,7 +322,8 @@ export default {
           { id: 1, xw: "", xm: "", zw: "", dh: "" },
           { id: 2, xw: "", xm: "", zw: "", dh: "" }
         ],
-        sftt: ""
+        sftt: "",
+        sfgzsj: false
       },
       chkxwkey: [],
       chktagkey: [],
@@ -495,6 +499,7 @@ export default {
         this.form.filetype = content.olden.filetype;
         this.form.url = content.olden.url;
         this.form.zqbarr = content.zqbjson;
+        this.form.sfgzsj = content.olden.author == "true" ? true : false
         console.log(this.form.zqbarr);
         ///// chkxwkey
         this.chkxwkey = [];
