@@ -9,7 +9,7 @@ export default {
     };
   },
   mounted() {
-    let token = this.$route.query["token"];
+    let token = this.$route.query["access_token"];
     let qbbs = this.$route.query["qbbs"];
     localStorage.setItem("token", token);
     localStorage.setItem("qbbs", qbbs);

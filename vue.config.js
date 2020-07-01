@@ -26,7 +26,7 @@ module.exports = {
    */
   runtimeCompiler: true,
   filenameHashing: true,
-  publicPath: '/webadmin/',
+  publicPath: '/web/',
   outputDir: 'dist',
   assetsDir: 'static',
   lintOnSave: process.env.NODE_ENV === 'development',
