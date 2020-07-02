@@ -1,9 +1,14 @@
 <template>
   <div class="app-container">
     <div class="op-buts">
-      <!-- <el-button type="primary" @click="addRole()">添加用户</el-button> -->
+      <el-button type="primary" style="float:left;" @click="addUser()">添加用户</el-button>
       <div class="rg-sea">
-        <el-input placeholder="请输入内容" prefix-icon="el-icon-search" v-model="keyword" @change="refreshpage(1)"></el-input>
+        <el-input
+          placeholder="请输入内容"
+          prefix-icon="el-icon-search"
+          v-model="keyword"
+          @change="refreshpage(1)"
+        ></el-input>
       </div>
     </div>
 
@@ -15,13 +20,12 @@
       <el-table-column prop="seatname" label="席位名称"></el-table-column>
       <el-table-column prop="lastloginip" label="上次登录IP"></el-table-column>
       <el-table-column prop="lastlogindate" label="上次登录日期"></el-table-column>
-      <!-- <el-table-column label="操作">
+      <el-table-column label="操作">
         <template slot-scope="scope">
-          <el-button @click="handleClick(scope.row)" type="text" size="small">查看</el-button>
-          <el-button type="text" size="small">编辑</el-button>
-          <el-button type="text" size="small">删除</el-button>
+          <el-button type="default" size="small" @click="editRow(scope.row)">编辑</el-button>
+          <el-button type="danger" size="small" @click="deleteRow(scope.row)">删除</el-button>
         </template>
-      </el-table-column> -->
+      </el-table-column>
     </el-table>
     <div class="op-pages">
       <el-pagination
@@ -31,12 +35,17 @@
         @current-change="refreshpage($event)"
       ></el-pagination>
     </div>
+    <add-Dialog ref="refAddUser" @refresh="initInfo"></add-Dialog>
   </div>
 </template>
 <script>
-import { getUsers } from "@/api/cmsuser";
+import { getUsers, deleteUser } from "@/api/cmsuser";
+import addDialog from "@/views/admin/user/coms/adduser";
 
 export default {
+  components: {
+    "add-Dialog": addDialog
+  },
   data() {
     return {
       tableData: [],
@@ -67,6 +76,26 @@ export default {
     async refreshpage(ev) {
       this.pageindex = ev;
       this.initInfo();
+    },
+    addUser() {
+      this.$refs.refAddUser.show();
+    },
+    deleteRow(us) {
+      this.$confirm("您确认要删除吗?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
+      }).then(async () => {
+        await deleteUser({ id: us.id });
+        this.$message({
+          message: "删除成功！",
+          type: "success"
+        });
+        this.initInfo();
+      });
+    },
+    editRow(us) {
+      this.$refs.refAddUser.show(us);
     }
   }
 };
@@ -77,7 +106,7 @@ export default {
   margin: 0 0 10px 0;
   .rg-sea {
     width: 200px;
-    display:inline-block;
+    display: inline-block;
   }
 }
 .op-pages {

@@ -46,7 +46,7 @@ export async function getDepts() {
     return res
 }
 
-export async function delDept({id}){
+export async function delDept({ id }) {
     let obj = initUserToken()
     let target = { id: id };
     let pam = Object.assign(obj, target);
@@ -114,7 +114,7 @@ export async function saveRole({ id, rolems, buts }) {
     return dataobj
 }
 
-export async function getRoleById({id}){
+export async function getRoleById({ id }) {
     let obj = initUserToken()
     let target = { id: id };
     let pam = Object.assign(obj, target);
@@ -126,9 +126,9 @@ export async function getRoleById({id}){
     return dataobj.data
 }
 
-export async function getContent({ cid, pagenum, pagesize, containChild, status = 1, lydw = undefined, gjmc = undefined, orderField = undefined, title = undefined, orderType=undefined }) {
+export async function getContent({ cid, pagenum, pagesize, containChild, status = 1, lydw = undefined, gjmc = undefined, orderField = undefined, title = undefined, orderType = undefined }) {
     let istb = "false";
-    if(status == '10'){
+    if (status == '10') {
         istb = "true";
         status = "1";
     }
@@ -160,4 +160,32 @@ export async function getContent({ cid, pagenum, pagesize, containChild, status 
         res.data.push(tmp)
     }
     return res
+}
+
+export async function addUsers({ id, name, isadmin, password, role, deptid, nickname, xw }) {
+    let obj = initUserToken()
+    let target = {
+        id: id, name: name, isadmin: isadmin, password: password, role: role, deptid: deptid, nickname: nickname, xw: xw
+    };
+    let pam = Object.assign(obj, target);
+    let dataobj = await request({
+        url: `/cms/api/addUsers`,
+        method: 'get',
+        params: pam
+    })
+    return dataobj
+}
+
+export async function deleteUser({ id }) {
+    let obj = initUserToken()
+    let target = {
+        id: id
+    };
+    let pam = Object.assign(obj, target);
+    let dataobj = await request({
+        url: `/cms/api/deleteuser`,
+        method: 'get',
+        params: pam
+    })
+    return dataobj
 }

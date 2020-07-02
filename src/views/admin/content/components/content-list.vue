@@ -36,6 +36,11 @@
           <span>{{scope.row.olden.ip}}</span>
         </template>
       </el-table-column>
+      <el-table-column label="上传用户">
+        <template slot-scope="scope">
+          <span>{{scope.row.olden.cover}}</span>
+        </template>
+      </el-table-column>
       <!-- <el-table-column
         prop="level"
         label="秘密等级"
